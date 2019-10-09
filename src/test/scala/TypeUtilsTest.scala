@@ -27,4 +27,12 @@ class TypeUtilsTest {
         val res = valueOf[3 * 4]
         assertEquals(12, res)
     }
+
+    @Test def `1 == 1 is true`(): Unit = {
+        assertTrue(valueOf[1 == 1])
+    }
+
+    @Test def `2 == 1 is false`(): Unit = {
+        assertFalse(valueOf[2 == 1])
+    }
 }
