@@ -53,7 +53,12 @@ object Shape {
     def matrix(rows: Dimension, columns: Dimension): rows.type #: columns.type #: SNil = rows #: columns #: SNil
 }
 
-final case class #:[H <: Dimension, T <: Shape](head: H, tail: T) extends Shape
+final case class #:[H <: Dimension, T <: Shape](head: H, tail: T) extends Shape {
+    override def toString = head match {
+        case _ #: _ => s"($head) #: $tail"
+        case _      => s"$head #: $tail"
+    }
+}
 
 sealed trait SNil extends Shape
 case object SNil extends SNil
