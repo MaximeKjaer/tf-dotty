@@ -11,6 +11,23 @@ sealed trait Shape extends Product with Serializable {
     def #:[H <: Dimension, This >: this.type <: Shape](head: H): H #: This = 
         tensorflow.api.core.#:(head, this)
 
+    /** Concat with another shape **/
+    def ++(that: Shape): this.type Concat that.type = {
+        val res: Shape = this match {
+            case SNil => that
+            case x #: xs => x #: (xs ++ that)
+        }
+        res.asInstanceOf[this.type Concat that.type]
+    }
+
+    def reverse: Reverse[this.type] = {
+        val res: Shape = this match {
+            case SNil => SNil
+            case x #: xs => xs.reverse ++ (x #: SNil)
+        }
+        res.asInstanceOf[Reverse[this.type]]
+    }
+
     def rank: Size[this.type] = {
         val res: Int = this match {
             case SNil => 0
@@ -44,6 +61,16 @@ object Shape {
     protected type NumElementsNonEmpty[X <: Shape] <: Int = X match {
         case SNil => 1
         case x #: xs => x * NumElementsNonEmpty[xs]
+    }
+
+    type Concat[X <: Shape, Y <: Shape] <: Shape = X match {
+        case SNil => Y
+        case x #: xs => x #: Concat[xs, Y]
+    }
+
+    type Reverse[X <: Shape] <: Shape = X match {
+        case SNil => SNil
+        case x #: xs => Concat[Reverse[xs], x #: SNil]
     }
 
     def scalar: SNil = SNil
