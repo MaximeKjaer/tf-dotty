@@ -7,26 +7,24 @@ type Dimension = Int & Singleton
 sealed trait Shape extends Product with Serializable {
     import Shape._
 
-    type NE = NumElements[this.type]
-
     /** Prepend the head to this */
     def #:[H <: Dimension, This >: this.type <: Shape](head: H): H #: This = 
         tensorflow.api.core.#:(head, this)
 
-    def rank[This >: this.type <: Shape]: Size[This] = {
+    def rank: Size[this.type] = {
         val res: Int = this match {
             case SNil => 0
             case head #: tail => 1 + tail.rank
         }
-        res.asInstanceOf[Size[This]]
+        res.asInstanceOf[Size[this.type]]
     }
 
-    def numElements: NE = {
+    def numElements: NumElements[this.type] = {
         val res: Int = this match {
             case SNil => 0
             case head #: tail => head * Math.max(1, tail.numElements)
         }
-        res.asInstanceOf[NE]
+        res.asInstanceOf[NumElements[this.type]]
     }
 }
 
