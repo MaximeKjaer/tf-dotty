@@ -23,10 +23,8 @@ object TypeUtils {
         case S[aMinusOne] => MultiplyLoop[aMinusOne, B, B + Res]
     }
 
-    type ==[A <: Int, B <: Int] <: Boolean = (A, B) match {
-        case (0, 0) => true
-        case (0, _) => false
-        case (_, 0) => false
-        case (S[aMinusOne], S[bMinusOne]) => aMinusOne == bMinusOne
+    type ==[A <: Int, B <: Int] <: Boolean = A match {
+        case B => true
+        case _ => false
     }
 }
