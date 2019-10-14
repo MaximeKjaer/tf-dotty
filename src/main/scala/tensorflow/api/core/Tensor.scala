@@ -14,12 +14,6 @@ class Tensor[T : TFEncoding, S <: Shape] {
     def **(that: Tensor[T, S]): Tensor[T, S] = new Tensor[T, S]
     def floorDiv(that: Tensor[T, S]): Tensor[T, S] = new Tensor[T, S]
 
-    /** Element-wise logical functions for boolean tensors */ 
-    def unary_~(implicit ev: T <:< Boolean) : Tensor[T, S] = new Tensor[T, S]
-    def &(that: Tensor[Boolean, S])(implicit ev: T <:< Boolean): Tensor[Boolean, S] = new Tensor[Boolean, S]
-    def |(that: Tensor[Boolean, S])(implicit ev: T <:< Boolean): Tensor[Boolean, S] = new Tensor[Boolean, S]
-    def ^(that: Tensor[Boolean, S])(implicit ev: T <:< Boolean): Tensor[Boolean, S] = new Tensor[Boolean, S]
-
     /** Element-wise comparison results in a boolean tensor with the same dimensions */
     def lt(that: Tensor[T, S]): Tensor[Boolean, S] = new Tensor[Boolean, S]
     def le(that: Tensor[T, S]): Tensor[Boolean, S] = new Tensor[Boolean, S]
@@ -27,6 +21,13 @@ class Tensor[T : TFEncoding, S <: Shape] {
     def gt(that: Tensor[T, S]): Tensor[Boolean, S] = new Tensor[Boolean, S]
 
     // def reshape[NewShape <: Shape](given ev: Shape.NumElements[S] <:< Shape.NumElements[NewShape]): Tensor[T, NewShape] = new Tensor[T, NewShape]
+}
+
+given boolTensorOps: [S <: Shape](tensor: Tensor[Boolean, S]) {
+    def unary_~ : Tensor[Boolean, S] = new Tensor[Boolean, S]
+    def & (that: Tensor[Boolean, S]): Tensor[Boolean, S] = new Tensor[Boolean, S]
+    def | (that: Tensor[Boolean, S]): Tensor[Boolean, S] = new Tensor[Boolean, S]
+    def ^ (that: Tensor[Boolean, S]): Tensor[Boolean, S] = new Tensor[Boolean, S]
 }
 
 object Tensor {    

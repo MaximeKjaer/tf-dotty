@@ -1,4 +1,4 @@
-import tensorflow.api.core._
+import tensorflow.api.core.{given, _}
 
 object Main {
   def main(args: Array[String]): Unit = {
