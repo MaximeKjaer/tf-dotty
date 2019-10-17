@@ -1,6 +1,6 @@
 package tensorflow.api.core
 
-import scala.compiletime.S
+import scala.compiletime.{S, constValue}
 
 type Dimension = Int & Singleton
 
@@ -72,6 +72,23 @@ object Shape {
         case SNil => SNil
         case x #: xs => Concat[Reverse[xs], x #: SNil]
     }
+
+    type IsEmpty[X <: Shape] <: Boolean = X match {
+        case SNil => true
+        case _ #: _ => false
+    }
+
+    type Head[X <: Shape] <: Dimension = X match {
+        case head #: _ => head
+    }
+
+    type Tail[X <: Shape] <: Shape = X match {
+        case _ #: tail => tail
+    }
+
+    inline def fromType[S <: Shape]: Shape = 
+        if (constValue[IsEmpty[S]]) SNil 
+        else constValue[Head[S]] #: fromType[Tail[S]]
 
     def scalar: SNil = SNil
     def vector(length: Dimension): length.type #: SNil = length #: SNil

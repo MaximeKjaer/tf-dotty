@@ -31,13 +31,15 @@ given boolTensorOps: [S <: Shape](tensor: Tensor[Boolean, S]) {
 }
 
 object Tensor {    
-    def apply[T : TFEncoding, S <: Shape]: Tensor[T, S] = new Tensor[T, S]
+    inline def apply[T : TFEncoding, S <: Shape]: Tensor[T, S] = zeros[T, S]
 
     inline def zeros[T : TFEncoding, S <: Shape]: Tensor[T, S] = fill[T, S](summon[TFEncoding[T]].dataType.zero)
+
     inline def fill[T : TFEncoding, S <: Shape](value: T): Tensor[T, S] = {
         val dataType = summon[TFEncoding[T]].dataType
-        val shape = constValue[S]
-        // val numBytes = shape.numElements * dataType.byteSize
-        null // TODO
+        val shape = Shape.fromType[S]
+        val numBytes = shape.numElements * dataType.byteSize
+        // TODO 
+        new Tensor[T, S]
     }
 }
