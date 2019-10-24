@@ -1,5 +1,6 @@
 package tensorflow.api.core
 
+import me.shadaj.scalapy.py
 import scala.compiletime.constValue
 
 class Tensor[T : TFEncoding, S <: Shape] {
@@ -20,6 +21,7 @@ class Tensor[T : TFEncoding, S <: Shape] {
     def ge(that: Tensor[T, S]): Tensor[Boolean, S] = new Tensor[Boolean, S]
     def gt(that: Tensor[T, S]): Tensor[Boolean, S] = new Tensor[Boolean, S]
 
+    // def reshape[NewShape <: Shape](s: NewShape)(given ev: Shape.NumElements[S] <:< Shape.NumElements[NewShape]): Tensor[T, NewShape] = new Tensor[T, NewShape]
     // def reshape[NewShape <: Shape](given ev: Shape.NumElements[S] <:< Shape.NumElements[NewShape]): Tensor[T, NewShape] = new Tensor[T, NewShape]
 }
 
