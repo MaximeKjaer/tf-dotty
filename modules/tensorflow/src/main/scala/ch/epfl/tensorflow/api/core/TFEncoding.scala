@@ -1,4 +1,4 @@
-package tensorflow.api.core
+package ch.epfl.tensorflow.api.core
 
 // Typeclass for TF encoding
 trait TFEncoding[T] {

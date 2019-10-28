@@ -1,6 +1,6 @@
 import org.junit.Test
 import org.junit.Assert._
-import tensorflow.api.core._
+import ch.epfl.tensorflow.api.core._
 
 class ShapeTest {
     val shape1 = 1 #: 2 #: 3 #: SNil

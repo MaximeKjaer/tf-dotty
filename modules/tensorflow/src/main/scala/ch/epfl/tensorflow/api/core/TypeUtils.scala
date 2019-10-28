@@ -1,4 +1,4 @@
-package tensorflow.api.core
+package ch.epfl.tensorflow.api.core
 
 object TypeUtils {
     import scala.compiletime.S 

@@ -1,4 +1,4 @@
-package tensorflow.api.core
+package ch.epfl.tensorflow.api.core
 
 import scala.compiletime.{S, constValue}
 
@@ -9,7 +9,7 @@ sealed trait Shape extends Product with Serializable {
 
     /** Prepend the head to this */
     def #:[H <: Dimension, This >: this.type <: Shape](head: H): H #: This = 
-        tensorflow.api.core.#:(head, this)
+        ch.epfl.tensorflow.api.core.#:(head, this)
 
     /** Concat with another shape **/
     def ++(that: Shape): this.type Concat that.type = {
@@ -42,6 +42,11 @@ sealed trait Shape extends Product with Serializable {
             case head #: tail => head * Math.max(1, tail.numElements)
         }
         res.asInstanceOf[NumElements[this.type]]
+    }
+
+    def toSeq: Seq[Int] = this match {
+        case SNil => Nil
+        case head #: tail => head +: tail.toSeq
     }
 }
 

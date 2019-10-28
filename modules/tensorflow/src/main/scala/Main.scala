@@ -1,16 +1,11 @@
-import tensorflow.api.core.{given, _}
-import me.shadaj.scalapy.py
-import me.shadaj.scalapy.tensorflow.{TensorFlow => tf}
+import me.shadaj.scalapy.tensorflow.TF.tf
 
 object Main {
   
   def main(args: Array[String]): Unit = {
-    val list = py.global.range(1, 3 + 1)
-    val listSum = py.global.sum(list)
-    println(listSum.as[Int])
+    println(tf.zeros(Seq(20)))
 
     
-
     /*
     val matrix1 = Tensor[Int, 1 #: 2 #: 3 #: SNil]
     val matrix2 = Tensor[Int, 3 #: 2 #: 1 #: SNil]

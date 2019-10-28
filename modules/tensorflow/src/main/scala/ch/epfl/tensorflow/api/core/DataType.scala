@@ -1,4 +1,4 @@
-package tensorflow.api.core
+package ch.epfl.tensorflow.api.core
 
 // TODO look into new (G)ADT enum syntax
 sealed trait DataType[T] {

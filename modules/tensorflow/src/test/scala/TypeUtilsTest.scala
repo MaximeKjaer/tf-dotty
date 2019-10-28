@@ -1,6 +1,6 @@
 import org.junit.Test
 import org.junit.Assert._
-import tensorflow.api.core.TypeUtils._
+import ch.epfl.tensorflow.api.core.TypeUtils._
 
 class TypeUtilsTest {
     @Test def `1 + 1 == 2`(): Unit = {
