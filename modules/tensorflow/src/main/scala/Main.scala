@@ -3,7 +3,18 @@ import ch.epfl.tensorflow.api.core._
 object Main {
   
   def main(args: Array[String]): Unit = {
-    println(TensorFlow.zeros[20 #: 10 #: SNil])
+    val matrix1 = TensorFlow.zeros[20 #: 10 #: SNil]
+    val matrix2 = TensorFlow.zerosLike(matrix1)
+    val matrix3 = TensorFlow.zeros[20 #: 30 #: SNil]
+
+    println(matrix1)
+    println(matrix2)
+
+    val res1: Tensor[Float, 20 #: 10 #: SNil] = (matrix1 + matrix2 - matrix2) / matrix2
+    val res2: Tensor[Float, 20 #: 10 #: SNil] = TensorFlow.floor(TensorFlow.abs(TensorFlow.pow(res1, matrix2)))
+    
+    println(res2)
+
 
     
     /*

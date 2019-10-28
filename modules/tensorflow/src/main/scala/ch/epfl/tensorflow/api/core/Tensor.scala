@@ -7,14 +7,12 @@ class Tensor[T : TFEncoding, S <: Shape](val tensor: PyTensor) {
     override def toString: String = tensor.toString
 
     /** Element-wise transformations result in a new tensor with the same dimensions */
-    def unary_- : Tensor[T, S] = new Tensor[T, S](tensor)
-    def abs: Tensor[T, S] = new Tensor[T, S](tensor)
+    def unary_- : Tensor[T, S] = new Tensor[T, S](-this.tensor)
 
     /* Element-wise operations result in a new tensor with the same dimensions */
-    def +(that: Tensor[T, S]): Tensor[T, S] = new Tensor[T, S](tensor)
-    def -(that: Tensor[T, S]): Tensor[T, S] = new Tensor[T, S](tensor)
-    def /(that: Tensor[T, S]): Tensor[T, S] = new Tensor[T, S](tensor)
-    def **(that: Tensor[T, S]): Tensor[T, S] = new Tensor[T, S](tensor)
+    def +(that: Tensor[T, S]): Tensor[T, S] = new Tensor[T, S](this.tensor + that.tensor)
+    def -(that: Tensor[T, S]): Tensor[T, S] = new Tensor[T, S](this.tensor - that.tensor)
+    def /(that: Tensor[T, S]): Tensor[T, S] = new Tensor[T, S](this.tensor / that.tensor)
     def floorDiv(that: Tensor[T, S]): Tensor[T, S] = new Tensor[T, S](tensor)
 
     /** Element-wise comparison results in a boolean tensor with the same dimensions */

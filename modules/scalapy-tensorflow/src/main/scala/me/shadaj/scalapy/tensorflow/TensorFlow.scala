@@ -25,6 +25,10 @@ object PythonList {
 
   def matmul(a: Tensor, b: Tensor): Tensor = py.native
 
+  def abs(x: Tensor): Tensor = py.native
+
+  def floor(x: Tensor): Tensor = py.native
+
   def identity: PyFunction = py.native
 
   def identity(t: Tensor): Tensor = py.native
@@ -36,6 +40,8 @@ object PythonList {
   def add_n(ts: Seq[Tensor]): Tensor = py.native
 
   def square(t: Tensor): Tensor = py.native
+
+  def pow(x: Tensor, y: Tensor): Tensor = py.native
 
   def tanh(t: Tensor): Tensor = py.native
 
