@@ -91,14 +91,19 @@ object Shape {
         case _ #: tail => tail
     }
 
+    /* This was a previous attempt at materializing type-level values. Has now been replaced by ShapeOf.
+    
     inline def fromType[S <: Shape]: Shape = 
         if (constValue[IsEmpty[S]]) SNil 
         else constValue[Head[S]] #: fromType[Tail[S]]
+    */
 
     def scalar: SNil = SNil
     def vector(length: Dimension): length.type #: SNil = length #: SNil
     def matrix(rows: Dimension, columns: Dimension): rows.type #: columns.type #: SNil = rows #: columns #: SNil
 }
+
+
 
 final case class #:[H <: Dimension, T <: Shape](head: H, tail: T) extends Shape {
     override def toString = head match {
@@ -110,3 +115,11 @@ final case class #:[H <: Dimension, T <: Shape](head: H, tail: T) extends Shape 
 sealed trait SNil extends Shape
 case object SNil extends SNil
 
+
+
+
+/*
+given [H <: Dimension, T <: Shape](given tail: ValueOf[T]): ValueOf[H #: T] {
+    def value = valueOf[H] #: tail.value
+}
+*/

@@ -1,9 +1,9 @@
-import me.shadaj.scalapy.tensorflow.TF.tf
+import ch.epfl.tensorflow.api.core._
 
 object Main {
   
   def main(args: Array[String]): Unit = {
-    println(tf.zeros(Seq(20)))
+    println(TensorFlow.zeros[20 #: 10 #: SNil])
 
     
     /*
