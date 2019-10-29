@@ -9,6 +9,9 @@ object TensorFlow {
     def int32 = INT32
     def bool = BOOLEAN
 
+    def Variable[T : TFEncoding, S <: Shape](initialValue: Tensor[T, S]): Variable[T, S] =
+        new Variable[T, S](tf.Variable(initialValue.tensor))
+
     /** 
      * Creates a tensor with all elements set to zero.
      * @tparam S Type of the shape

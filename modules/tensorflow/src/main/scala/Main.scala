@@ -18,7 +18,8 @@ object Main {
 
     println(TensorFlow.constant(3, shape = 10 #: 3 #: SNil))
     println(TensorFlow.constant(3f))
-    
+
+    println(TensorFlow.Variable(res2))
     
     /*
     val matrix1 = Tensor[Int, 1 #: 2 #: 3 #: SNil]

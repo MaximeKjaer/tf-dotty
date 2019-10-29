@@ -5,6 +5,7 @@ import me.shadaj.scalapy.tensorflow.TF.tf
 
 sealed trait DataType[T] {
     def dtype: tensorflow.DType
+    override def toString: String = dtype.toString
 }
 
 case object INT32 extends DataType[Int] {

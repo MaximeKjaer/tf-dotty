@@ -1,9 +1,8 @@
 package ch.epfl.tensorflow.api.core
 
-import scala.compiletime.constValue
 import me.shadaj.scalapy.tensorflow.{Tensor => PyTensor}
 
-class Tensor[T : TFEncoding, S <: Shape](val tensor: PyTensor) {
+class Tensor[T : TFEncoding, S <: Shape] private[core] (val tensor: PyTensor) {
     override def toString: String = tensor.toString
 
     val dtype = summon[TFEncoding[T]].dataType
