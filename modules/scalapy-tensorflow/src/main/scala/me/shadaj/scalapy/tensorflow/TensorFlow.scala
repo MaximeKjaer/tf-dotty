@@ -54,8 +54,20 @@ object PythonList {
   def matmul(a: Tensor, b: Tensor): Tensor = py.native
 
   def abs(x: Tensor): Tensor = py.native
-
   def floor(x: Tensor): Tensor = py.native
+  def square(t: Tensor): Tensor = py.native
+  
+  def sin(t: Tensor): Tensor = py.native
+  def sinh(t: Tensor): Tensor = py.native
+  def asin(t: Tensor): Tensor = py.native
+  def asinh(t: Tensor): Tensor = py.native
+  
+  def tan(t: Tensor): Tensor = py.native
+  def tanh(t: Tensor): Tensor = py.native
+  def atan(t: Tensor): Tensor = py.native
+  def atanh(t: Tensor): Tensor = py.native
+  
+  def pow(x: Tensor, y: Tensor): Tensor = py.native
 
   def identity: PyFunction = py.native
 
@@ -66,12 +78,6 @@ object PythonList {
   def reshape(tensor: Tensor, shape: PythonList[Int]): Tensor = py.native
 
   def add_n(ts: Seq[Tensor]): Tensor = py.native
-
-  def square(t: Tensor): Tensor = py.native
-
-  def pow(x: Tensor, y: Tensor): Tensor = py.native
-
-  def tanh(t: Tensor): Tensor = py.native
 
   def reduce_mean(t: Tensor): Tensor = py.native
 
