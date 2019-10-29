@@ -40,5 +40,10 @@ object TensorFlow {
     def floor[T : TFEncoding, S <: Shape](x: Tensor[T, S])(given shape: ShapeOf[S]): Tensor[T, S] =
         new Tensor[T, S](tf.floor(x.tensor))
     
+    // TODO constant types where T is a Seq[Seq[T]] etc.
+    def constant[T : TFEncoding : py.Reader : py.Writer](value: T, shape: Shape = SNil): Tensor[T, shape.type] = {
+        val dtype = summon[TFEncoding[T]].dataType.dtype
+        new Tensor[T, shape.type](tf.constant(value, dtype, shape.toSeq))
+    }
 
 }

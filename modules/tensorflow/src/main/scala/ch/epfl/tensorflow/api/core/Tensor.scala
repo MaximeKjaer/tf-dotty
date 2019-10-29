@@ -7,6 +7,7 @@ class Tensor[T : TFEncoding, S <: Shape](val tensor: PyTensor) {
     override def toString: String = tensor.toString
 
     val dtype = summon[TFEncoding[T]].dataType
+    def shape(given s: ShapeOf[S]) = s.value
 
     /** Element-wise transformations result in a new tensor with the same dimensions */
     def unary_- : Tensor[T, S] = new Tensor[T, S](-this.tensor)
@@ -27,9 +28,9 @@ class Tensor[T : TFEncoding, S <: Shape](val tensor: PyTensor) {
     // def reshape[NewShape <: Shape](given ev: Shape.NumElements[S] =:= Shape.NumElements[NewShape]): Tensor[T, NewShape] = new Tensor[T, NewShape]
 }
 
-given boolTensorOps: [S <: Shape](tensor: Tensor[Boolean, S]) {
-    def unary_~ : Tensor[Boolean, S] = new Tensor[Boolean, S](tensor.tensor)
-    def & (that: Tensor[Boolean, S]): Tensor[Boolean, S] = new Tensor[Boolean, S](tensor.tensor)
-    def | (that: Tensor[Boolean, S]): Tensor[Boolean, S] = new Tensor[Boolean, S](tensor.tensor)
-    def ^ (that: Tensor[Boolean, S]): Tensor[Boolean, S] = new Tensor[Boolean, S](tensor.tensor)
+given boolTensorOps: [S <: Shape](self: Tensor[Boolean, S]) {
+    def unary_~ : Tensor[Boolean, S] = new Tensor[Boolean, S](~self.tensor)
+    def & (that: Tensor[Boolean, S]): Tensor[Boolean, S] = new Tensor[Boolean, S](self.tensor & that.tensor)
+    def | (that: Tensor[Boolean, S]): Tensor[Boolean, S] = new Tensor[Boolean, S](self.tensor | that.tensor)
+    def ^ (that: Tensor[Boolean, S]): Tensor[Boolean, S] = new Tensor[Boolean, S](self.tensor ^ that.tensor)
 }

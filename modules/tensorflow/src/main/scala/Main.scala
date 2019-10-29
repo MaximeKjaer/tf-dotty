@@ -16,7 +16,9 @@ object Main {
     println(res2)
     println(res2.dtype)
 
-
+    println(TensorFlow.constant(3, shape = 10 #: 3 #: SNil))
+    println(TensorFlow.constant(3f))
+    
     
     /*
     val matrix1 = Tensor[Int, 1 #: 2 #: 3 #: SNil]

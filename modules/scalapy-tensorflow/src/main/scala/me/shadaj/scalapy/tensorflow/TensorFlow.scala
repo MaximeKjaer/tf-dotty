@@ -39,6 +39,9 @@ object PythonList {
 
   def Variable(initialValue: Tensor): Variable = py.native
 
+  def constant[T : py.Reader : py.Writer](value: T, dtype: DType, shape: Seq[Int], name: String = "Const"): Tensor =
+    as[py.Dynamic].constant(value, dtype, shape, name).as[Tensor]
+  
   def random_uniform(shape: PythonList[Int], min: Double, max: Double): Tensor = py.native
 
   def placeholder(`type`: DType): Tensor = py.native
