@@ -12,13 +12,38 @@ object PythonList {
 }
 
 @py.native trait TensorFlow extends py.Object {
+  // Types
+  def float16: DType = py.native
+  def float32: DType = py.native
+  def float64: DType = py.native
+  def bfloat16: DType = py.native
+  def complex64: DType = py.native
+  def complex128: DType = py.native
+  def int8: DType = py.native
+  def uint8: DType = py.native
+  def uint16: DType = py.native
+  def uint32: DType = py.native
+  def uint64: DType = py.native
+  def int16: DType = py.native
+  def int32: DType = py.native
+  def int64: DType = py.native
+  def bool: DType = py.native
+  def string: DType = py.native
+  def qint8: DType = py.native
+  def quint8: DType = py.native
+  def qint16: DType = py.native
+  def quint16: DType = py.native
+  def qint32: DType = py.native
+  def resource: DType = py.native
+  def variant: DType = py.native
+
   def Variable(initialValue: Tensor): Variable = py.native
 
   def random_uniform(shape: PythonList[Int], min: Double, max: Double): Tensor = py.native
 
-  def placeholder(`type`: String): Tensor = py.native
+  def placeholder(`type`: DType): Tensor = py.native
 
-  def placeholder(`type`: String, shape: Seq[py.NoneOr[Int]]): Tensor = py.native
+  def placeholder(`type`: DType, shape: Seq[py.NoneOr[Int]]): Tensor = py.native
 
   def nn: NeuralNetwork = py.native
   def train: Training = py.native

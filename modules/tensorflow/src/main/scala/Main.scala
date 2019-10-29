@@ -14,6 +14,7 @@ object Main {
     val res2: Tensor[Float, 20 #: 10 #: SNil] = TensorFlow.floor(TensorFlow.abs(TensorFlow.pow(res1, matrix2)))
     
     println(res2)
+    println(res2.dtype)
 
 
     

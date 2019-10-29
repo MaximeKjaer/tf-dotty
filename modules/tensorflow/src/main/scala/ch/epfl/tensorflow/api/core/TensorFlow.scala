@@ -1,8 +1,14 @@
 package ch.epfl.tensorflow.api.core
 
+import me.shadaj.scalapy.py
 import me.shadaj.scalapy.tensorflow.TF.tf
 
 object TensorFlow {
+    def float32 = FLOAT32
+    def float64 = FLOAT64
+    def int32 = INT32
+    def bool = BOOLEAN
+
     /** 
      * Creates a tensor with all elements set to zero.
      * @tparam S Type of the shape
@@ -33,7 +39,6 @@ object TensorFlow {
 
     def floor[T : TFEncoding, S <: Shape](x: Tensor[T, S])(given shape: ShapeOf[S]): Tensor[T, S] =
         new Tensor[T, S](tf.floor(x.tensor))
-    
     
 
 }

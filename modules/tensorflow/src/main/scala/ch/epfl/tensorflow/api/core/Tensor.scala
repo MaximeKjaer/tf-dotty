@@ -6,6 +6,8 @@ import me.shadaj.scalapy.tensorflow.{Tensor => PyTensor}
 class Tensor[T : TFEncoding, S <: Shape](val tensor: PyTensor) {
     override def toString: String = tensor.toString
 
+    val dtype = summon[TFEncoding[T]].dataType
+
     /** Element-wise transformations result in a new tensor with the same dimensions */
     def unary_- : Tensor[T, S] = new Tensor[T, S](-this.tensor)
 
