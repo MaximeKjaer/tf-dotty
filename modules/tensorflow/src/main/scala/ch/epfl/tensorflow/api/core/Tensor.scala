@@ -7,6 +7,8 @@ class Tensor[T : TFEncoding, S <: Shape] private[core] (val tensor: PyTensor) {
 
     val dtype = summon[TFEncoding[T]].dataType
     def shape(given s: ShapeOf[S]) = s.value
+    def name: String = tensor.name
+    def device: Option[String] = Option(tensor.device).filter(_.trim.nonEmpty)
 
     /** Element-wise transformations result in a new tensor with the same dimensions */
     def unary_- : Tensor[T, S] = new Tensor[T, S](-this.tensor)

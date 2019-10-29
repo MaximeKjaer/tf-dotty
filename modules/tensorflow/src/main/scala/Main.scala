@@ -7,7 +7,7 @@ object Main {
     val matrix2 = TensorFlow.zerosLike(matrix1)
     val matrix3 = TensorFlow.zeros[20 #: 30 #: SNil]
 
-    println(matrix1)
+    println(s"Device: '${matrix1.device}'")
     println(matrix2)
 
     val res1: Tensor[Float, 20 #: 10 #: SNil] = (matrix1 + matrix2 - matrix2) / matrix2
