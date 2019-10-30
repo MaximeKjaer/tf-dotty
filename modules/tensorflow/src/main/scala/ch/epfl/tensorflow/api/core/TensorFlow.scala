@@ -45,6 +45,17 @@ object TensorFlow {
     def zerosLike[T : TFEncoding, S <: Shape](tensor: Tensor[T, S])(given shape: ShapeOf[S]): Tensor[T, S] =
         new Tensor[T, S](tf.zeros(shape.value.toSeq))
 
+    // TODO: only accept float16, float32, float64, int32, or int64.
+    def random_uniform[S <: Shape](min: Double, max: Double)(given shape: ShapeOf[S]): Tensor[Float, S] =
+        new Tensor[Float, S](tf.random_uniform(shape.value.toSeq, min, max, TensorFlow.float32.dtype))
+
+    def random_uniform[S <: Shape, T : TFEncoding](
+        min: Double, // Todo temporary
+        max: Double,
+        dtype: DataType[T] = TensorFlow.float32
+    )(given shape: ShapeOf[S]): Tensor[T, S] =
+        new Tensor[T, S](tf.random_uniform(shape.value.toSeq, min, max, dtype.dtype))
+
     //////////////
     // Reducers //
     //////////////
