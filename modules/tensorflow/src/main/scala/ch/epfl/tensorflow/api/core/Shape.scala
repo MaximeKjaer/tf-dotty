@@ -53,29 +53,41 @@ sealed trait Shape extends Product with Serializable {
 object Shape {
     import TypeUtils.*
 
+    type Map[X <: Shape, F[_ <: Dimension] <: Dimension] <: Shape = X match {
+        case SNil => SNil
+        case head #: tail => F[head] #: Map[tail, F]
+    }
+
+    /**
+     * Type-level representation of `def foldLeft[B](z: B)(op: (B, A) ⇒ B): B`
+     * @tparam B Return type of the operation
+     * @tparam X Shape to fold over
+     * @tparam Z Zero element
+     * @tparam F Function taking an accumulator of type B, and an element of type Int, returning B
+     */
+    type FoldLeft[B, X <: Shape, Z <: B, F[_ <: B, _ <: Int] <: B] <: B = X match {
+        case SNil => Z
+        case head #: tail => FoldLeft[B, tail, F[Z, head], F]
+    }
+
     type Size[X <: Shape] <: Int = X match {
         case SNil => 0
-        case x #: xs => S[Size[xs]]
+        case head #: tail => S[Size[tail]]
     }
 
     type NumElements[X <: Shape] <: Int = X match {
         case SNil => 0
-        case x #: xs => x * NumElementsNonEmpty[xs]
-    }
-
-    protected type NumElementsNonEmpty[X <: Shape] <: Int = X match {
-        case SNil => 1
-        case x #: xs => x * NumElementsNonEmpty[xs]
+        case head #: tail => FoldLeft[Int, X, 1, *]
     }
 
     type Concat[X <: Shape, Y <: Shape] <: Shape = X match {
         case SNil => Y
-        case x #: xs => x #: Concat[xs, Y]
+        case head #: tail => head #: Concat[tail, Y]
     }
 
     type Reverse[X <: Shape] <: Shape = X match {
         case SNil => SNil
-        case x #: xs => Concat[Reverse[xs], x #: SNil]
+        case head #: tail => Concat[Reverse[tail], head #: SNil]
     }
 
     type IsEmpty[X <: Shape] <: Boolean = X match {
@@ -89,6 +101,15 @@ object Shape {
 
     type Tail[X <: Shape] <: Shape = X match {
         case _ #: tail => tail
+    }
+
+    type Remove[X <: Shape, Index <: Int] <: Shape = Index match {
+        case 0 => X match {
+            case _ #: tail => tail
+        }
+        case S[indexMinusOne] => X match {
+            case head #: tail => head #: Remove[tail, indexMinusOne]
+        }
     }
 
     /* This was a previous attempt at materializing type-level values. Has now been replaced by ShapeOf.
@@ -114,12 +135,3 @@ final case class #:[H <: Dimension, T <: Shape](head: H, tail: T) extends Shape 
 
 sealed trait SNil extends Shape
 case object SNil extends SNil
-
-
-
-
-/*
-given [H <: Dimension, T <: Shape](given tail: ValueOf[T]): ValueOf[H #: T] {
-    def value = valueOf[H] #: tail.value
-}
-*/

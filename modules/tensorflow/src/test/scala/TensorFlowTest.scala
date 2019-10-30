@@ -1,11 +1,17 @@
 import org.junit.Test
 import org.junit.Assert._
 import ch.epfl.tensorflow.api.core._
-import me.shadaj.scalapy.py
 
 class TensorFlowTest {
-    @Test def `version is 1.14.0`(): Unit = {
-        val version = py.module("tensorflow").version.VERSION.as[String]
-        assertEquals("1.14.0", version)
+    @Test def `reduce_mean(tensor) ==> tensor of shape SNil`(): Unit = {
+        val tensor = TensorFlow.zeros[2 #: 2 #: SNil]
+        val res = TensorFlow.reduce_mean(tensor)
+        assertEquals(SNil, res.shape)
+    }
+
+    @Test def `reduce_mean(tensor, 0) ==> tensor of shape 2 #: SNil`(): Unit = {
+        val tensor = TensorFlow.zeros[2 #: 2 #: SNil]
+        val res = TensorFlow.reduce_mean(tensor, 0)
+        assertEquals(2 #: SNil, res.shape)
     }
 }

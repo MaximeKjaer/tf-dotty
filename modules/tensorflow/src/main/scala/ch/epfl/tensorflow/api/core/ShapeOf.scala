@@ -4,6 +4,8 @@ trait ShapeOf[T <: Shape] {
     def value: T
 }
 
+def shapeOf[S <: Shape](given s: ShapeOf[S]): S = s.value
+
 object ShapeOf {
     given ShapeOf[SNil] {
         def value = SNil

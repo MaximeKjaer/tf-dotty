@@ -44,6 +44,32 @@ object TensorFlow {
      */
     def zerosLike[T : TFEncoding, S <: Shape](tensor: Tensor[T, S])(given shape: ShapeOf[S]): Tensor[T, S] =
         new Tensor[T, S](tf.zeros(shape.value.toSeq))
+
+    //////////////
+    // Reducers //
+    //////////////
+
+    // TODO
+    // - reduce_all
+    // - reduce_any
+    // - reduce_euclidian_norm
+    // - reduce_logsum_exp
+    // - reduce_max
+    // - reduce_min
+    // - reduce_prod
+    // - reduce_std
+    // - reduce_sum
+    // - reduce_variance
+
+    def reduce_mean[T : TFEncoding, S <: Shape](tensor: Tensor[T, S]): Tensor[T, SNil] =
+        new Tensor[T, SNil](tf.reduce_mean(tensor.tensor))
+
+    def reduce_mean[T : TFEncoding, S <: Shape](
+        tensor: Tensor[T, S],
+        axis: Dimension // Todo more descriptive type name
+    ): Tensor[T, Shape.Remove[S, axis.type]] =
+        new Tensor[T, Shape.Remove[S, axis.type]](tf.reduce_mean(tensor.tensor, axis))
+    
     
     //////////
     // Math //

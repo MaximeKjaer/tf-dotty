@@ -21,6 +21,7 @@ object Main {
     println(TensorFlow.Variable(res2))
 
 
+    // val loss = TensorFlow.reduce_mean(tf.square(y - yData))
     val optimizer = TensorFlow.train.GradientDescentOptimizer(0.5)
     
     /*

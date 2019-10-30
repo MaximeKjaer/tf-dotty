@@ -80,6 +80,7 @@ object PythonList {
   def add_n(ts: Seq[Tensor]): Tensor = py.native
 
   def reduce_mean(t: Tensor): Tensor = py.native
+  def reduce_mean(t: Tensor, axis: Int): Tensor = py.native
 
   def gradients(ys: Tensor | Seq[Tensor], xs: Tensor | Seq[Tensor]): Seq[Tensor] = py.native
 
