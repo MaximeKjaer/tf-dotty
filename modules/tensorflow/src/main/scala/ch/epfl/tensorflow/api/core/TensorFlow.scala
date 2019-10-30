@@ -12,6 +12,11 @@ object TensorFlow {
     def int32 = INT32
     def bool = BOOLEAN
 
+    /////////////
+    // Modules //
+    /////////////
+    def train: Training = new Training(tf.train)
+    
     //////////////////
     // Constructors //
     //////////////////
