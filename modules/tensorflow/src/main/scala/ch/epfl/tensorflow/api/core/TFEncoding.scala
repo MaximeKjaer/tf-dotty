@@ -1,25 +1,32 @@
 package ch.epfl.tensorflow.api.core
 
-// Typeclass for TF encoding
-trait TFEncoding[T] {
+import me.shadaj.scalapy.py
+
+sealed trait TFEncoding[T : py.Reader : py.Writer] {
     def dataType: DataType[T]
 }
 
 object TFEncoding {
-    given intEncoding: TFEncoding[Int] {
+    given TFEncoding[Int] {
         override def dataType: DataType[Int] = INT32
-        
     }
 
-    given floatEncoding: TFEncoding[Float] {
+    given TFEncoding[Float] {
         override def dataType: DataType[Float] = FLOAT32
     }
 
-    given doubleEncoding: TFEncoding[Double] {
+    given TFEncoding[Double] {
         override def dataType: DataType[Double] = FLOAT64
     }
-
-    given boolEncoding: TFEncoding[Boolean] {
+    
+    given TFEncoding[Boolean] {
         override def dataType: DataType[Boolean] = BOOLEAN
     }
+}
+
+sealed trait IsNumeric[T : TFEncoding]
+object IsNumeric {
+    given IsNumeric[Int]
+    given IsNumeric[Float]
+    given IsNumeric[Double]
 }
