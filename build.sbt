@@ -1,9 +1,9 @@
 val dottyVersion = "0.19.0-RC1"
 val scala213Version = "2.13.1"
 
-lazy val root = project
+lazy val tensorflow = project
   .in(file("modules/tensorflow"))
-  .dependsOn(tensorflowScalapy)
+  .dependsOn(scalapyTensorflow)
   .settings(
     name := "tf-dotty",
     version := "0.1.0",
@@ -11,7 +11,6 @@ lazy val root = project
     scalaVersion := dottyVersion,
 
     libraryDependencies += ("me.shadaj" %% "scalapy-core" % "0.3.0+1-35dca37d").withDottyCompat(dottyVersion),
-    libraryDependencies += ("me.shadaj" %% "scalapy-numpy" % "0.1.0+3-046d1d67+20191023-1508").withDottyCompat(dottyVersion),
     libraryDependencies += "com.novocode" % "junit-interface" % "0.11" % "test",
 
     fork := true,
@@ -19,7 +18,7 @@ lazy val root = project
     projectDependencies ~=(_.map(_.withDottyCompat(dottyVersion))),
   )
 
-lazy val tensorflowScalapy = project
+lazy val scalapyTensorflow = project
   .in(file("modules/scalapy-tensorflow"))
   .settings(
     name := "scalapy-tensorflow",
