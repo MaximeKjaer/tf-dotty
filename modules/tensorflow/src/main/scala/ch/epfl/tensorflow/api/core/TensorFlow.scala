@@ -24,9 +24,9 @@ object TensorFlow {
         new Variable[T, S](tf.Variable(initialValue.tensor))
 
     // TODO constant types where T is a Seq[Seq[T]] etc.
-    def constant[T : TFEncoding : py.Reader : py.Writer](value: T, shape: Shape = SNil): Tensor[T, shape.type] = {
+    def constant[T : TFEncoding : py.Reader : py.Writer, S <: Shape](value: T, shape: S = SNil): Tensor[T, S] = {
         val dtype = summon[TFEncoding[T]].dataType.dtype
-        new Tensor[T, shape.type](tf.constant(value, dtype, shape.toSeq))
+        new Tensor[T, S](tf.constant(value, dtype, shape.toSeq))
     }
 
     /** 
