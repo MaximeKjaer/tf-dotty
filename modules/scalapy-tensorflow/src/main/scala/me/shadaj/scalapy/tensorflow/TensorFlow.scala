@@ -42,7 +42,7 @@ object PythonList {
   def constant[T : py.Reader : py.Writer](value: T, dtype: DType, shape: Seq[Int], name: String = "Const"): Tensor =
     as[py.Dynamic].constant(value, dtype, shape, name).as[Tensor]
   
-  def random_uniform(shape: PythonList[Int], min: Double, max: Double): Tensor = py.native
+  def random_uniform(shape: Seq[Int], min: Double, max: Double, dtype: DType = float32): Tensor = py.native
 
   def placeholder(`type`: DType): Tensor = py.native
 
@@ -75,7 +75,7 @@ object PythonList {
 
   def zeros(shape: Seq[Int]): Tensor = py.native
 
-  def reshape(tensor: Tensor, shape: PythonList[Int]): Tensor = py.native
+  def reshape(tensor: Tensor, shape: Seq[Int]): Tensor = py.native
 
   def add_n(ts: Seq[Tensor]): Tensor = py.native
 
