@@ -29,32 +29,32 @@ object TensorFlow {
         new Tensor[T, S](tf.constant(value, dtype, shape.toSeq))
     }
 
-    /** 
-     * Creates a tensor with all elements set to zero.
-     * @tparam S Type of the shape
-     * @return Tensor of Float, of the shape {@code S}
-     */
-    def zeros[S <: Shape](given shape: ShapeOf[S]): Tensor[Float, S] =
-        new Tensor[Float, S](tf.zeros(shape.value.toSeq))
+    def zeros[T : TFEncoding, S <: Shape](shape: S, dataType: DataType[T] = float32): Tensor[T, S] =
+        new Tensor[T, S](tf.zeros(shape.toSeq, dataType.dtype))
+    
+    // TensorFlow also has a method accepting a 1D tensor of dimensions,
+    // but we cannot know at compiletime what it contains, so we cannot support it.
+    //     
+    // def zeros[T : TFEncoding, S <: Shape.OfDimension[1]](
+    // shape: Tensor[Int, S],
+    //     dataType: DataType[T] = float32
+    // ): Tensor[T, _] = ??? // unknown shape!
 
-    /**
-     * Creates a tensor with all elements set to zero.
-     * @param tensor Tensor to use as a template
-     * @return Tensor of the same type and shape as {@code tensor}, with all elements set to zero.
-     */
-    def zerosLike[T : TFEncoding, S <: Shape](tensor: Tensor[T, S])(given shape: ShapeOf[S]): Tensor[T, S] =
-        new Tensor[T, S](tf.zeros(shape.value.toSeq))
+    // Same shape and datatype
+    def zeros_like[T : TFEncoding, S <: Shape](tensor: Tensor[T, S]): Tensor[T, S] =
+        new Tensor[T, S](tf.zeros_like(tensor.tensor))
 
-    // TODO: only accept float16, float32, float64, int32, or int64.
-    def random_uniform[S <: Shape](min: Double, max: Double)(given shape: ShapeOf[S]): Tensor[Float, S] =
-        new Tensor[Float, S](tf.random_uniform(shape.value.toSeq, min, max, TensorFlow.float32.dtype))
+    // Same shape, potentially new datatype
+    def zeros_like[T : TFEncoding, S <: Shape](tensor: Tensor[_, S], dataType: DataType[T]): Tensor[T, S] =
+        new Tensor[T, S](tf.zeros_like(tensor.tensor, dataType.dtype))
 
-    def random_uniform[S <: Shape, T : TFEncoding](
-        min: Double, // Todo temporary
-        max: Double,
-        dtype: DataType[T] = TensorFlow.float32
-    )(given shape: ShapeOf[S]): Tensor[T, S] =
-        new Tensor[T, S](tf.random_uniform(shape.value.toSeq, min, max, dtype.dtype))
+    def random_uniform[T : TFEncoding : IsNumeric : py.Reader : py.Writer, S <: Shape](
+        shape: S,
+        min: T,
+        max: T,
+        dataType: DataType[T] = float32
+    ): Tensor[T, S] =
+        new Tensor[T, S](tf.random_uniform(shape.toSeq, min, max, dataType.dtype))
 
     //////////////
     // Reducers //

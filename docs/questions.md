@@ -1,5 +1,13 @@
 # Notes and questions
 
+## Inferring SNil
+
+When inferring SNil from term-level (e.g. `def f[S <: Shape](s: S): Tensor[T, S]`) it's inferred as `object SNil`, and not type `SNil`. This is annoying...
+
+## Implicit
+
+Why can't I do `TFEncoding[T : py.Reader : py.Writer]` and have the implicits for the reader and writer available wherever I have the TFEncoding?
+
 ## Wrong implicit conversion to double
 
 The ScalaPy TensorFlow facade has the following bit of code in `package.scala`:
