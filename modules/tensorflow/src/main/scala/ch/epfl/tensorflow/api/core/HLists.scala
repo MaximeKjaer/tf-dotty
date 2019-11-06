@@ -2,9 +2,20 @@ package ch.epfl.tensorflow.api.core
 
 import scala.compiletime.{S, constValue}
 
-type Dimension = Int & Singleton
+trait HList[+T]
 
-sealed trait Shape extends Product with Serializable {
+type Label = String & Singleton
+type Dimension = Int & Singleton
+type Axis = (Label, Dimension)
+
+sealed trait HNil extends Shape with Labels with Axes
+case object HNil extends HNil
+
+///////////
+// Shape //
+///////////
+
+sealed trait Shape extends HList[Dimension] {
     import Shape._
 
     /** Prepend the head to this */
@@ -14,7 +25,7 @@ sealed trait Shape extends Product with Serializable {
     /** Concat with another shape **/
     def ++(that: Shape): this.type Concat that.type = {
         val res: Shape = this match {
-            case SNil => that
+            case HNil => that
             case x #: xs => x #: (xs ++ that)
         }
         res.asInstanceOf[this.type Concat that.type]
@@ -22,15 +33,15 @@ sealed trait Shape extends Product with Serializable {
 
     def reverse: Reverse[this.type] = {
         val res: Shape = this match {
-            case SNil => SNil
-            case x #: xs => xs.reverse ++ (x #: SNil)
+            case HNil => HNil
+            case x #: xs => xs.reverse ++ (x #: HNil)
         }
         res.asInstanceOf[Reverse[this.type]]
     }
 
     def rank: Size[this.type] = {
         val res: Int = this match {
-            case SNil => 0
+            case HNil => 0
             case head #: tail => 1 + tail.rank
         }
         res.asInstanceOf[Size[this.type]]
@@ -38,14 +49,14 @@ sealed trait Shape extends Product with Serializable {
 
     def numElements: NumElements[this.type] = {
         val res: Int = this match {
-            case SNil => 0
+            case HNil => 0
             case head #: tail => head * Math.max(1, tail.numElements)
         }
         res.asInstanceOf[NumElements[this.type]]
     }
 
     def toSeq: Seq[Int] = this match {
-        case SNil => Nil
+        case HNil => Nil
         case head #: tail => head +: tail.toSeq
     }
 }
@@ -54,7 +65,7 @@ object Shape {
     import TypeUtils.*
 
     type Map[X <: Shape, F[_ <: Dimension] <: Dimension] <: Shape = X match {
-        case SNil => SNil
+        case HNil => HNil
         case head #: tail => F[head] #: Map[tail, F]
     }
 
@@ -66,32 +77,32 @@ object Shape {
      * @tparam F Function taking an accumulator of type B, and an element of type Int, returning B
      */
     type FoldLeft[B, X <: Shape, Z <: B, F[_ <: B, _ <: Int] <: B] <: B = X match {
-        case SNil => Z
+        case HNil => Z
         case head #: tail => FoldLeft[B, tail, F[Z, head], F]
     }
 
     type Size[X <: Shape] <: Int = X match {
-        case SNil => 0
+        case HNil => 0
         case head #: tail => S[Size[tail]]
     }
 
     type NumElements[X <: Shape] <: Int = X match {
-        case SNil => 0
+        case HNil => 0
         case head #: tail => FoldLeft[Int, X, 1, *]
     }
 
     type Concat[X <: Shape, Y <: Shape] <: Shape = X match {
-        case SNil => Y
+        case HNil => Y
         case head #: tail => head #: Concat[tail, Y]
     }
 
     type Reverse[X <: Shape] <: Shape = X match {
-        case SNil => SNil
-        case head #: tail => Concat[Reverse[tail], head #: SNil]
+        case HNil => HNil
+        case head #: tail => Concat[Reverse[tail], head #: HNil]
     }
 
     type IsEmpty[X <: Shape] <: Boolean = X match {
-        case SNil => true
+        case HNil => true
         case _ #: _ => false
     }
 
@@ -115,23 +126,55 @@ object Shape {
     /* This was a previous attempt at materializing type-level values. Has now been replaced by ShapeOf.
     
     inline def fromType[S <: Shape]: Shape = 
-        if (constValue[IsEmpty[S]]) SNil 
+        if (constValue[IsEmpty[S]]) HNil 
         else constValue[Head[S]] #: fromType[Tail[S]]
     */
 
-    def scalar: SNil = SNil
-    def vector(length: Dimension): length.type #: SNil = length #: SNil
-    def matrix(rows: Dimension, columns: Dimension): rows.type #: columns.type #: SNil = rows #: columns #: SNil
+    def scalar: HNil = HNil
+    def vector(length: Dimension): length.type #: HNil = length #: HNil
+    def matrix(rows: Dimension, columns: Dimension): rows.type #: columns.type #: HNil = rows #: columns #: HNil
 }
 
-
-
 final case class #:[H <: Dimension, T <: Shape](head: H, tail: T) extends Shape {
-    override def toString = head match {
+    override def toString = tail match {
         case _ #: _ => s"($head) #: $tail"
         case _      => s"$head #: $tail"
     }
 }
 
-sealed trait SNil extends Shape
-case object SNil extends SNil
+////////////
+// Labels //
+////////////
+
+sealed trait Labels extends HList[Label] {
+    def @:[H <: Label, This >: this.type <: Labels](head: H): H @: This = 
+        ch.epfl.tensorflow.api.core.@:(head, this)
+}
+
+object Labels {
+    type IndexOf[L <: Label, LS <: Labels] <: Int = LS match {
+        case HNil => Nothing
+        case L @: tail => 0
+        case _ @: tail => S[IndexOf[L, tail]]
+    }
+}
+
+final case class @:[H <: Label, T <: Labels](head: H, tail: T) extends Labels {
+    override def toString = tail match {
+        case _ @: _ => s"($head) @: $tail"
+        case _      => s"$head @: $tail"
+    }
+}
+
+//////////
+// Axes //
+//////////
+
+sealed trait Axes extends HList[Axis] {
+    def *:[H <: Axis, This >: this.type <: Axes](head: H): *:[H, This] =
+        ch.epfl.tensorflow.api.core.*:(head, this)
+}
+
+final case class *:[H <: Axis, T <: Axes](head: H, tail: T) extends Axes {
+    override def toString = s"$head *: $tail"
+}

@@ -24,7 +24,7 @@ object TensorFlow {
         new Variable[T, S](tf.Variable(initialValue.tensor))
 
     // TODO constant types where T is a Seq[Seq[T]] etc.
-    def constant[T : TFEncoding : py.Reader : py.Writer, S <: Shape](value: T, shape: S = SNil): Tensor[T, S] = {
+    def constant[T : TFEncoding : py.Reader : py.Writer, S <: Shape](value: T, shape: S = HNil): Tensor[T, S] = {
         val dtype = summon[TFEncoding[T]].dataType.dtype
         new Tensor[T, S](tf.constant(value, dtype, shape.toSeq))
     }
@@ -72,8 +72,8 @@ object TensorFlow {
     // - reduce_sum
     // - reduce_variance
 
-    def reduce_mean[T : TFEncoding, S <: Shape](tensor: Tensor[T, S]): Tensor[T, SNil] =
-        new Tensor[T, SNil](tf.reduce_mean(tensor.tensor))
+    def reduce_mean[T : TFEncoding, S <: Shape](tensor: Tensor[T, S]): Tensor[T, HNil] =
+        new Tensor[T, HNil](tf.reduce_mean(tensor.tensor))
 
     def reduce_mean[T : TFEncoding, S <: Shape](
         tensor: Tensor[T, S],

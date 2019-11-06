@@ -5,12 +5,12 @@ trait ShapeOf[T <: Shape] {
 }
 
 object ShapeOf {
-    given ShapeOf[SNil.type] {
-        def value = SNil
+    given ShapeOf[HNil.type] {
+        def value = HNil
     }
 
-    given ShapeOf[SNil] {
-        def value = SNil
+    given ShapeOf[HNil] {
+        def value = HNil
     }
 
     given [H <: Dimension, T <: Shape](given head: ValueOf[H], tail: ShapeOf[T]): ShapeOf[H #: T] {
