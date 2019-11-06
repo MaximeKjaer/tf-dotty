@@ -10,7 +10,7 @@ object TypeUtils {
 
     type +[A <: Int, B <: Int] <: Int = A match {
         case 0 => B
-        case S[aMinusOne] => aMinusOne + S[B]
+        case S[aMinusOne] => S[aMinusOne + B]
     }
 
     type *[A <: Int, B <: Int] <: Int = A match {
