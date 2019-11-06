@@ -4,9 +4,11 @@ trait ShapeOf[T <: Shape] {
     def value: T
 }
 
-inline def shapeOf[S <: Shape](given s: ShapeOf[S]): S = s.value
-
 object ShapeOf {
+    given ShapeOf[SNil.type] {
+        def value = SNil
+    }
+
     given ShapeOf[SNil] {
         def value = SNil
     }
@@ -15,3 +17,5 @@ object ShapeOf {
         def value = head.value #: tail.value
     }
 }
+
+inline def shapeOf[S <: Shape](given s: ShapeOf[S]): S = s.value
