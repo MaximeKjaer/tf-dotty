@@ -170,11 +170,61 @@ final case class @:[H <: Label, T <: Labels](head: H, tail: T) extends Labels {
 // Axes //
 //////////
 
+// For type inference:
+def ax[L <: Label, D <: Dimension](l: L, d: D): (L, D) = (l, d)
+
 sealed trait Axes extends HList[Axis] {
     def *:[H <: Axis, This >: this.type <: Axes](head: H): *:[H, This] =
         ch.epfl.tensorflow.api.core.*:(head, this)
+    
+    def shape: Axes.ShapeOf[this.type] = {
+        val res: Shape = this match {
+            case HNil => HNil
+            case (_, s) *: tail => s #: tail.shape
+        }
+        res.asInstanceOf[Axes.ShapeOf[this.type]]
+    }
+
+    def labels: Axes.LabelsOf[this.type] = {
+        val res: Labels = this match {
+            case HNil => HNil
+            case (l, _) *: tail => l @: tail.labels
+        }
+        res.asInstanceOf[Axes.LabelsOf[this.type]]
+    }
 }
 
 final case class *:[H <: Axis, T <: Axes](head: H, tail: T) extends Axes {
     override def toString = s"$head *: $tail"
+}
+
+object Axes {
+    type ShapeOf[As <: Axes] <: Shape = As match {
+        case HNil => HNil
+        case (_, s) *: tail => s #: ShapeOf[tail]
+    }
+
+    type LabelsOf[As <: Axes] <: Labels = As match {
+        case HNil => HNil
+        case (l, _) *: tail => l @: LabelsOf[tail]
+    }
+
+    type Remove[L <: Label, As <: Axes] <: Axes = As match {
+        case HNil => HNil
+        case (l, d) *: tail => l match {
+            case L => tail
+            case _ => (l, d) *: Remove[L, tail]
+        }
+    }
+
+    type RemoveAll[Ls <: Labels, As <: Axes] <: Axes = Ls match {
+        case HNil => As
+        case head @: tail => RemoveAll[tail, Remove[head, As]]
+    }
+
+    type IndexOf[L <: Label, As <: Axes] <: Int = As match {
+        case HNil => Nothing
+        case (L, _) *: _ => 0
+        case _ *: tail => S[IndexOf[L, tail]]
+    }
 }

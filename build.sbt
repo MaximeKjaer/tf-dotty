@@ -1,4 +1,4 @@
-val dottyVersion = "0.19.0-RC1"
+val dottyVersion = "0.20.0-RC1"
 val scala213Version = "2.13.1"
 
 lazy val tensorflow = project

@@ -20,17 +20,17 @@ object TensorFlow {
     //////////////////
     // Constructors //
     //////////////////
-    def Variable[T : TFEncoding, S <: Shape](initialValue: Tensor[T, S]): Variable[T, S] =
-        new Variable[T, S](tf.Variable(initialValue.tensor))
+    def Variable[T : TFEncoding, S <: Shape, L <: Labels](initialValue: Tensor[T, S, L]): Variable[T, S, L] =
+        new Variable[T, S, L](tf.Variable(initialValue.tensor))
 
     // TODO constant types where T is a Seq[Seq[T]] etc.
-    def constant[T : TFEncoding : py.Reader : py.Writer, S <: Shape](value: T, shape: S = HNil): Tensor[T, S] = {
+    def constant[T : TFEncoding : py.Reader : py.Writer, A <: Axes](value: T, axes: A = HNil): Tensor.Aux[T, A] = {
         val dtype = summon[TFEncoding[T]].dataType.dtype
-        new Tensor[T, S](tf.constant(value, dtype, shape.toSeq))
+        Tensor[T, A](tf.constant(value, dtype, axes.shape.toSeq))
     }
 
-    def zeros[T : TFEncoding, S <: Shape](shape: S, dataType: DataType[T] = float32): Tensor[T, S] =
-        new Tensor[T, S](tf.zeros(shape.toSeq, dataType.dtype))
+    def zeros[T : TFEncoding, A <: Axes](axes: A, dataType: DataType[T] = float32): Tensor.Aux[T, A] =
+        Tensor[T, A](tf.zeros(axes.shape.toSeq, dataType.dtype))
     
     // TensorFlow also has a method accepting a 1D tensor of dimensions,
     // but we cannot know at compiletime what it contains, so we cannot support it.
@@ -41,20 +41,20 @@ object TensorFlow {
     // ): Tensor[T, _] = ??? // unknown shape!
 
     // Same shape and datatype
-    def zeros_like[T : TFEncoding, S <: Shape](tensor: Tensor[T, S]): Tensor[T, S] =
-        new Tensor[T, S](tf.zeros_like(tensor.tensor))
+    def zeros_like[T : TFEncoding, S <: Shape, L <: Labels](tensor: Tensor[T, S, L]): Tensor[T, S, L] =
+        new Tensor[T, S, L](tf.zeros_like(tensor.tensor))
 
     // Same shape, potentially new datatype
-    def zeros_like[T : TFEncoding, S <: Shape](tensor: Tensor[_, S], dataType: DataType[T]): Tensor[T, S] =
-        new Tensor[T, S](tf.zeros_like(tensor.tensor, dataType.dtype))
+    def zeros_like[T : TFEncoding, S <: Shape, L <: Labels](tensor: Tensor[_, S, L], dataType: DataType[T]): Tensor[T, S, L] =
+        new Tensor[T, S, L](tf.zeros_like(tensor.tensor, dataType.dtype))
 
-    def random_uniform[T : TFEncoding : IsNumeric : py.Reader : py.Writer, S <: Shape](
-        shape: S,
+    def random_uniform[T : TFEncoding : IsNumeric : py.Reader : py.Writer, A <: Axes](
+        axes: A,
         min: T,
         max: T,
         dataType: DataType[T] = float32
-    ): Tensor[T, S] =
-        new Tensor[T, S](tf.random_uniform(shape.toSeq, min, max, dataType.dtype))
+    ): Tensor.Aux[T, A] =
+        Tensor[T, A](tf.random_uniform(axes.shape.toSeq, min, max, dataType.dtype))
 
     //////////////
     // Reducers //
@@ -72,14 +72,14 @@ object TensorFlow {
     // - reduce_sum
     // - reduce_variance
 
-    def reduce_mean[T : TFEncoding, S <: Shape](tensor: Tensor[T, S]): Tensor[T, HNil] =
-        new Tensor[T, HNil](tf.reduce_mean(tensor.tensor))
+    def reduce_mean[T : TFEncoding](tensor: Tensor[T, ?, ?]): Tensor.Aux[T, HNil] =
+        Tensor[T, HNil](tf.reduce_mean(tensor.tensor))
 
-    def reduce_mean[T : TFEncoding, S <: Shape](
-        tensor: Tensor[T, S],
-        axis: Dimension // Todo more descriptive type name
-    ): Tensor[T, Shape.Remove[S, axis.type]] =
-        new Tensor[T, Shape.Remove[S, axis.type]](tf.reduce_mean(tensor.tensor, axis))
+    def reduce_mean[T : TFEncoding, A <: Axes, L <: Label](
+        tensor: Tensor.Aux[T, A],
+        axis: L
+    )(given index: ValueOf[Axes.IndexOf[L, A]]): Tensor.Aux[T, Axes.Remove[L, A]] =
+        Tensor[T, Axes.Remove[L, A]](tf.reduce_mean(tensor.tensor, index.value))
     
     
     //////////
@@ -91,39 +91,39 @@ object TensorFlow {
      * @param y Tensor to use as exponent
      * @return Element-wise result of x^y 
      */
-    def pow[T : TFEncoding, S <: Shape](x: Tensor[T, S], y: Tensor[T, S]): Tensor[T, S] =
-        new Tensor[T, S](tf.pow(x.tensor, y.tensor))
+    def pow[T : TFEncoding, S <: Shape, L <: Labels](x: Tensor[T, S, L], y: Tensor[T, S, L]): Tensor[T, S, L] =
+        new Tensor[T, S, L](tf.pow(x.tensor, y.tensor))
 
-    def abs[T : TFEncoding, S <: Shape](x: Tensor[T, S]): Tensor[T, S] =
-        new Tensor[T, S](tf.abs(x.tensor))
+    def abs[T : TFEncoding, S <: Shape, L <: Labels](x: Tensor[T, S, L]): Tensor[T, S, L] =
+        new Tensor[T, S, L](tf.abs(x.tensor))
 
-    def floor[T : TFEncoding, S <: Shape](x: Tensor[T, S]): Tensor[T, S] =
-        new Tensor[T, S](tf.floor(x.tensor))
+    def floor[T : TFEncoding, S <: Shape, L <: Labels](x: Tensor[T, S, L]): Tensor[T, S, L] =
+        new Tensor[T, S, L](tf.floor(x.tensor))
     
-    def square[T : TFEncoding, S <: Shape](x: Tensor[T, S]): Tensor[T, S] =
-        new Tensor[T, S](tf.square(x.tensor))
+    def square[T : TFEncoding, S <: Shape, L <: Labels](x: Tensor[T, S, L]): Tensor[T, S, L] =
+        new Tensor[T, S, L](tf.square(x.tensor))
     
-    def sin[T : TFEncoding, S <: Shape](x: Tensor[T, S]): Tensor[T, S] =
-        new Tensor[T, S](tf.sin(x.tensor))
+    def sin[T : TFEncoding, S <: Shape, L <: Labels](x: Tensor[T, S, L]): Tensor[T, S, L] =
+        new Tensor[T, S, L](tf.sin(x.tensor))
 
-    def sinh[T : TFEncoding, S <: Shape](x: Tensor[T, S]): Tensor[T, S] =
-        new Tensor[T, S](tf.sinh(x.tensor))
+    def sinh[T : TFEncoding, S <: Shape, L <: Labels](x: Tensor[T, S, L]): Tensor[T, S, L] =
+        new Tensor[T, S, L](tf.sinh(x.tensor))
 
-    def asin[T : TFEncoding, S <: Shape](x: Tensor[T, S]): Tensor[T, S] =
-        new Tensor[T, S](tf.asin(x.tensor))
+    def asin[T : TFEncoding, S <: Shape, L <: Labels](x: Tensor[T, S, L]): Tensor[T, S, L] =
+        new Tensor[T, S, L](tf.asin(x.tensor))
 
-    def asinh[T : TFEncoding, S <: Shape](x: Tensor[T, S]): Tensor[T, S] =
-        new Tensor[T, S](tf.asinh(x.tensor))
+    def asinh[T : TFEncoding, S <: Shape, L <: Labels](x: Tensor[T, S, L]): Tensor[T, S, L] =
+        new Tensor[T, S, L](tf.asinh(x.tensor))
 
-    def tan[T : TFEncoding, S <: Shape](x: Tensor[T, S]): Tensor[T, S] =
-        new Tensor[T, S](tf.tan(x.tensor))
+    def tan[T : TFEncoding, S <: Shape, L <: Labels](x: Tensor[T, S, L]): Tensor[T, S, L] =
+        new Tensor[T, S, L](tf.tan(x.tensor))
 
-    def tanh[T : TFEncoding, S <: Shape](x: Tensor[T, S]): Tensor[T, S] =
-        new Tensor[T, S](tf.tanh(x.tensor))
+    def tanh[T : TFEncoding, S <: Shape, L <: Labels](x: Tensor[T, S, L]): Tensor[T, S, L] =
+        new Tensor[T, S, L](tf.tanh(x.tensor))
 
-    def atan[T : TFEncoding, S <: Shape](x: Tensor[T, S]): Tensor[T, S] =
-        new Tensor[T, S](tf.atan(x.tensor))
+    def atan[T : TFEncoding, S <: Shape, L <: Labels](x: Tensor[T, S, L]): Tensor[T, S, L] =
+        new Tensor[T, S, L](tf.atan(x.tensor))
 
-    def atanh[T : TFEncoding, S <: Shape](x: Tensor[T, S]): Tensor[T, S] =
-        new Tensor[T, S](tf.atanh(x.tensor))
+    def atanh[T : TFEncoding, S <: Shape, L <: Labels](x: Tensor[T, S, L]): Tensor[T, S, L] =
+        new Tensor[T, S, L](tf.atanh(x.tensor))
 }
