@@ -55,6 +55,9 @@ object TensorFlow {
         dataType: DataType[T] = float32
     ): Tensor[T, S] =
         new Tensor[T, S](tf.random_uniform(shape.toSeq, min, max, dataType.dtype))
+    
+    def transpose[T : TFEncoding, S <: Shape](tensor: Tensor[T, S]): Tensor[T, Shape.Reverse[S]] =
+        new Tensor[T, Shape.Reverse[S]](tf.transpose(tensor.tensor))
 
     //////////////
     // Reducers //

@@ -87,6 +87,8 @@ object PythonList {
 
   def reduce_mean(t: Tensor, axis: Seq[Int]): Tensor =
     as[py.Dynamic].reduce_mean(t, PythonList.seqToPythonList(axis)).as[Tensor]
+  
+  def transpose(t: Tensor): Tensor = py.native
 
   def gradients(ys: Tensor | Seq[Tensor], xs: Tensor | Seq[Tensor]): Seq[Tensor] = py.native
 
