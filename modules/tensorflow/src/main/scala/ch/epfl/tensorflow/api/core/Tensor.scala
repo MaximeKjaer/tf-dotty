@@ -7,6 +7,7 @@ class Tensor[T : TFEncoding, S <: Shape, L <: Labels] private[core] (val tensor:
 
     def dtype: DataType[T] = summon[TFEncoding[T]].dataType
     def shape(given s: Materialize[S]): S = s.value
+    def labels(given l: Materialize[L]): L = l.value
 
     def name: String = tensor.name
     def device: Option[String] = Option(tensor.device).filter(_.trim.nonEmpty)

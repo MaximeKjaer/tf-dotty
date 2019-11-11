@@ -2,6 +2,14 @@ package ch.epfl.tensorflow.api.core
 
 import scala.compiletime.{S, constValue}
 
+sealed trait Select
+case object SNil extends Select
+case class ^[T <: Select](tail: T) extends Select
+case class v[T <: Select](tail: T) extends Select
+
+// L :: H :: R :: G :: B :: T :: HNil
+// v :: v :: ^ :: ^ :: ^ :: v :: HNil
+
 trait HList[+T]
 
 type Label = String & Singleton
@@ -149,6 +157,15 @@ final case class #:[H <: Dimension, T <: Shape](head: H, tail: T) extends Shape 
 sealed trait Labels extends HList[Label] {
     def @:[H <: Label, This >: this.type <: Labels](head: H): H @: This = 
         ch.epfl.tensorflow.api.core.@:(head, this)
+
+    def indexOf[L <: Label](l: L): Labels.IndexOf[L, this.type] = {
+        val res: Int = this match {
+            case HNil => ???
+            case `l` @: _ => 0
+            case l @: tail => 1 + tail.indexOf(l)
+        }
+        res.asInstanceOf[Labels.IndexOf[L, this.type]]
+    }
 }
 
 object Labels {
@@ -191,6 +208,15 @@ sealed trait Axes extends HList[Axis] {
             case (l, _) *: tail => l @: tail.labels
         }
         res.asInstanceOf[Axes.LabelsOf[this.type]]
+    }
+
+    def indexOf[L <: Label](l: L): Axes.IndexOf[L, this.type] = {
+        val res: Int = this match {
+            case HNil => ???
+            case (`l`, _) *: _ => 0
+            case _ *: tail => tail.indexOf(l) + 1
+        }
+        res.asInstanceOf[Axes.IndexOf[L, this.type]]
     }
 }
 

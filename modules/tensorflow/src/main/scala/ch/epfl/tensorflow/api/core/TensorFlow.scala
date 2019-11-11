@@ -75,11 +75,14 @@ object TensorFlow {
     def reduce_mean[T : TFEncoding](tensor: Tensor[T, ?, ?]): Tensor.Aux[T, HNil] =
         Tensor[T, HNil](tf.reduce_mean(tensor.tensor))
 
+    // TODO fix
     def reduce_mean[T : TFEncoding, A <: Axes, L <: Label](
         tensor: Tensor.Aux[T, A],
         axis: L
-    )(given index: ValueOf[Axes.IndexOf[L, A]]): Tensor.Aux[T, Axes.Remove[L, A]] =
-        Tensor[T, Axes.Remove[L, A]](tf.reduce_mean(tensor.tensor, index.value))
+    ): Tensor.Aux[T, Axes.Remove[L, A]] = {
+        val index = 1 // tensor.labels.indexOf(axis)
+        Tensor[T, Axes.Remove[L, A]](tf.reduce_mean(tensor.tensor, index))
+    }
     
     
     //////////

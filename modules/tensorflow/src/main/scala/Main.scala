@@ -14,6 +14,8 @@ object Main {
     val matrix2 = TensorFlow.zeros_like(matrix1)
     val matrix3 = TensorFlow.zeros(axis2)
 
+    val reduction = TensorFlow.reduce_mean(matrix1, "x")
+
     // val reshaped = TensorFlow.reshape(matrix1, 2 #: 100 #: HNil)
 
     println(matrix1)
