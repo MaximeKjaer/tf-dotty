@@ -72,14 +72,13 @@ object TensorFlow {
     // - reduce_sum
     // - reduce_variance
 
-    def reduce_mean[T : TFEncoding, S <: Shape](tensor: Tensor[T, S]): Tensor[T, SNil] =
-        new Tensor[T, SNil](tf.reduce_mean(tensor.tensor))
-
-    def reduce_mean[T : TFEncoding, S <: Shape](
+    def reduce_mean[T : TFEncoding, S <: Shape, S2 <: Select](
         tensor: Tensor[T, S],
-        axis: Dimension // Todo more descriptive type name
-    ): Tensor[T, Shape.Remove[S, axis.type]] =
-        new Tensor[T, Shape.Remove[S, axis.type]](tf.reduce_mean(tensor.tensor, axis))
+        axes: S2 = SNil
+    ): Tensor[T, Shape.Remove[S, S2]] = {
+        println(axes.selectedIndices)
+        new Tensor[T, Shape.Remove[S, S2]](tf.reduce_mean(tensor.tensor, axes.selectedIndices))
+    }
     
     
     //////////

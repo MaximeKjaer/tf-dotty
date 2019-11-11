@@ -1,6 +1,14 @@
 package ch.epfl.tensorflow.api.core
 
-import scala.compiletime.{S, constValue}
+import scala.compiletime.S
+
+sealed trait SNil extends Shape with Select
+case object SNil extends SNil
+
+
+///////////
+// Shape //
+///////////
 
 type Dimension = Int & Singleton
 
@@ -103,12 +111,12 @@ object Shape {
         case _ #: tail => tail
     }
 
-    type Remove[X <: Shape, Index <: Int] <: Shape = Index match {
-        case 0 => X match {
-            case _ #: tail => tail
-        }
-        case S[indexMinusOne] => X match {
-            case head #: tail => head #: Remove[tail, indexMinusOne]
+    type Remove[X <: Shape, S <: Select] <: Shape = X match {
+        case SNil => SNil
+        case head #: tail => S match {
+            case ^ :: stail => Remove[tail, stail]
+            case v :: stail => head #: Remove[tail, stail]
+            case SNil => head #: tail
         }
     }
 
@@ -133,5 +141,32 @@ final case class #:[H <: Dimension, T <: Shape](head: H, tail: T) extends Shape 
     }
 }
 
-sealed trait SNil extends Shape
-case object SNil extends SNil
+////////////
+// Select //
+////////////
+
+sealed trait Selector
+
+sealed trait v extends Selector
+case object v extends v
+sealed trait ^ extends Selector
+case object ^ extends ^
+
+sealed trait Select {
+    def ::[H <: Selector, This >: this.type <: Select](head: H): H :: This = 
+        ch.epfl.tensorflow.api.core.::(head, this)
+
+    def selectedIndices: Seq[Int] = {
+        def loop(select: Select, index: Int): Seq[Int] = select match {
+            case ^ :: tail => index +: loop(tail, index + 1)
+            case v :: tail => loop(tail, index + 1)
+            case SNil => Seq.empty
+        }
+        loop(this, 0)
+    }
+}
+
+final case class ::[H <: Selector, T <: Select](head: H, tail: T) extends Select {
+    override def toString = s"$head :: $tail"
+}
+

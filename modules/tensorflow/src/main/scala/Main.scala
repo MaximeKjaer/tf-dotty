@@ -13,6 +13,9 @@ object Main {
 
     val res1: Tensor[Float, 20 #: 10 #: SNil.type] = (matrix1 + matrix2 - matrix2) / matrix2
     val res2: Tensor[Float, 20 #: 10 #: SNil.type] = TensorFlow.floor(TensorFlow.abs(TensorFlow.pow(res1, matrix2)))
+
+    val x = TensorFlow.reduce_mean(matrix1, ^ :: ^ :: SNil)
+    println(x)
     
     println(res2)
     println(res2.dtype)
