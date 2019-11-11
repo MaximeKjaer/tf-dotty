@@ -2,10 +2,10 @@ package ch.epfl.tensorflow.api.core
 
 import me.shadaj.scalapy.tensorflow.{Tensor => PyTensor}
 
-class Tensor[T : TFEncoding, S <: Shape] private[core] (val tensor: PyTensor) {
+class Tensor[T, S <: Shape] private[core] (val tensor: PyTensor) {
     override def toString: String = tensor.toString
 
-    val dtype = summon[TFEncoding[T]].dataType
+    def dtype: DataType[T] = ??? // TODO 
     def shape(given s: ShapeOf[S]) = s.value
     def name: String = tensor.name
     def device: Option[String] = Option(tensor.device).filter(_.trim.nonEmpty)

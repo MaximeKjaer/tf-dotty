@@ -22,8 +22,8 @@ object Main {
     println(res2)
     println(res2.dtype)
 
-    println(TensorFlow.constant(3, shape = 10 #: 3 #: SNil))
-    println(TensorFlow.constant(3f))
+    println(TensorFlow.constant(3, TensorFlow.int32, shape = 10 #: 3 #: SNil))
+    println(TensorFlow.constant(3f, TensorFlow.float32))
     println(TensorFlow.Variable(res2))
   }
 }

@@ -1,9 +1,10 @@
 package ch.epfl.tensorflow.api.core
 
+import me.shadaj.scalapy.py
 import me.shadaj.scalapy.tensorflow
 import me.shadaj.scalapy.tensorflow.TF.tf
 
-sealed trait DataType[T] {
+trait DataType[T](given val reader: py.Reader[T], val writer: py.Writer[T]) {
     def dtype: tensorflow.DType
     override def toString: String = dtype.toString
 }
