@@ -12,7 +12,9 @@ object PythonList {
 }
 
 @py.native trait TensorFlow extends py.Object {
-  // Types
+  ///////////    
+  // Types //
+  ///////////
   def float16: DType = py.native
   def float32: DType = py.native
   def float64: DType = py.native
@@ -37,6 +39,16 @@ object PythonList {
   def resource: DType = py.native
   def variant: DType = py.native
 
+  /////////////
+  // Modules //
+  /////////////
+  def nn: NeuralNetwork = py.native
+  def train: Training = py.native
+
+  //////////////////
+  // Constructors //
+  //////////////////
+
   def Variable(initialValue: Tensor): Variable = py.native
 
   def constant[T : py.Reader : py.Writer](value: T, dtype: DType, shape: Seq[Int], name: String = "Const"): Tensor =
@@ -52,26 +64,48 @@ object PythonList {
 
   def placeholder(`type`: DType, shape: Seq[py.NoneOr[Int]]): Tensor = py.native
 
-  def nn: NeuralNetwork = py.native
-  def train: Training = py.native
-
   def matmul(a: Tensor, b: Tensor): Tensor = py.native
 
+  //////////
+  // Math //
+  //////////
   def abs(x: Tensor): Tensor = py.native
-  def floor(x: Tensor): Tensor = py.native
-  def square(t: Tensor): Tensor = py.native
-  
-  def sin(t: Tensor): Tensor = py.native
-  def sinh(t: Tensor): Tensor = py.native
+  def accumulate_n(inputs: Seq[Tensor]): Tensor = py.native
+  def acos(x: Tensor): Tensor = py.native
+  def acosh(x: Tensor): Tensor = py.native
+  def add(x: Tensor, y: Tensor): Tensor = py.native
+  def add_n(inputs: Seq[Tensor]): Tensor = py.native
+  def angle(input: Tensor): Tensor = py.native
+  def argmax(input: Tensor, axis: Seq[Int], output_type: DType): Tensor = py.native
+  def argmin(input: Tensor, axis: Seq[Int], output_type: DType): Tensor = py.native
   def asin(t: Tensor): Tensor = py.native
   def asinh(t: Tensor): Tensor = py.native
+  def atan(t: Tensor): Tensor = py.native
+  def atan2(y: Tensor, x: Tensor): Tensor = py.native
+  def atanh(t: Tensor): Tensor = py.native
+  // TODO bessel funcitons
+  def betainc(a: Tensor, b: Tensor, x: Tensor): Tensor = py.native
+  // TODO bincount
+  def ceil(x: Tensor): Tensor = py.native
+  // TODO confusion_matrix
+  // TODO conj
+  def cos(t: Tensor): Tensor = py.native
+  def cosh(t: Tensor): Tensor = py.native
+  def count_nonzero(t: Tensor, axis: Seq[Int], dtype: DType): Tensor = py.native // TODO test
+  def cumprod(x: Tensor, axis: Seq[Int], exclusive: Boolean, reverse: Boolean): Tensor = py.native
+  def cumsum(x: Tensor, axis: Seq[Int], exclusive: Boolean, reverse: Boolean): Tensor = py.native
+
+  def floor(x: Tensor): Tensor = py.native
+  def pow(x: Tensor, y: Tensor): Tensor = py.native
+  def square(t: Tensor): Tensor = py.native
+  def sin(t: Tensor): Tensor = py.native
+  def sinh(t: Tensor): Tensor = py.native
   
   def tan(t: Tensor): Tensor = py.native
   def tanh(t: Tensor): Tensor = py.native
-  def atan(t: Tensor): Tensor = py.native
-  def atanh(t: Tensor): Tensor = py.native
   
-  def pow(x: Tensor, y: Tensor): Tensor = py.native
+  
+  
 
   def identity: PyFunction = py.native
 
@@ -82,8 +116,8 @@ object PythonList {
   def zeros_like(tensor: Tensor, dtype: py.NoneOr[DType] = py.None): Tensor = py.native
 
   def reshape(tensor: Tensor, shape: Seq[Int]): Tensor = py.native
-
-  def add_n(ts: Seq[Tensor]): Tensor = py.native
+  
+  
 
   def reduce_mean(t: Tensor, axis: Seq[Int]): Tensor =
     as[py.Dynamic].reduce_mean(t, PythonList.seqToPythonList(axis)).as[Tensor]

@@ -12,6 +12,10 @@ case object INT32 extends DataType[Int] {
     override def dtype = tf.int32
 }
 
+case object INT64 extends DataType[Long] {
+    override def dtype = tf.int64
+}
+
 case object FLOAT32 extends DataType[Float] {
     override def dtype = tf.float32
 }

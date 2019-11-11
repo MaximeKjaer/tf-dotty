@@ -11,6 +11,10 @@ object TFEncoding {
         override def dataType: DataType[Int] = INT32
     }
 
+    given TFEncoding[Long] {
+        override def dataType: DataType[Long] = INT64
+    }
+
     given TFEncoding[Float] {
         override def dataType: DataType[Float] = FLOAT32
     }
