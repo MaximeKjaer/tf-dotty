@@ -3,14 +3,13 @@ val scala213Version = "2.13.1"
 
 lazy val tensorflow = project
   .in(file("modules/tensorflow"))
-  .dependsOn(scalapyTensorflow)
+  .dependsOn(scalapyCore, scalapyTensorflow)
   .settings(
     name := "tf-dotty",
     version := "0.1.0",
     organization := "ch.epfl",
     scalaVersion := dottyVersion,
 
-    libraryDependencies += ("me.shadaj" %% "scalapy-core" % "0.3.0+1-35dca37d").withDottyCompat(dottyVersion),
     libraryDependencies += "com.novocode" % "junit-interface" % "0.11" % "test",
 
     fork := true,
@@ -20,19 +19,18 @@ lazy val tensorflow = project
 
 lazy val scalapyTensorflow = project
   .in(file("modules/scalapy-tensorflow"))
+  .dependsOn(scalapyCore, scalapyNumpy)
   .settings(
     name := "scalapy-tensorflow",
     scalaVersion := scala213Version,
     organization := "me.shadaj",
 
-    // ScalaPy:
-    // Available by running `sbt publishLocal` from https://github.com/MaximeKjaer/scalapy/tree/port-jna-2.13
-    // libraryDependencies += "me.shadaj" %% "scalapy-core" % "0.3.0+6-73fec340",
-    // Available by running `sbt publishLocal` from https://github.com/MaximeKjaer/scalapy/tree/port-2.13
-    libraryDependencies += ("me.shadaj" %% "scalapy-core" % "0.3.0+1-35dca37d").withDottyCompat(dottyVersion),
-    libraryDependencies += ("me.shadaj" %% "scalapy-numpy" % "0.1.0+3-046d1d67+20191023-1508").withDottyCompat(dottyVersion),
-
     // Tests:
     libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.14.0" % Test,
-    libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.8" % Test
+    libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.8" % Test,
+
+    projectDependencies ~=(_.map(_.withDottyCompat(dottyVersion))),
   )
+
+lazy val scalapyCore = ProjectRef(uri("git://github.com/MaximeKjaer/scalapy#port-2.13"), "coreJVM")
+lazy val scalapyNumpy = ProjectRef(uri("git://github.com/MaximeKjaer/scalapy-numpy#port-2.13"), "scalaPyNumpyCrossJVM")
