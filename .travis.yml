@@ -3,6 +3,8 @@ cache:
   directories:
     - $HOME/.ivy2/cache
     - $HOME/.sbt
+    - $HOME/.cache/pip
+    - $HOME/.cache/pyenv
 
 install:
   - pyenv install -s 3.6.3
