@@ -1,6 +1,9 @@
 # Tensorflow Dotty
 
+[![Build Status](https://travis-ci.com/MaximeKjaer/tf-dotty.svg?token=soqG4sgcMQUgpCtPSUUr&branch=master)](https://travis-ci.com/MaximeKjaer/tf-dotty)
+
 ## Dependencies
+
 This project communicates with the Python implementation of TensorFlow. Therefore, you will need to have Python 3.7 and pip installed. One of the installed dependencies, `jep`, needs to have the `JAVA_HOME` environment variable set, so we'll start there. I had to set:
 
 ```
@@ -12,7 +15,6 @@ This setup is a little finnicky with version numbers: we need TensorFlow 1.14.0 
 ```
 mkvirtualenv -p python3.7 -r requirements.txt tf-dotty
 ```
-
 
 ## Usage
 
