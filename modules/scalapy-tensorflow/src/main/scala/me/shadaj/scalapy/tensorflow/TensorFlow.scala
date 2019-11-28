@@ -119,7 +119,7 @@ object PythonList {
   
   
 
-  def reduce_mean(t: Tensor, axis: Seq[Int]): Tensor =
+  def reduce_mean(t: Tensor, axis: Seq[Int] = Seq()): Tensor =
     as[py.Dynamic].reduce_mean(t, PythonList.seqToPythonList(axis)).as[Tensor]
   
   def transpose(t: Tensor): Tensor = py.native
