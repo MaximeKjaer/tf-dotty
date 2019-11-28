@@ -9,7 +9,7 @@ cache:
 install:
   - pyenv install -s 3.6.3
   - pyenv global 3.6.3
-  - pip install jep
+  - pip install -r requirements.txt
 
 script:
   - export JEP_PATH="/opt/python/3.6.3/lib/python3.6/site-packages/jep"
