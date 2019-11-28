@@ -9,9 +9,11 @@ class TensorFlowTest {
         assertEquals(SNil, res.shape)
     }
 
+    /*
     @Test def `reduce_mean(tensor, 0) ==> tensor of shape 2 #: SNil`(): Unit = {
         val tensor = TensorFlow.zeros(2 #: 2 #: SNil)
-        val res = TensorFlow.reduce_mean(tensor, 0)
+        val res = TensorFlow.reduce_mean(tensor, ^ :: v :: SNil)
         assertEquals(2 #: SNil, res.shape)
     }
+    */
 }

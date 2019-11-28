@@ -27,15 +27,18 @@ class ShapeTest {
         assertEquals(shape1NumEls, shape2NumEls)
     }
 
-    @Test def `Remove[1 #: SNil, 0] == SNil`(): Unit = {   
-        assertShapeEquals[SNil, Shape.Remove[1 #: SNil, 0]]
+    @Test def `Remove[1 #: SNil, ^ :: SNil] == SNil`(): Unit = {   
+        assertShapeEquals[SNil, Shape.Remove[1 #: SNil, ^ :: SNil]]
     }
 
-    @Test def `Remove[1 #: 2 #: SNil, 0] == 2 #: SNil`(): Unit = {   
-        assertShapeEquals[2 #: SNil, Shape.Remove[1 #: 2 #: SNil, 0]]
+    @Test def `Remove[1 #: 2 #: SNil, ^ :: SNil] == 2 #: SNil`(): Unit = {   
+        assertShapeEquals[2 #: SNil, Shape.Remove[1 #: 2 #: SNil, ^ :: SNil]]
     }
 
-    @Test def `Remove[1 #: 2 #: SNil, 1] == 1 #: SNil`(): Unit = {   
-        assertShapeEquals[1 #: SNil, Shape.Remove[1 #: 2 #: SNil, 1]]
+    /*
+    @Test def `Remove[1 #: 2 #: SNil, v :: ^ :: SNil] == 1 #: SNil`(): Unit = {
+        val x: Shape.Remove[1 #: 2 #: SNil, v :: ^ :: SNil] = 1 #: SNil
+        assertShapeEquals[1 #: SNil, Shape.Remove[1 #: 2 #: SNil, v :: ^ :: SNil]]
     }
+    */
 }
