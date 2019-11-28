@@ -86,10 +86,8 @@ object TensorFlow {
     def reduce_mean[T, S <: Shape, S2 <: Select](
         tensor: Tensor[T, S],
         axes: S2 = SNil
-    ): Tensor[T, Shape.Remove[S, S2]] = {
-        println(axes.selectedIndices)
-        new Tensor[T, Shape.Remove[S, S2]](tf.reduce_mean(tensor.tensor, axes.selectedIndices))
-    }
+    ): Tensor[T, Shape.Reduce[S, S2]] =
+        new Tensor[T, Shape.Reduce[S, S2]](tf.reduce_mean(tensor.tensor, axes.selectedIndices))
     
     
     //////////

@@ -111,11 +111,18 @@ object Shape {
         case _ #: tail => tail
     }
 
+    // This represents reduction as in TensorFlow: an empty list of indices means
+    // all, and a non-empty list specifies the indices to remove.
+    type Reduce[X <: Shape, S <: Select] <: Shape = S match {
+        case SNil => SNil
+        case _ => Remove[X, S]
+    }
+
     type Remove[X <: Shape, S <: Select] <: Shape = X match {
         case SNil => SNil
         case head #: tail => S match {
             case ^ :: stail => Remove[tail, stail]
-            case v :: stail => head #: Remove[tail, stail]
+            case `v` :: stail => head #: Remove[tail, stail]
             case SNil => head #: tail
         }
     }
