@@ -1,3 +1,4 @@
+# Scala 
 *.class
 *.log
 target/
@@ -6,3 +7,6 @@ project/target/
 .metals
 .dotty-ide*
 .idea
+
+# Website
+node_modules
