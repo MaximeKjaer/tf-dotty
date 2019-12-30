@@ -3,7 +3,7 @@ package ch.epfl.tensorflow.api.core
 import scala.compiletime.S
 import scala.compiletime.ops.int._
 
-sealed trait SNil extends Shape with Select
+sealed trait SNil extends Shape with Indices
 case object SNil extends SNil
 
 
@@ -110,18 +110,33 @@ object Shape {
         case _ #: tail => tail
     }
 
-    // This represents reduction as in TensorFlow: an empty list of indices means
-    // all, and a non-empty list specifies the indices to remove.
-    type Reduce[X <: Shape, S <: Select] <: Shape = S match {
+    /** Generate a list of indices */
+    type Enumerate[X <: Shape] = IndicesLoop[X, 0]
+    protected type IndicesLoop[X <: Shape, Current <: Index] <: Indices = X match {
+        case head #: tail => Current :: IndicesLoop[tail, S[Current]]
         case SNil => SNil
-        case _ => Remove[X, S]
     }
 
-    type Remove[X <: Shape, S <: Select] <: Shape = X match {
+    // This represents reduction as in TensorFlow: an empty list of indices means
+    // all, and a non-empty list specifies the indices to remove.
+    type Reduce[X <: Shape, S <: Indices] <: Shape = S match {
         case SNil => SNil
-        case head #: tail => S match {
-            case ^ :: stail => Remove[tail, stail]
-            case `v` :: stail => head #: Remove[tail, stail]
+        case _ => Remove[X, Enumerate[X], S]
+    }
+
+    /**
+     * Remove indices from a shape
+     * @tparam X Shape to remove from 
+     * @tparam I Enumerated indices of the shape
+     * @tparam R Indices to remove from X
+     */
+    protected type Remove[X <: Shape, I <: Indices, R <: Indices] <: Shape = X match {
+        case SNil => SNil
+        case head #: tail => I match {
+            case index :: tailIndices => Indices.Contains[R, index] match {
+                case true => Remove[tail, tailIndices, Tail[R]]
+                case false => head #: Remove[tail, tailIndices, Tail[R]]
+            }
             case SNil => head #: tail
         }
     }
@@ -151,28 +166,26 @@ final case class #:[H <: Dimension, T <: Shape](head: H, tail: T) extends Shape 
 // Select //
 ////////////
 
-sealed trait Selector
+type Index = Int & Singleton
 
-sealed trait v extends Selector
-case object v extends v
-sealed trait ^ extends Selector
-case object ^ extends ^
-
-sealed trait Select {
-    def ::[H <: Selector, This >: this.type <: Select](head: H): H :: This = 
+sealed trait Indices {
+    def ::[H <: Index, This >: this.type <: Indices](head: H): H :: This = 
         ch.epfl.tensorflow.api.core.::(head, this)
 
-    def selectedIndices: Seq[Int] = {
-        def loop(select: Select, index: Int): Seq[Int] = select match {
-            case ^ :: tail => index +: loop(tail, index + 1)
-            case v :: tail => loop(tail, index + 1)
-            case SNil => Seq.empty
-        }
-        loop(this, 0)
+    def indices: Set[Int] = this match {
+        case head :: tail => tail.indices + head
+        case SNil => Set.empty
     }
 }
 
-final case class ::[H <: Selector, T <: Select](head: H, tail: T) extends Select {
+final case class ::[H <: Index, T <: Indices](head: H, tail: T) extends Indices {
     override def toString = s"$head :: $tail"
 }
 
+object Indices {
+    type Contains[Haystack <: Indices, Needle <: Index] <: Boolean = Haystack match {
+        case Needle :: _ => true
+        case head :: tail => Contains[tail, Needle]
+        case SNil => false
+    }
+}

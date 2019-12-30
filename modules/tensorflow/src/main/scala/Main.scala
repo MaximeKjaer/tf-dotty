@@ -16,7 +16,7 @@ object Main {
 
     val res1T = TensorFlow.transpose(res1)
 
-    val x = TensorFlow.reduce_mean(matrix1, ^ :: ^ :: SNil)
+    val x = TensorFlow.reduce_mean(matrix1, SNil)
     println(x)
     
     println(res2)

@@ -83,11 +83,11 @@ object TensorFlow {
     // - reduce_sum
     // - reduce_variance
 
-    def reduce_mean[T, S <: Shape, S2 <: Select](
+    def reduce_mean[T, S <: Shape, S2 <: Indices](
         tensor: Tensor[T, S],
         axes: S2 = SNil
     ): Tensor[T, Shape.Reduce[S, S2]] =
-        new Tensor[T, Shape.Reduce[S, S2]](tf.reduce_mean(tensor.tensor, axes.selectedIndices))
+        new Tensor[T, Shape.Reduce[S, S2]](tf.reduce_mean(tensor.tensor, axes.indices.toSeq))
     
     
     //////////
@@ -117,18 +117,18 @@ object TensorFlow {
     // todo encode T1, T2 isNumeric
     def argmax[T1, T2 <: Int | Long, S <: Shape](
         input: Tensor[T1, S],
-        axes: Select = SNil,
+        axes: Indices = SNil,
         output_type: DataType[T2] = int64
     ): Tensor[T2, S] =
-        new Tensor[T2, S](tf.argmax(input.tensor, axes.selectedIndices, output_type.dtype))
+        new Tensor[T2, S](tf.argmax(input.tensor, axes.indices.toSeq, output_type.dtype))
 
     // todo encode T1, T2 isNumeric
     def argmin[T1, T2 <: Int | Long, S <: Shape](
         input: Tensor[T1, S],
-        axes: Select = SNil,
+        axes: Indices = SNil,
         output_type: DataType[T2] = int64
     ): Tensor[T2, S] =
-        new Tensor[T2, S](tf.argmin(input.tensor, axes.selectedIndices, output_type.dtype))
+        new Tensor[T2, S](tf.argmin(input.tensor, axes.indices.toSeq, output_type.dtype))
 
     def asin[T, S <: Shape](x: Tensor[T, S]): Tensor[T, S] =
         new Tensor[T, S](tf.asin(x.tensor))
@@ -167,28 +167,28 @@ object TensorFlow {
         new Tensor[T, S](tf.cosh(x.tensor))
     
     // Todo must be numeric, bool or string
-    def count_nonzero[T1 <: Float | Double | Int | Long | Boolean | String, T2, S <: Shape, Sel <: Select](
+    def count_nonzero[T1 <: Float | Double | Int | Long | Boolean | String, T2, S <: Shape, Sel <: Indices](
         input_tensor: Tensor[T1, S],
         axis: Sel = SNil,
         dtype: DataType[T2] = int64
-    ): Tensor[T2, Shape.Remove[S, Sel]] =
-        new Tensor(tf.count_nonzero(input_tensor.tensor, axis.selectedIndices, dtype.dtype))
+    ): Tensor[T2, Shape.Reduce[S, Sel]] =
+        new Tensor(tf.count_nonzero(input_tensor.tensor, axis.indices.toSeq, dtype.dtype))
 
-    def cumprod[T <: Float | Double | Int | Long, S <: Shape, Sel <: Select](
+    def cumprod[T <: Float | Double | Int | Long, S <: Shape, Sel <: Indices](
         x: Tensor[T, S],
         axis: Sel = SNil,
         exclusive: Boolean = false,
         reverse: Boolean = false
-    ): Tensor[T, Shape.Remove[S, Sel]] = 
-        new Tensor(tf.cumprod(x.tensor, axis.selectedIndices, exclusive, reverse))
+    ): Tensor[T, Shape.Reduce[S, Sel]] = 
+        new Tensor(tf.cumprod(x.tensor, axis.indices.toSeq, exclusive, reverse))
 
-    def cumsum[T <: Float | Double | Int | Long, S <: Shape, Sel <: Select](
+    def cumsum[T <: Float | Double | Int | Long, S <: Shape, Sel <: Indices](
         x: Tensor[T, S],
         axis: Sel = SNil,
         exclusive: Boolean = false,
         reverse: Boolean = false
-    ): Tensor[T, Shape.Remove[S, Sel]] = 
-        new Tensor(tf.cumprod(x.tensor, axis.selectedIndices, exclusive, reverse))
+    ): Tensor[T, Shape.Reduce[S, Sel]] = 
+        new Tensor(tf.cumprod(x.tensor, axis.indices.toSeq, exclusive, reverse))
     
     // ------
 
@@ -212,6 +212,4 @@ object TensorFlow {
 
     def tanh[T, S <: Shape](x: Tensor[T, S]): Tensor[T, S] =
         new Tensor[T, S](tf.tanh(x.tensor))
-
-    
 }
