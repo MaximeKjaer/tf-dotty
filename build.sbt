@@ -11,6 +11,7 @@ lazy val tensorflow = project
     scalaVersion := dottyVersion,
 
     libraryDependencies += "com.novocode" % "junit-interface" % "0.11" % "test",
+    testOptions += Tests.Argument(TestFrameworks.JUnit, "-s", "-v"),
 
     fork := true,
     javaOptions += s"-Djava.library.path=${sys.env.getOrElse("JEP_PATH", "/home/maxime/.virtualenvs/tf-dotty/lib/python3.7/site-packages/jep")}",
