@@ -1,6 +1,7 @@
 package ch.epfl.tensorflow.api.core
 
 import scala.compiletime.S
+import scala.compiletime.ops.int._
 
 sealed trait SNil extends Shape with Select
 case object SNil extends SNil
@@ -59,8 +60,6 @@ sealed trait Shape extends Product with Serializable {
 }
 
 object Shape {
-    import TypeUtils.*
-
     type Map[X <: Shape, F[_ <: Dimension] <: Dimension] <: Shape = X match {
         case SNil => SNil
         case head #: tail => F[head] #: Map[tail, F]

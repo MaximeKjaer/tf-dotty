@@ -1,4 +1,9 @@
-val dottyVersion = "0.19.0-RC1"
+/** This version is compiled from this fork of dotty:
+ *  https://github.com/MaximeKjaer/dotty/tree/singleton-arithmetic
+ *  It has been published locally with `sbt dotty-bootstrapped/publishLocal`.
+ */
+val dottyVersion = "0.21.0-bin-SNAPSHOT"
+
 val scala213Version = "2.13.1"
 
 lazy val tensorflow = project
