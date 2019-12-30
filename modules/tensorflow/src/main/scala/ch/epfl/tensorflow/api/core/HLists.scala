@@ -153,8 +153,6 @@ object Shape {
     def matrix(rows: Dimension, columns: Dimension): rows.type #: columns.type #: SNil = rows #: columns #: SNil
 }
 
-
-
 final case class #:[H <: Dimension, T <: Shape](head: H, tail: T) extends Shape {
     override def toString = head match {
         case _ #: _ => s"($head) #: $tail"
@@ -184,8 +182,10 @@ final case class ::[H <: Index, T <: Indices](head: H, tail: T) extends Indices 
 
 object Indices {
     type Contains[Haystack <: Indices, Needle <: Index] <: Boolean = Haystack match {
-        case Needle :: _ => true
-        case head :: tail => Contains[tail, Needle]
+        case head :: tail => head match {
+            case Needle => true
+            case _ => Contains[tail, Needle]
+        }
         case SNil => false
     }
 }
