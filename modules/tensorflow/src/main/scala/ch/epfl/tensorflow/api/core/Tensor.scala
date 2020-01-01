@@ -6,7 +6,7 @@ class Tensor[T, S <: Shape] private[core] (val tensor: PyTensor) {
     override def toString: String = tensor.toString
 
     def dtype: DataType[T] = ??? // TODO 
-    def shape(given s: ShapeOf[S]) = s.value
+    def shape: S = Shape.fromSeq(tensor.shape).asInstanceOf[S]
     def name: String = tensor.name
     def device: Option[String] = Option(tensor.device).filter(_.trim.nonEmpty)
 

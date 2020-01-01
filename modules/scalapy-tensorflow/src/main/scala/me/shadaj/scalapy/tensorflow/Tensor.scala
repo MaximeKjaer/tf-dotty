@@ -6,6 +6,7 @@ import me.shadaj.scalapy.py
   def name: String = py.native
   def device: String = py.native
   def dtype: DType = py.native
+  def shape: Seq[Int] = (as[py.Dynamic].shape.as_list().as[Seq[Int]].toSeq)
 
   def unary_+(): Tensor = (+as[py.Dynamic]).as[Tensor]
   def unary_-(): Tensor = (-as[py.Dynamic]).as[Tensor]

@@ -60,6 +60,11 @@ sealed trait Shape extends Product with Serializable {
 }
 
 object Shape {
+    def fromSeq(seq: Seq[Int]): Shape = seq match {
+        case Nil => SNil
+        case head +: tail => head #: Shape.fromSeq(tail)
+    }
+
     type Map[X <: Shape, F[_ <: Dimension] <: Dimension] <: Shape = X match {
         case SNil => SNil
         case head #: tail => F[head] #: Map[tail, F]
