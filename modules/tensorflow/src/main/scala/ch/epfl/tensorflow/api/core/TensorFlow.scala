@@ -83,11 +83,11 @@ object TensorFlow {
     // - reduce_sum
     // - reduce_variance
 
-    def reduce_mean[T, S <: Shape, S2 <: Indices](
-        tensor: Tensor[T, S],
-        axes: S2 = SNil
-    ): Tensor[T, Shape.Reduce[S, S2]] =
+    def reduce_mean[T, S <: Shape](tensor: Tensor[T, S]): Tensor[T, SNil] = new Tensor[T, SNil](tf.reduce_mean(tensor.tensor))
+
+    def reduce_mean[T, S <: Shape, S2 <: Indices](tensor: Tensor[T, S], axes: S2): Tensor[T, Shape.Reduce[S, S2]] =
         new Tensor[T, Shape.Reduce[S, S2]](tf.reduce_mean(tensor.tensor, axes.indices.toSeq))
+    
     
     
     //////////

@@ -36,7 +36,7 @@ class ShapeTest {
 
     @Test def `Reduce empty`(): Unit = {
         val res = shapeOf[Shape.Reduce[1 #: 2 #: SNil, SNil]]
-        assertEquals(SNil, res)
+        assertEquals(1 #: 2 #: SNil, res)
     }
 
     @Test def `Reduce 1`(): Unit = {

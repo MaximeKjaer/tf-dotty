@@ -125,7 +125,7 @@ object Shape {
     // This represents reduction as in TensorFlow: an empty list of indices means
     // all, and a non-empty list specifies the indices to remove.
     type Reduce[X <: Shape, S <: Indices] <: Shape = S match {
-        case SNil => SNil
+        case SNil => X
         case _ => RemoveAll[X, Enumerate[X], S]
     }
 
