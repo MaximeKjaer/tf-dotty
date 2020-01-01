@@ -121,23 +121,24 @@ object Shape {
     // all, and a non-empty list specifies the indices to remove.
     type Reduce[X <: Shape, S <: Indices] <: Shape = S match {
         case SNil => SNil
-        case _ => Remove[X, Enumerate[X], S]
+        case _ => RemoveAll[X, Enumerate[X], S]
     }
 
     /**
      * Remove indices from a shape
-     * @tparam X Shape to remove from 
-     * @tparam I Enumerated indices of the shape
-     * @tparam R Indices to remove from X
+     * 
+     * @tparam RemoveFrom   Shape to remove from 
+     * @tparam Enumeration  Enumerated indices of the shape
+     * @tparam ToRemove     Indices to remove from X
      */
-    protected type Remove[X <: Shape, I <: Indices, R <: Indices] <: Shape = X match {
+    protected type RemoveAll[RemoveFrom <: Shape, Enumeration <: Indices, ToRemove <: Indices] <: Shape = RemoveFrom match {
         case SNil => SNil
-        case head #: tail => I match {
-            case index :: tailIndices => Indices.Contains[R, index] match {
-                case true => Remove[tail, tailIndices, Tail[R]]
-                case false => head #: Remove[tail, tailIndices, Tail[R]]
-            }
+        case head #: tail => Enumeration match {
             case SNil => head #: tail
+            case headIndex :: tailIndices => Indices.Contains[ToRemove, headIndex] match {
+                case true => RemoveAll[tail, tailIndices, Indices.RemoveValue[ToRemove, headIndex]]
+                case false => head #: RemoveAll[tail, tailIndices, ToRemove]
+            }
         }
     }
 
@@ -208,6 +209,14 @@ object Indices {
             case _ => Contains[tail, Needle]
         }
         case SNil => false
+    }
+
+    type RemoveValue[RemoveFrom <: Indices, Value <: Index] <: Indices = RemoveFrom match {
+        case SNil => SNil
+        case head :: tail => head match {
+            case Value => RemoveValue[tail, Value]
+            case _ => head :: RemoveValue[tail, Value]
+        }
     }
 }
 
