@@ -210,3 +210,14 @@ object Indices {
         case SNil => false
     }
 }
+
+final class IndicesOf[T <: Indices](val value: T)
+
+object IndicesOf {
+    given indicesOfSNilType: IndicesOf[SNil.type] = IndicesOf(SNil)
+    given indicesOfSNil: IndicesOf[SNil] = IndicesOf(SNil)
+    given indicesOfCons[H <: Dimension, T <: Indices](given head: ValueOf[H], tail: IndicesOf[T]): IndicesOf[H :: T] =
+        IndicesOf(head.value :: tail.value)
+}
+
+inline def indicesOf[I <: Indices](given i: IndicesOf[I]): I = i.value
