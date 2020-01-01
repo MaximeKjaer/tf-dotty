@@ -54,4 +54,26 @@ class TensorFlowTest {
         assertEquals(SNil, res.shape)
     }
     */
+
+    @Test def `reshape same shape`(): Unit = {
+        val shape: 1 #: 2 #: 3 #: 4 #: SNil = 1 #: 2 #: 3 #: 4 #: SNil
+        val tensor = TensorFlow.zeros(shape)
+        val res = TensorFlow.reshape(tensor, shape)
+        assertEquals(shape, res.shape)
+        assertEquals(res.shape, shapeFromType(res))
+    }
+
+    @Test def `reshape flipped`(): Unit = {
+        val tensor = TensorFlow.zeros(2 #: 3 #: SNil)
+        val res = TensorFlow.reshape(tensor, 3 #: 2 #: SNil)
+        assertEquals(3 #: 2 #: SNil, res.shape)
+        assertEquals(res.shape, shapeFromType(res))
+    }
+
+    @Test def `reshape 1`(): Unit = {
+        val tensor = TensorFlow.zeros(2 #: 3 #: SNil)
+        val res = TensorFlow.reshape(tensor, 6 #: SNil)
+        assertEquals(6 #: SNil, res.shape)
+        assertEquals(res.shape, shapeFromType(res))
+    }
 }

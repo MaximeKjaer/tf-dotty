@@ -24,9 +24,6 @@ class Tensor[T, S <: Shape] private[core] (val tensor: PyTensor) {
     def le(that: Tensor[T, S]): Tensor[Boolean, S] = new Tensor[Boolean, S](tensor)
     def ge(that: Tensor[T, S]): Tensor[Boolean, S] = new Tensor[Boolean, S](tensor)
     def gt(that: Tensor[T, S]): Tensor[Boolean, S] = new Tensor[Boolean, S](tensor)
-
-    // def reshape[NewShape <: Shape](s: NewShape)(given ev: Shape.NumElements[S] <:< Shape.NumElements[NewShape]): Tensor[T, NewShape] = new Tensor[T, NewShape]
-    // def reshape[NewShape <: Shape](given ev: Shape.NumElements[S] =:= Shape.NumElements[NewShape]): Tensor[T, NewShape] = new Tensor[T, NewShape]
 }
 
 given boolTensorOps: [S <: Shape](self: Tensor[Boolean, S]) {

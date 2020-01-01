@@ -2,6 +2,8 @@ package ch.epfl.tensorflow.api.core
 
 import me.shadaj.scalapy.py
 import me.shadaj.scalapy.tensorflow.TF.tf
+import scala.annotation.implicitNotFound
+import scala.compiletime.ops.any.==
 
 object TensorFlow {
     ///////////    
@@ -66,6 +68,22 @@ object TensorFlow {
     
     def transpose[T, S <: Shape](tensor: Tensor[T, S]): Tensor[T, Shape.Reverse[S]] =
         new Tensor[T, Shape.Reverse[S]](tf.transpose(tensor.tensor))
+
+    
+    @implicitNotFound("Reshape dimensions mismatch")
+    type CanReshape[Old <: Shape, New <: Shape] = (Shape.NumElements[Old] == Shape.NumElements[New]) match {
+        case true => ValueOf[true]
+        // TODO better error message through Error
+        // case false => Error["Cannot reshape tensor from " + ToString[Shape.NumElements[Old]] +
+        //                     " elements to " + Shape.NumElements[Old] + " elements. Number of elements must be the same"]
+    }
+
+    
+    def reshape[T, OldShape <: Shape, NewShape <: Shape](tensor: Tensor[T, OldShape], shape: NewShape)(
+        given ev: CanReshape[OldShape, NewShape]
+    ): Tensor[T, NewShape] = {
+        new Tensor[T, NewShape](tf.reshape(tensor.tensor, shape.toSeq))
+    }
 
     //////////////
     // Reducers //

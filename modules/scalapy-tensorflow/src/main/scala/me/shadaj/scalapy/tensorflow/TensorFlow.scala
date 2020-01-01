@@ -115,7 +115,8 @@ object PythonList {
   
   def zeros_like(tensor: Tensor, dtype: py.NoneOr[DType] = py.None): Tensor = py.native
 
-  def reshape(tensor: Tensor, shape: Seq[Int]): Tensor = py.native
+  def reshape(tensor: Tensor, shape: Seq[Int]): Tensor =
+    as[py.Dynamic].reshape(tensor, PythonList.seqToPythonList(shape)).as[Tensor]
   
   def reduce_mean(t: Tensor): Tensor = as[py.Dynamic].reduce_mean(t).as[Tensor]
 

@@ -1,7 +1,7 @@
 package ch.epfl.tensorflow.api.core
 
 import scala.compiletime.S
-import scala.compiletime.ops.int._
+import scala.compiletime.ops.int.*
 
 sealed trait SNil extends Shape with Indices
 case object SNil extends SNil
@@ -89,7 +89,12 @@ object Shape {
 
     type NumElements[X <: Shape] <: Int = X match {
         case SNil => 0
-        case head #: tail => FoldLeft[Int, X, 1, *]
+        case head #: tail => head * NumElementsNonEmpty[tail]
+    }
+
+    type NumElementsNonEmpty[X <: Shape] <: Int = X match {
+        case SNil => 1
+        case head #: tail => head * NumElementsNonEmpty[tail]
     }
 
     type Concat[X <: Shape, Y <: Shape] <: Shape = X match {
@@ -159,7 +164,7 @@ object Shape {
     def matrix(rows: Dimension, columns: Dimension): rows.type #: columns.type #: SNil = rows #: columns #: SNil
 }
 
-final case class #:[H <: Dimension, T <: Shape](head: H, tail: T) extends Shape {
+final case class #:[+H <: Dimension, +T <: Shape](head: H, tail: T) extends Shape {
     override def toString = head match {
         case _ #: _ => s"($head) #: $tail"
         case _      => s"$head #: $tail"
@@ -230,7 +235,7 @@ final class IndicesOf[T <: Indices](val value: T)
 object IndicesOf {
     given indicesOfSNilType: IndicesOf[SNil.type] = IndicesOf(SNil)
     given indicesOfSNil: IndicesOf[SNil] = IndicesOf(SNil)
-    given indicesOfCons[H <: Dimension, T <: Indices](given head: ValueOf[H], tail: IndicesOf[T]): IndicesOf[H :: T] =
+    given indicesOfCons[H <: Index, T <: Indices](given head: ValueOf[H], tail: IndicesOf[T]): IndicesOf[H :: T] =
         IndicesOf(head.value :: tail.value)
 }
 
