@@ -91,4 +91,17 @@ class TensorFlowTest {
         assertEquals(res.shape, shapeFromType(res))
     }
 
+    @Test def `count_nonzero with default args`(): Unit = {
+        val tensor = TensorFlow.zeros(2 #: 3 #: 4 #: SNil)
+        val res = TensorFlow.count_nonzero(tensor)
+        assertEquals(SNil, res.shape)
+        assertEquals(res.shape, shapeFromType(res))
+    }
+
+    @Test def `count_nonzero along axis 0`(): Unit = {
+        val tensor = TensorFlow.zeros(2 #: 3 #: 4 #: SNil)
+        val res = TensorFlow.count_nonzero(tensor, 0 :: SNil)
+        assertEquals(3 #: 4 #: SNil, res.shape)
+        assertEquals(res.shape, shapeFromType(res))
+    }
 }

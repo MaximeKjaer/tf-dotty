@@ -4,11 +4,15 @@ import me.shadaj.scalapy.py
 import me.shadaj.scalapy.tensorflow.TF.tf
 import scala.annotation.implicitNotFound
 import scala.compiletime.ops.any.==
+import Utils.encodeAxis
 
 object TensorFlow {
     ///////////    
     // Types //
     ///////////
+    
+    type Numeric = Int | Long | Float | Double // also: uint8, uint16, uint32, uint64, int8, int16, float16, complex64, complex128, bfloat16
+
     def float32: DataType[Float] = FLOAT32
     def float64: DataType[Double] = FLOAT64
     def int32: DataType[Int] = INT32
@@ -101,6 +105,7 @@ object TensorFlow {
     // - reduce_sum
     // - reduce_variance
 
+    // TODO use default arguments instead of overloading.
     def reduce_mean[T, S <: Shape](tensor: Tensor[T, S]): Tensor[T, SNil] = new Tensor[T, SNil](tf.reduce_mean(tensor.tensor))
 
     def reduce_mean[T, S <: Shape, S2 <: Indices](tensor: Tensor[T, S], axes: S2): Tensor[T, Shape.Reduce[S, S2]] =
@@ -200,13 +205,36 @@ object TensorFlow {
     def cosh[T, S <: Shape](x: Tensor[T, S]): Tensor[T, S] =
         new Tensor[T, S](tf.cosh(x.tensor))
     
-    // Todo must be numeric, bool or string
-    def count_nonzero[T1 <: Float | Double | Int | Long | Boolean | String, T2, S <: Shape, Sel <: Indices](
-        input_tensor: Tensor[T1, S],
-        axis: Sel = SNil,
-        dtype: DataType[T2] = int64
-    ): Tensor[T2, Shape.Reduce[S, Sel]] =
-        new Tensor(tf.count_nonzero(input_tensor.tensor, axis.indices.toSeq, dtype.dtype))
+    /**
+      * Computes number of nonzero elements across dimensions of a tensor.
+      * 
+      * Reduces input_tensor along the dimensions given in axis. Unless keepdims is true, the rank of the tensor is reduced
+      * by 1 for each entry in axis. If keepdims is true, the reduced dimensions are retained with length 1.
+      *
+      * If axis has no entries, all dimensions are reduced, and a tensor with a single element is returned.
+      * 
+      * NOTE Floating point comparison to zero is done by exact floating point equality check. Small values are not rounded
+      * to zero for purposes of the nonzero check.
+      * 
+      * @param input_tensor The tensor to reduce
+      * @param axis         The dimensions to reduce. If SNil (the default), reduces all dimensions.
+      * @param keepdims     If true, retains reduced dimensions with length 1.
+      * @param dtype        The output dtype
+      * @tparam InputT      Type of input elements
+      * @tparam OutputT     Type of output elements
+      * @tparam S           Shape of input tensor
+      * @tparam Keepdims    Type of the keepdims argument
+      * @tparam Axis        Type of axes to reduce over, or py.None.type to reduce over all
+      */
+    // TODO type-level keepdims!
+    def count_nonzero[InputT <: Numeric | Boolean | String, OutputT, S <: Shape, Axis <: Indices | py.None.type, Keepdims <: Boolean](
+        input_tensor: Tensor[InputT, S],
+        axis: Axis = py.None,
+        keepdims: Keepdims = false,
+        dtype: DataType[OutputT] = int64
+    ): Tensor[OutputT, Shape.Reduce[S, Axis]] = {
+        new Tensor(tf.count_nonzero(input_tensor.tensor, encodeAxis(axis), keepdims, dtype.dtype))
+    }
 
     def cumprod[T <: Float | Double | Int | Long, S <: Shape, Sel <: Indices](
         x: Tensor[T, S],

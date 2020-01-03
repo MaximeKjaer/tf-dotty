@@ -1,5 +1,6 @@
 package ch.epfl.tensorflow.api.core
 
+import me.shadaj.scalapy.py
 import scala.compiletime.S
 import scala.compiletime.ops.int.*
 
@@ -129,8 +130,15 @@ object Shape {
 
     // This represents reduction as in TensorFlow: an empty list of indices means
     // all, and a non-empty list specifies the indices to remove.
-    type Reduce[X <: Shape, S <: Indices] <: Shape = S match {
-        case SNil => X
+    /**
+      * Represents reduction along an axis, as defined in TensorFlow:
+      * 
+      *   - None means reduce along all axes
+      *   - List of indices contain which indices in the shape to remove
+      *   - Empty list of indices means reduce along nothing
+      */
+    type Reduce[X <: Shape, S <: Indices | py.None.type] <: Shape = S match {
+        case py.None.type => SNil
         case _ => RemoveAll[X, Enumerate[X], S]
     }
 

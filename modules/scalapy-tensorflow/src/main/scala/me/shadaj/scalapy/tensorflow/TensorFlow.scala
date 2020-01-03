@@ -91,7 +91,18 @@ object PythonList {
   // TODO conj
   def cos(t: Tensor): Tensor = py.native
   def cosh(t: Tensor): Tensor = py.native
-  def count_nonzero(t: Tensor, axis: Seq[Int], dtype: DType): Tensor = py.native // TODO test
+
+  def count_nonzero(
+    input_tensor: Tensor,
+    axis: py.NoneOr[Seq[Int]] = py.None,
+    keepdims: py.NoneOr[Boolean] = py.None,
+    dtype: DType = int64
+  ): Tensor = axis.map(
+    none => as[py.Dynamic].count_nonzero(input_tensor, none, keepdims, dtype).as[Tensor],
+    seq  => as[py.Dynamic].count_nonzero(input_tensor, PythonList.seqToPythonList(seq), keepdims, dtype).as[Tensor]
+  )
+    
+
   def cumprod(x: Tensor, axis: Seq[Int], exclusive: Boolean, reverse: Boolean): Tensor = py.native
   def cumsum(x: Tensor, axis: Seq[Int], exclusive: Boolean, reverse: Boolean): Tensor = py.native
 
