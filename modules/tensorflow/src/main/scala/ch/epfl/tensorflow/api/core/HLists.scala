@@ -152,6 +152,17 @@ object Shape {
         }
     }
 
+    type RemoveIndex[RemoveFrom <: Shape, I <: Index] = RemoveIndexLoop[RemoveFrom, I, 0]
+    
+    protected type RemoveIndexLoop[RemoveFrom <: Shape, I <: Index, Current <: Index] <: Shape = RemoveFrom match {
+        // todo compile-time error
+        // case SNil => Error["out of bounds"]
+        case head #: tail => Current match {
+            case I => tail
+            case _ => head #: RemoveIndexLoop[tail, I, S[Current]]
+        }
+    }
+
     /* This was a previous attempt at materializing type-level values. Has now been replaced by ShapeOf.
     
     inline def fromType[S <: Shape]: Shape = 

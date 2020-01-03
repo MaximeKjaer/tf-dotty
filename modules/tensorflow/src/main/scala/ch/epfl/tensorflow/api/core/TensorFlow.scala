@@ -132,21 +132,37 @@ object TensorFlow {
     def angle[T, S <: Shape](input: Tensor[T, S]): Tensor[Float, S] =
         new Tensor[Float, S](tf.angle(input.tensor))
 
-    // todo encode T1, T2 isNumeric
-    def argmax[T1, T2 <: Int | Long, S <: Shape](
-        input: Tensor[T1, S],
-        axes: Indices = SNil,
-        output_type: DataType[T2] = int64
-    ): Tensor[T2, S] =
-        new Tensor[T2, S](tf.argmax(input.tensor, axes.indices.toSeq, output_type.dtype))
+    /** 
+      * Returns the index with the largest value across axes of a tensor.
+      * 
+      * Note that in case of ties the identity of the return value is not guaranteed.
+      *
+      * @param input A Tensor
+      * @param axis Describes which axis of the input Tensor to reduce across. For vectors, use axis = 0.
+      * @tparam T Type of input elements
+      * @tparam S Shape of input and output tensor
+      */
+    def argmax[T <: Comparable, S <: Shape, Axis <: Index](
+        input: Tensor[T, S],
+        axis: Axis = 0
+    ): Tensor[Long, Shape.RemoveIndex[S, Axis]] =
+        new Tensor[Long, Shape.RemoveIndex[S, Axis]](tf.argmax(input.tensor, axis))
 
-    // todo encode T1, T2 isNumeric
-    def argmin[T1, T2 <: Int | Long, S <: Shape](
-        input: Tensor[T1, S],
-        axes: Indices = SNil,
-        output_type: DataType[T2] = int64
-    ): Tensor[T2, S] =
-        new Tensor[T2, S](tf.argmin(input.tensor, axes.indices.toSeq, output_type.dtype))
+    /** 
+      * Returns the index with the smallest value across axes of a tensor.
+      * 
+      * Note that in case of ties the identity of the return value is not guaranteed.
+      *
+      * @param input A Tensor
+      * @param axis Describes which axis of the input Tensor to reduce across. For vectors, use axis = 0.
+      * @tparam T Type of input elements
+      * @tparam S Shape of input and output tensor
+      */
+    def argmin[T <: Comparable, S <: Shape, Axis <: Index](
+        input: Tensor[T, S],
+        axis: Axis = 0
+    ): Tensor[Long, Shape.RemoveIndex[S, Axis]] =
+        new Tensor[Long, Shape.RemoveIndex[S, Axis]](tf.argmin(input.tensor, axis))
 
     def asin[T, S <: Shape](x: Tensor[T, S]): Tensor[T, S] =
         new Tensor[T, S](tf.asin(x.tensor))

@@ -76,4 +76,19 @@ class TensorFlowTest {
         assertEquals(6 #: SNil, res.shape)
         assertEquals(res.shape, shapeFromType(res))
     }
+
+    @Test def `argmax along axis 0`(): Unit = {
+        val tensor = TensorFlow.zeros(2 #: 3 #: SNil)
+        val res = TensorFlow.argmax(tensor, axis = 0)
+        assertEquals(3 #: SNil, res.shape)
+        assertEquals(res.shape, shapeFromType(res))
+    }
+
+    @Test def `argmax along axis 1`(): Unit = {
+        val tensor = TensorFlow.zeros(2 #: 3 #: 4 #: SNil)
+        val res = TensorFlow.argmax(tensor, axis = 1)
+        assertEquals(2 #: 4 #: SNil, res.shape)
+        assertEquals(res.shape, shapeFromType(res))
+    }
+
 }

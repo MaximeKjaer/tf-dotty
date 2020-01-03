@@ -84,4 +84,14 @@ class ShapeTest {
         // val res = indicesOf[Shape.Enumerate[1 #: 10 #: SNil]]
         // assertEquals(0 :: 1 :: SNil, res)
     }
+
+    @Test def `RemoveIndex 0`(): Unit = {
+        val res = shapeOf[Shape.RemoveIndex[0 #: 1 #: SNil, 0]]
+        assertEquals(1 #: SNil, res)
+    }
+
+    @Test def `RemoveIndex 1`(): Unit = {
+        val res = shapeOf[Shape.RemoveIndex[0 #: 1 #: SNil, 1]]
+        assertEquals(0 #: SNil, res)
+    }
 }

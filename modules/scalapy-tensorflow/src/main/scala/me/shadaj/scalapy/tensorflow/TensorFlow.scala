@@ -76,8 +76,8 @@ object PythonList {
   def add(x: Tensor, y: Tensor): Tensor = py.native
   def add_n(inputs: Seq[Tensor]): Tensor = py.native
   def angle(input: Tensor): Tensor = py.native
-  def argmax(input: Tensor, axis: Seq[Int], output_type: DType): Tensor = py.native
-  def argmin(input: Tensor, axis: Seq[Int], output_type: DType): Tensor = py.native
+  def argmax(input: Tensor, axis: py.NoneOr[Int]): Tensor = py.native
+  def argmin(input: Tensor, axis: py.NoneOr[Int]): Tensor = py.native
   def asin(t: Tensor): Tensor = py.native
   def asinh(t: Tensor): Tensor = py.native
   def atan(t: Tensor): Tensor = py.native
