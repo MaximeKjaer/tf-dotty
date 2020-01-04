@@ -128,18 +128,19 @@ object Shape {
         case SNil => SNil
     }
 
-    // This represents reduction as in TensorFlow: an empty list of indices means
-    // all, and a non-empty list specifies the indices to remove.
     /**
-      * Represents reduction along an axis, as defined in TensorFlow:
+      * Represents reduction along axes, as defined in TensorFlow:
       * 
       *   - None means reduce along all axes
       *   - List of indices contain which indices in the shape to remove
       *   - Empty list of indices means reduce along nothing
+      * 
+      * @tparam S           Shape to reduce
+      * @tparam Axes        List of indices to reduce along. `py.None.type` if no reduction should be done.
       */
-    type Reduce[X <: Shape, S <: Indices | py.None.type] <: Shape = S match {
+    type Reduce[S <: Shape, Axes <: Indices | py.None.type] <: Shape = Axes match {
         case py.None.type => SNil
-        case _ => RemoveAll[X, Enumerate[X], S]
+        case Indices => RemoveAll[S, Enumerate[S], Axes]
     }
 
     /**

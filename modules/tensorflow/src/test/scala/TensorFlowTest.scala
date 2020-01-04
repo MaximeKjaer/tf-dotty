@@ -3,7 +3,7 @@ import org.junit.Assert._
 import ch.epfl.tensorflow.api.core._
 
 class TensorFlowTest {
-    def shapeFromType[S <: Shape](t: Tensor[_, S])(given s: ShapeOf[S]): S = s.value
+    def shapeFromType[S <: Shape](t: Tensor[?, S])(given s: ShapeOf[S]): S = s.value
 
     @Test def `reduce_mean without axes`(): Unit = {
         val tensor = TensorFlow.zeros(2 #: 2 #: SNil)
@@ -93,14 +93,23 @@ class TensorFlowTest {
 
     @Test def `count_nonzero with default args`(): Unit = {
         val tensor = TensorFlow.zeros(2 #: 3 #: 4 #: SNil)
-        val res = TensorFlow.count_nonzero(tensor)
+        val res = TensorFlow.count_nonzero(tensor, keepdims=false)
         assertEquals(SNil, res.shape)
         assertEquals(res.shape, shapeFromType(res))
     }
 
+    /*
+    @Test def `count_nonzero with keepdims`(): Unit = {
+        val tensor = TensorFlow.zeros(2 #: 3 #: 4 #: SNil)
+        val res = TensorFlow.count_nonzero(tensor, keepdims=true)
+        assertEquals(1 #: 1 #: 1 #: SNil, res.shape)
+        assertEquals(res.shape, shapeFromType(res))
+    }
+    */
+
     @Test def `count_nonzero along axis 0`(): Unit = {
         val tensor = TensorFlow.zeros(2 #: 3 #: 4 #: SNil)
-        val res = TensorFlow.count_nonzero(tensor, 0 :: SNil)
+        val res = TensorFlow.count_nonzero(tensor, 0 :: SNil, keepdims=false)
         assertEquals(3 #: 4 #: SNil, res.shape)
         assertEquals(res.shape, shapeFromType(res))
     }

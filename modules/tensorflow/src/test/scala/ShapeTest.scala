@@ -69,6 +69,11 @@ class ShapeTest {
         assertEquals(SNil, res)
     }
 
+    @Test def `Map 1`(): Unit = {
+        val res = shapeOf[Shape.Map[1 #: 2 #: 3 #: SNil, [_] =>> 1]]
+        assertEquals(1 #: 1 #: 1 #: SNil, res)
+    }
+
     @Test def `Enumerate empty`(): Unit = {
         val res = indicesOf[Shape.Enumerate[SNil]]
         assertEquals(SNil, res)

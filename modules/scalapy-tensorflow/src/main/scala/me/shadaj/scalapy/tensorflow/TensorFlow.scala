@@ -101,10 +101,9 @@ object PythonList {
     none => as[py.Dynamic].count_nonzero(input_tensor, none, keepdims, dtype).as[Tensor],
     seq  => as[py.Dynamic].count_nonzero(input_tensor, PythonList.seqToPythonList(seq), keepdims, dtype).as[Tensor]
   )
-    
 
-  def cumprod(x: Tensor, axis: Seq[Int], exclusive: Boolean, reverse: Boolean): Tensor = py.native
-  def cumsum(x: Tensor, axis: Seq[Int], exclusive: Boolean, reverse: Boolean): Tensor = py.native
+  def cumprod(x: Tensor, axis: Int, exclusive: Boolean, reverse: Boolean): Tensor = py.native
+  def cumsum(x: Tensor, axis: Int, exclusive: Boolean, reverse: Boolean): Tensor = py.native
 
   def floor(x: Tensor): Tensor = py.native
   def pow(x: Tensor, y: Tensor): Tensor = py.native
@@ -129,10 +128,14 @@ object PythonList {
   def reshape(tensor: Tensor, shape: Seq[Int]): Tensor =
     as[py.Dynamic].reshape(tensor, PythonList.seqToPythonList(shape)).as[Tensor]
   
-  def reduce_mean(t: Tensor): Tensor = as[py.Dynamic].reduce_mean(t).as[Tensor]
-
-  def reduce_mean(t: Tensor, axis: Seq[Int]): Tensor = 
-    as[py.Dynamic].reduce_mean(t, PythonList.seqToPythonList(axis)).as[Tensor]
+  def reduce_mean(
+    input_tensor: Tensor,
+    axis: py.NoneOr[Seq[Int]] = py.None,
+    keepdims: Boolean = false
+  ): Tensor = axis.map(
+    none => as[py.Dynamic].reduce_mean(input_tensor, none, keepdims).as[Tensor],
+    seq  => as[py.Dynamic].reduce_mean(input_tensor, PythonList.seqToPythonList(seq), keepdims).as[Tensor]
+  )
   
   def transpose(t: Tensor): Tensor = py.native
 
