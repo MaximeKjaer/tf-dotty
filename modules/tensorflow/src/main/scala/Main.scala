@@ -1,29 +1,30 @@
 import ch.epfl.tensorflow.api.core._
+import ch.epfl.tensorflow.api.core.TF.tf
 
 object Main {
   
   def main(args: Array[String]): Unit = {
-    val test = TensorFlow.zeros(20 #: 10 #: SNil, TensorFlow.bool)
-    val matrix1 = TensorFlow.zeros(20 #: 10 #: SNil)
-    val matrix2 = TensorFlow.zeros_like(matrix1)
-    val matrix3 = TensorFlow.zeros(20 #: 30 #: SNil)
+    val test = tf.zeros(20 #: 10 #: SNil, tf.bool)
+    val matrix1 = tf.zeros(20 #: 10 #: SNil)
+    val matrix2 = tf.zeros_like(matrix1)
+    val matrix3 = tf.zeros(20 #: 30 #: SNil)
 
     println(matrix1)
     println(matrix2)
 
     val res1: Tensor[Float, 20 #: 10 #: SNil.type] = (matrix1 + matrix2 - matrix2) / matrix2
-    val res2: Tensor[Float, 20 #: 10 #: SNil.type] = TensorFlow.floor(TensorFlow.abs(TensorFlow.pow(res1, matrix2)))
+    val res2: Tensor[Float, 20 #: 10 #: SNil.type] = tf.floor(tf.abs(tf.pow(res1, matrix2)))
 
-    val res1T = TensorFlow.transpose(res1)
+    val res1T = tf.transpose(res1)
 
-    val x = TensorFlow.reduce_mean(matrix1, SNil)
+    val x = tf.reduce_mean(matrix1, SNil)
     println(x)
     
     println(res2)
     println(res2.dtype)
 
-    println(TensorFlow.constant(3, TensorFlow.int32, shape = 10 #: 3 #: SNil))
-    println(TensorFlow.constant(3f, TensorFlow.float32))
-    println(TensorFlow.Variable(res2))
+    println(tf.constant(3, tf.int32, shape = 10 #: 3 #: SNil))
+    println(tf.constant(3f, tf.float32))
+    println(tf.Variable(res2))
   }
 }
