@@ -74,22 +74,6 @@ class ShapeTest {
         assertEquals(1 #: 1 #: 1 #: SNil, res)
     }
 
-    @Test def `Enumerate empty`(): Unit = {
-        val res = indicesOf[Shape.Enumerate[SNil]]
-        assertEquals(SNil, res)
-    }
-
-    @Test def `Enumerate 1`(): Unit = {
-        val res = indicesOf[Shape.Enumerate[1 #: SNil]]
-        assertEquals(0 :: SNil, res)
-    }
-
-    // TODO fix https://github.com/lampepfl/dotty/issues/7868
-    @Test def `Enumerate 2`(): Unit = {
-        // val res = indicesOf[Shape.Enumerate[1 #: 10 #: SNil]]
-        // assertEquals(0 :: 1 :: SNil, res)
-    }
-
     @Test def `RemoveIndex 0`(): Unit = {
         val res = shapeOf[Shape.RemoveIndex[0 #: 1 #: SNil, 0]]
         assertEquals(1 #: SNil, res)

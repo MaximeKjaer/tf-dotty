@@ -121,13 +121,6 @@ object Shape {
         case _ #: tail => tail
     }
 
-    /** Generate a list of indices */
-    type Enumerate[X <: Shape] = IndicesLoop[X, 0]
-    protected type IndicesLoop[X <: Shape, Current <: Index] <: Indices = X match {
-        case head #: tail => Current :: IndicesLoop[tail, S[Current]]
-        case SNil => SNil
-    }
-
     /**
       * Represents reduction along axes, as defined in TensorFlow:
       * 
@@ -140,24 +133,21 @@ object Shape {
       */
     type Reduce[S <: Shape, Axes <: Indices | py.None.type] <: Shape = Axes match {
         case py.None.type => SNil
-        case Indices => RemoveAll[S, Enumerate[S], Axes]
+        case Indices => ReduceLoop[S, Axes, 0]
     }
 
     /**
      * Remove indices from a shape
      * 
      * @tparam RemoveFrom   Shape to remove from 
-     * @tparam Enumeration  Enumerated indices of the shape
-     * @tparam ToRemove     Indices to remove from X
+     * @tparam ToRemove     Indices to remove from `RemoveFrom`
+     * @tparam I            Current index (in the original shape)
      */
-    protected type RemoveAll[RemoveFrom <: Shape, Enumeration <: Indices, ToRemove <: Indices] <: Shape = RemoveFrom match {
+    protected type ReduceLoop[RemoveFrom <: Shape, ToRemove <: Indices, I <: Index] <: Shape = RemoveFrom match {
         case SNil => SNil
-        case head #: tail => Enumeration match {
-            case SNil => head #: tail
-            case headIndex :: tailIndices => Indices.Contains[ToRemove, headIndex] match {
-                case true => RemoveAll[tail, tailIndices, Indices.RemoveValue[ToRemove, headIndex]]
-                case false => head #: RemoveAll[tail, tailIndices, ToRemove]
-            }
+        case head #: tail => Indices.Contains[ToRemove, I] match {
+            case true => ReduceLoop[tail, Indices.RemoveValue[ToRemove, I], S[I]]
+            case false => head #: ReduceLoop[tail, ToRemove, S[I]]
         }
     }
 
