@@ -5,14 +5,14 @@
     "previous": "Previous",
     "tagline": "Shape-safe TensorFlow in Dotty",
     "docs": {
+      "architecture": {
+        "title": "Architecture"
+      },
       "benchmarks": {
         "title": "Benchmarks"
       },
       "contributing": {
         "title": "Contributing"
-      },
-      "dimensions": {
-        "title": "Tensor Dimensions"
       },
       "getting-started": {
         "title": "Getting Started"
@@ -20,8 +20,16 @@
       "questions": {
         "title": "questions"
       },
-      "report": {
-        "title": "report"
+      "reduce": {
+        "title": "Reducing with match types",
+        "sidebar_label": "Reduce"
+      },
+      "reshape": {
+        "title": "Reshaping with singleton ops",
+        "sidebar_label": "Reshape"
+      },
+      "shape": {
+        "title": "Tensor shape"
       },
       "unsolved": {
         "title": "unsolved"
@@ -33,7 +41,7 @@
     },
     "categories": {
       "Getting Started": "Getting Started",
-      "Core concepts": "Core concepts",
+      "Implementation": "Implementation",
       "Contributing": "Contributing"
     }
   },

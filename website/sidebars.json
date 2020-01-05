@@ -1,14 +1,7 @@
 {
   "docs": {
-    "Getting Started": [
-      "getting-started"
-    ],
-    "Core concepts": [
-      "dimensions",
-      "benchmarks"
-    ],
-    "Contributing": [
-      "contributing"
-    ]
+    "Getting Started": ["getting-started", "benchmarks"],
+    "Implementation": ["architecture", "shape", "reduce", "reshape"],
+    "Contributing": ["contributing"]
   }
 }

@@ -67,7 +67,12 @@ const siteConfig = {
   },
 
   // Add custom scripts here that would be placed in <script> tags.
-  scripts: ['https://buttons.github.io/buttons.js'],
+  scripts: [
+    'https://buttons.github.io/buttons.js',
+    // MathJax
+    'https://polyfill.io/v3/polyfill.min.js?features=es6',
+    'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  ],
 
   // On page navigation for the current documentation page.
   onPageNav: 'separate',
