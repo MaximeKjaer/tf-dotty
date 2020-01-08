@@ -26,13 +26,7 @@ tf-dotty is not yet published on Maven. See how to compile from source in the do
 
 ### Python dependencies
 
-This project communicates with the Python implementation of TensorFlow. Therefore, you will need to have Python 3.7 and pip installed. One of the installed dependencies, `jep`, needs to have the `JAVA_HOME` environment variable set. This could look as follows (but check your local install for the exact value):
-
-```console
-$ export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-```
-
-To install the dependencies, run:
+This project communicates with the Python implementation of TensorFlow. Therefore, you will need to have Python 3.7 and pip installed. To install the dependencies, run:
 
 ```console
 $ pip install -r requirements.txt

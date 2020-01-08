@@ -14,11 +14,12 @@
       "contributing": {
         "title": "Contributing"
       },
+      "dotty": {
+        "title": "Dotty features",
+        "sidebar_label": "Dotty features"
+      },
       "getting-started": {
         "title": "Getting Started"
-      },
-      "questions": {
-        "title": "questions"
       },
       "reduce": {
         "title": "Reducing with match types",
@@ -30,9 +31,6 @@
       },
       "shape": {
         "title": "Tensor shape"
-      },
-      "unsolved": {
-        "title": "unsolved"
       }
     },
     "links": {

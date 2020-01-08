@@ -50,6 +50,17 @@ However, there are also disadvantages to this type:
 
 ### Second attempt: Nested type loop
 
-\\( \mathcal{O}(m \cdot n) \\), where \\( m \\) is the size of the index list, and \\( n \\) is the rank of the tensor.
+It is possible to compute reduction along a list of given indices by implementing logic similar to two nested loops:
+
+- The outer loop iterates over the shape and counts the current index;
+- The inner loop iterates over the indices to remove, returns whether the index is in the list, and removes all occurrences of the index.
+
+This implementation is \\( \mathcal{O}(m \cdot n) \\), where \\( m \\) is the size of the index list, and \\( n \\) is the rank of the tensor. In practice, the rank of tensors is often small enough that compilation time suffers a negligible slowdown because of this inefficient implementation [todo: big "citation needed" here, based on benchmarks].
+
+When the outer loop reaches the end of the `Shape`, any indices remaining in the index list are out of bounds, and can be reported as such through a compiletime error.
 
 ### Caveat: keepdims
+
+Some TensorFlow operations, such as `tf.reduce_mean` and `tf.count_nonzero` provide an additional, optional argument called `keepdims`, defaulting to `false`. If set to `true`, the reduced dimensions are kept with size `1` instead of being removed. To implement this, the `Reduce` match type can take an additional `KeepDims` type parameter. When `KeepDims` is `true`, the match type replaces the selected `Shape` elements with `1` instead of removing them.
+
+However, a bug in Dotty's type inference for default parameters currently prevents this from being accurately typed, and tf-dotty therefore does not support the `keepdims` parameter. This bug is tracked in [todo: submit issue].

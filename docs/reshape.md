@@ -24,7 +24,7 @@ Computing the number of elements in a tensor at compile-time requires support fo
 
 ### First attempt: with match types and `S`
 
-Dotty has support for `scala.compiletime.S`, a type which represents the successor of a natural singleton integer type. Additionally, match types provide support for transforming a type into another; it's even possible to define recursive transformations. These two features make it possible to define some arithmetic operations:
+With match type and `scala.compiletime.S`, it is possible to define some arithmetic operations in Dotty's type system:
 
 ```scala
 import scala.annotation.infix
@@ -45,7 +45,7 @@ protected type MultiplyLoop[A <: Int, B <: Int, Acc <: Int] <: Int = A match {
 }
 ```
 
-These match types are highly recursive; with the default setting of 512 MB of memory for the JVM, computing `100 * 100` results in a stack overflow on Dotty 0.21.0-RC1 [check this; give big-O of depth], which is too limiting for what actual machine learning workloads need to compute.
+These match types are highly recursive; with the default setting of 512 MB of memory for the JVM, computing `100 * 100` results in a stack overflow on Dotty 0.21.0-RC1 [todo: check this; give big-O of depth], which is too limiting for what actual machine learning workloads need to compute.
 
 ### Second attempt: with compiler support
 
