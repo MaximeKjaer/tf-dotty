@@ -10,3 +10,4 @@ project/target/
 
 # Website
 node_modules
+website/build
