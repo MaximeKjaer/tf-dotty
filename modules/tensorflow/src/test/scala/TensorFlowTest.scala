@@ -92,6 +92,15 @@ class TensorFlowTest {
         assertEquals(res.shape, shapeFromType(res))
     }
 
+    /* Should not compile:
+    @Test def `argmax along axis out of bounds`(): Unit = {
+        val tensor = tf.zeros(2 #: 3 #: SNil)
+        val res = tf.argmax(tensor, axis = 1000)
+        assertEquals(3 #: SNil, res.shape)
+        assertEquals(res.shape, shapeFromType(res))
+    }
+    */
+
     @Test def `count_nonzero with default args`(): Unit = {
         val tensor = tf.zeros(2 #: 3 #: 4 #: SNil)
         val res = tf.count_nonzero(tensor, keepdims=false)
@@ -114,4 +123,13 @@ class TensorFlowTest {
         assertEquals(3 #: 4 #: SNil, res.shape)
         assertEquals(res.shape, shapeFromType(res))
     }
+
+    /* Should not compile:
+    @Test def `count_nonzero along invalid axis`(): Unit = {
+        val tensor = tf.zeros(2 #: 3 #: 4 #: SNil)
+        val res = tf.count_nonzero(tensor, 1 :: -1 :: 3203 :: 20 :: 0 :: SNil, keepdims=false)
+        assertEquals(3 #: 4 #: SNil, res.shape)
+        assertEquals(res.shape, shapeFromType(res))
+    }
+    */
 }
