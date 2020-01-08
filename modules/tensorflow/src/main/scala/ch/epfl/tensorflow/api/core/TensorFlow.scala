@@ -130,7 +130,7 @@ object TensorFlow {
       * @param keepdims     If `true`, retains reduced dimensions with length 1.
       */
     // TODO keepdims type-level support
-    def reduce_mean[T <: Numeric, S <: Shape, Axis <: py.None.type | Indices](
+    def reduce_mean[T <: Numeric, S <: Shape, Axis <: py.None | Indices](
         input_tensor: Tensor[T, S],
         axis: Axis = py.None,
         keepdims: Boolean = false
@@ -388,9 +388,9 @@ object TensorFlow {
       * @tparam InputT      Type of input elements
       * @tparam OutputT     Type of output elements
       * @tparam S           Shape of input tensor
-      * @tparam Axis        Type of axes to reduce over, or py.None.type to reduce over all
+      * @tparam Axis        Type of axes to reduce over, or py.None to reduce over all
       */
-    def count_nonzero[InputT <: Numeric | Boolean | String, OutputT, S <: Shape, Axis <: Indices | py.None.type](
+    def count_nonzero[InputT <: Numeric | Boolean | String, OutputT, S <: Shape, Axis <: Indices | py.None](
         input_tensor: Tensor[InputT, S],
         axis: Axis = py.None,
         keepdims: Boolean = false,

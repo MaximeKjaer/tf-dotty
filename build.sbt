@@ -1,3 +1,5 @@
+import scala.sys.process._
+
 /** This version is compiled from this fork of dotty:
  *  https://github.com/MaximeKjaer/dotty/tree/singleton-arithmetic
  *  It has been published locally with `sbt dotty-bootstrapped/publishLocal`.
@@ -8,28 +10,35 @@ val scala213Version = "2.13.1"
 
 lazy val tensorflow = project
   .in(file("modules/tensorflow"))
-  .dependsOn(scalapyCore, scalapyTensorflow)
+  .dependsOn(scalapyTensorflow)
   .settings(
     name := "tf-dotty",
     version := "0.1.0",
     organization := "ch.epfl",
     scalaVersion := dottyVersion,
 
+    // Tests:
     libraryDependencies += "com.novocode" % "junit-interface" % "0.11" % "test",
     testOptions += Tests.Argument(TestFrameworks.JUnit, "-s", "-v"),
 
+    // ScalaPy:
+    libraryDependencies += "me.shadaj" % "scalapy-core_2.13" % "0.3.0+15-598682f0",
     fork := true,
-    javaOptions += s"-Djava.library.path=${sys.env.getOrElse("JEP_PATH", "/home/maxime/.virtualenvs/tf-dotty/lib/python3.7/site-packages/jep")}",
+    javaOptions += s"-Djna.library.path=${"python3-config --prefix".!!.trim}/lib",
+    
     projectDependencies ~=(_.map(_.withDottyCompat(dottyVersion))),
   )
 
 lazy val scalapyTensorflow = project
   .in(file("modules/scalapy-tensorflow"))
-  .dependsOn(scalapyCore, scalapyNumpy)
   .settings(
     name := "scalapy-tensorflow",
     scalaVersion := scala213Version,
     organization := "me.shadaj",
+
+    // ScalaPy:
+    libraryDependencies += "me.shadaj" %% "scalapy-core" % "0.3.0+15-598682f0",
+    libraryDependencies += "me.shadaj" %% "scalapy-numpy" % "0.1.0+5-ad550211",
 
     // Tests:
     libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.14.0" % Test,
@@ -37,6 +46,3 @@ lazy val scalapyTensorflow = project
 
     projectDependencies ~=(_.map(_.withDottyCompat(dottyVersion))),
   )
-
-lazy val scalapyCore = ProjectRef(uri("git://github.com/MaximeKjaer/scalapy#port-2.13"), "coreJVM")
-lazy val scalapyNumpy = ProjectRef(uri("git://github.com/MaximeKjaer/scalapy-numpy#port-2.13"), "scalaPyNumpyCrossJVM")

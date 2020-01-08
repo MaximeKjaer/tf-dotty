@@ -4,16 +4,16 @@
 
 ## Dependencies
 
-This project communicates with the Python implementation of TensorFlow. Therefore, you will need to have Python 3.7 and pip installed. One of the installed dependencies, `jep`, needs to have the `JAVA_HOME` environment variable set, so we'll start there. I had to set:
+This project communicates with the Python implementation of TensorFlow. Therefore, you will need to have Python 3.7 and pip installed. Therefore, you will need to have Python 3.7 and pip installed. To install the dependencies, run:
 
-```
-export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+```console
+$ pip install -r requirements.txt
 ```
 
-This setup is a little finnicky with version numbers: we need TensorFlow 1.14.0 and jep 3.8.2. To get something as close to my environment, you can start a Python virtualenv by running:
+You can also choose to do this in a virtualenv with virtualenvwrapper:
 
-```
-mkvirtualenv -p python3.7 -r requirements.txt tf-dotty
+```console
+$ mkvirtualenv -p python3.7 -r requirements.txt tf-dotty
 ```
 
 ## Usage
