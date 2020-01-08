@@ -211,22 +211,13 @@ final case class #:[+H <: Dimension, +T <: Shape](head: H, tail: T) extends Shap
     }
 }
 
-trait ShapeOf[T <: Shape] {
-    def value: T
-}
+final class ShapeOf[T <: Shape](val value: T)
 
 object ShapeOf {
-    given ShapeOf[SNil.type] {
-        def value = SNil
-    }
-
-    given ShapeOf[SNil] {
-        def value = SNil
-    }
-
-    given [H <: Dimension, T <: Shape](given head: ValueOf[H], tail: ShapeOf[T]): ShapeOf[H #: T] {
-        def value = head.value #: tail.value
-    }
+    given ShapeOf[SNil.type] = ShapeOf(SNil)
+    given ShapeOf[SNil] = ShapeOf(SNil)
+    given [H <: Dimension, T <: Shape](given head: ValueOf[H], tail: ShapeOf[T]): ShapeOf[H #: T] =
+        ShapeOf(head.value #: tail.value)
 }
 
 inline def shapeOf[S <: Shape](given s: ShapeOf[S]): S = s.value
