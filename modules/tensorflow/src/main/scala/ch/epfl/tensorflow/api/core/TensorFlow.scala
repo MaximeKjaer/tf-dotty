@@ -42,13 +42,20 @@ object TensorFlow {
     def Variable[T, S <: Shape](initialValue: Tensor[T, S]): Variable[T, S] =
         new Variable[T, S](tf.Variable(initialValue.tensor))
 
-    // TODO constant types where T is a Seq[Seq[T]] etc.
-    // TODO constant types where dtype is inferred from the value
+    def Session(): Session = new Session(tf.Session())
 
-    def constant[T, S <: Shape](value: T, dtype: DataType[T], shape: S = SNil): Tensor[T, S] = {
-        implicit val reader = dtype.reader
-        implicit val writer = dtype.writer
-        new Tensor[T, S](tf.constant(value, dtype.dtype, shape.toSeq))
+    type Unbox[S] = S match {
+        case Seq[t] => Unbox[t]
+        case _ => S
+    }
+
+    // TODO check that shape has the correct rank, at least.
+    def constant[V, T <: Unbox[V] : py.Reader : py.Writer, S <: Shape](
+        value: V,
+        dtype: DataType[T],
+        shape: S = SNil
+    )(given py.Reader[V], py.Writer[V]): Tensor[T, S] = {
+        new Tensor(tf.constant(value, dtype.dtype, shape.toSeq))
     }
 
     def zeros[T, S <: Shape](shape: S, dataType: DataType[T] = float32): Tensor[T, S] =
@@ -100,6 +107,19 @@ object TensorFlow {
     ): Tensor[T, NewShape] = {
         new Tensor[T, NewShape](tf.reshape(tensor.tensor, shape.toSeq))
     }
+
+    def broadcast_to[T, OldShape <: Shape, NewShape <: Shape](
+        input: Tensor[T, OldShape],
+        shape: NewShape
+    ): Tensor[T, NewShape] =
+        new Tensor(tf.broadcast_to(input.tensor, shape.toSeq))
+
+    //////////////////
+    // Initializers //
+    //////////////////
+
+    def initialize_all_variables(): Operation = new Operation(tf.initialize_all_variables())
+    def global_variables_initializer(): Operation = new Operation(tf.global_variables_initializer())
 
     //////////////
     // Reducers //

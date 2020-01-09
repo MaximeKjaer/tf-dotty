@@ -23,8 +23,8 @@ object Main {
     println(res2)
     println(res2.dtype)
 
-    println(tf.constant(3, tf.int32, shape = 10 #: 3 #: SNil))
-    println(tf.constant(3f, tf.float32))
+    println(tf.constant[Int, Int, 10 #: 3 #: SNil](3, tf.int32, shape = 10 #: 3 #: SNil))
+    println(tf.constant[Float, Float, SNil](3f, tf.float32))
     println(tf.Variable(res2))
   }
 }

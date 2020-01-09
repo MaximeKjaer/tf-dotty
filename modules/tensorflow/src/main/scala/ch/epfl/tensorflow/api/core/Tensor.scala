@@ -15,6 +15,7 @@ class Tensor[T, S <: Shape] private[core] (val tensor: PyTensor) {
 
     /* Element-wise operations result in a new tensor with the same dimensions */
     def +(that: Tensor[T, S]): Tensor[T, S] = new Tensor[T, S](this.tensor + that.tensor)
+    def *(that: Tensor[T, S]): Tensor[T, S] = new Tensor[T, S](this.tensor * that.tensor)
     def -(that: Tensor[T, S]): Tensor[T, S] = new Tensor[T, S](this.tensor - that.tensor)
     def /(that: Tensor[T, S]): Tensor[T, S] = new Tensor[T, S](this.tensor / that.tensor)
     def floorDiv(that: Tensor[T, S]): Tensor[T, S] = new Tensor[T, S](tensor)

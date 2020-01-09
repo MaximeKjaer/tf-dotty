@@ -153,5 +153,7 @@ object PythonList {
 
   def cond(c: Tensor, ifTrue: py.Object, ifFalse: py.Object): Tensor = py.native
 
+  def broadcast_to(input: Tensor, shape: Seq[Int]): Tensor = py.native
+
   def contrib: Contrib = py.native
 }
