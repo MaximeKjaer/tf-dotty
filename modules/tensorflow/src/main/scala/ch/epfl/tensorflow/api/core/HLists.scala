@@ -141,7 +141,9 @@ object Shape {
       *   - Empty list of indices means reduce along nothing
       * 
       * @tparam S           Shape to reduce
-      * @tparam Axes        List of indices to reduce along. `py.None` if no reduction should be done.
+      * @tparam Axes        List of indices to reduce along.
+      *                     `py.None` if reduction should be done along all axes.
+      *                     `SNil` if no reduction should be done.
       */
     type Reduce[S <: Shape, Axes <: Indices | py.None] <: Shape = Axes match {
         case py.None => SNil
