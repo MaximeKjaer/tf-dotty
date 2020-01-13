@@ -1,7 +1,8 @@
 {
   "docs": {
     "Getting Started": ["getting-started", "benchmarks"],
-    "Implementation": ["architecture", "dotty", "shape", "reduce", "reshape"],
+    "Architecture": ["architecture", "dotty"],
+    "Implementation": ["tensor", "reduce", "reshape"],
     "Contributing": ["contributing"]
   }
 }

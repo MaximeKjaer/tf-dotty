@@ -13,20 +13,15 @@ _Note that you must use tf-dotty from a Dotty project, and not a Scala 2 project
 import ch.epfl.tensorflow.api.core._
 import ch.epfl.tensorflow.api.core.TF.tf
 
-tf.zeros(2 #: 2 #: SNil) // val res: Tensor[Float, 2 #: 2 #: SNil] = Tensor("zeros:0", shape=(2, 2), dtype=float32)
+val matrix = tf.zeros(2 #: 2 #: SNil)
+ // matrix: Tensor[Float, 2 #: 2 #: SNil] = Tensor("zeros:0", shape=(2, 2), dtype=float32)
 ```
 
-Read the documentation on [tensor shapes](shape.md) to learn about `#:` and `SNil`.
+Read the documentation on [tensor shapes](tensor.md) to learn about `#:` and `SNil`.
 
-## Dependencies
+## Installing Python dependencies
 
-### tf-dotty
-
-tf-dotty is not yet published on Maven. See how to compile from source in the docs for [contributing](contributing.md), and place the compiled source in a `lib` folder.
-
-### Python dependencies
-
-This project communicates with the Python implementation of TensorFlow. Therefore, you will need to have Python 3.7 and pip installed. To install the dependencies, run:
+This project communicates with the TensorFlow 1.14 Python API. You will need to have Python 3.7 and pip installed. To install the dependencies, run:
 
 ```console
 $ pip install -r requirements.txt

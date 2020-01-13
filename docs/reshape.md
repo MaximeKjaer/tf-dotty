@@ -6,7 +6,7 @@ sidebar_label: Reshape
 
 ## Reshaping tensors
 
-A common operation in TensorFlow is [`tf.reshape`](https://www.tensorflow.org/api_docs/python/tf/reshape?version=stable), which changes the shape, but not the values, of a tensor. A restriction imposed by the TensorFlow API is that the output shape must have the same number of elements as the input shape. The Python implementation of TensorFlow throws a `ValueError` when the output dimensions incompatible:
+A common operation in TensorFlow is [`tf.reshape`](https://www.tensorflow.org/versions/r1.15/api_docs/python/tf/reshape), which changes the shape of a tensor, but does not change its. A restriction imposed by the TensorFlow API is that the output shape must have the same number of elements as the input shape. The Python implementation of TensorFlow throws a `ValueError` when the shapes are incompatible:
 
 ```python
 >>> import tensorflow as tf
@@ -14,11 +14,11 @@ A common operation in TensorFlow is [`tf.reshape`](https://www.tensorflow.org/ap
 # ValueError: Cannot reshape a tensor with 100 elements to shape [20,20] (400 elements) for 'Reshape' (op: 'Reshape') with input shapes: [10,10], [2] and with input tensors computed as partial shapes: input[1] = [20,20].
 ```
 
-Indeed, a tensor can only be reshaped to another shape containing the same number of elements. The number of elements of a shape is the product of dimension sizes; a tensor of shape `10 #: 20 #: 30 #: SNil` contains \\(10 \times 20 \times 30 = 6000\\) elements.
+Indeed, a tensor can only be reshaped to another shape containing the same number of elements. The number of elements of a shape is the product of dimension sizes; a tensor of shape `10 #: 20 #: 30 #: SNil` contains \\(10 \times 20 \times 30 = 6000\\) elements, and can only be reshaped into another shape containing 6000 elements.
 
 ## Statically checking reshapes
 
-Computing the number of elements in a tensor at compile-time requires support for type-level arithmetic, as Maclaurin et al. write in "[Dex: array programming with typed indices](https://openreview.net/pdf?id=rJxd7vsWPS)":
+How can we check this constraint statically? As Maclaurin et al. ask in "[Dex: array programming with typed indices](https://openreview.net/pdf?id=rJxd7vsWPS)":
 
 > What about the dreaded reshape, which would seem to require type-level arithmetic?
 
@@ -45,13 +45,11 @@ protected type MultiplyLoop[A <: Int, B <: Int, Acc <: Int] <: Int = A match {
 }
 ```
 
-These match types are highly recursive; with the default setting of 512 MB of memory for the JVM, computing `100 * 100` results in a stack overflow on Dotty 0.21.0-RC1 [todo: check this; give big-O of depth], which is too limiting for what actual machine learning workloads need to compute.
+These match types are highly recursive; with the default setting of 512 MB of memory for the JVM, computing `100 * 100` results in a stack overflow on Dotty 0.21.0-RC1, which is too limiting for what typical machine learning workloads need to compute.
 
 ### Second attempt: with compiler support
 
-To support O(1) computations, the Dotty compiler must be able to evaluate a type-level arithmetic operation as its term-level equivalent. We have implemented this as an extension to be [integrated to Dotty](https://github.com/lampepfl/dotty/pull/7628), currently awaiting approval. This implementation adds unbound type aliases to Dotty's standard library, in `scala.compiletime.ops`; when the type comparer considers one of those types, it can normalize it to the result of the arithmetic operation if all arguments are constant types. This functions analogously to a constant folding optimization, except at the type level.
-
-With these types, we can compute the number of elements in a tensor's shape:
+To support constant time multiplication, the Dotty compiler must be able to evaluate a type-level arithmetic operation as its term-level equivalent. This feature is [now available in Dotty](https://github.com/lampepfl/dotty/pull/7628). With these operation types, we can compute the number of elements in a tensor's shape:
 
 ```scala
 import scala.compiletime.ops.int.*
@@ -67,14 +65,13 @@ protected type NumElementsNonEmpty[X <: Shape] <: Int = X match {
 }
 ```
 
-A reshape can then ensure that the new shape has the same number of elements as the old shape:
+A reshape operation can then ensure that the new shape has the same number of elements as the old shape, by demanding an implicit parameter proving that the types representing the number of elements are equal:
 
 ```scala
-def reshape[T, OldShape <: Shape, NewShape <: Shape](tensor: Tensor[T, OldShape], shape: NewShape)(
-    given ev: Shape.NumElements[Old] =:= Shape.NumElements[New]
-): Tensor[T, NewShape] = {
+def reshape[T, OldShape <: Shape, NewShape <: Shape](
+    tensor: Tensor[T, OldShape], shape: NewShape
+)(
+    given Shape.NumElements[Old] =:= Shape.NumElements[New]
+): Tensor[T, NewShape] =
     new Tensor[T, NewShape](tf.reshape(tensor.tensor, shape.toSeq))
-}
 ```
-
-[todo benchmark comparisons]

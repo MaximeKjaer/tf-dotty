@@ -40,4 +40,6 @@ $ cd website
 $ npm start
 ```
 
+You can include math in Markdown using `\\(` and `\\)` delimiters.
+
 The docs are not a part of the sbt build for now. The project may use [mdoc](https://scalameta.org/mdoc) or [Dottydoc](https://dotty.epfl.ch/docs/usage/dottydoc.html) down the road.

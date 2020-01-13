@@ -29,8 +29,8 @@
         "title": "Reshaping with singleton ops",
         "sidebar_label": "Reshape"
       },
-      "shape": {
-        "title": "Tensor shape"
+      "tensor": {
+        "title": "Tensor"
       }
     },
     "links": {
@@ -39,6 +39,7 @@
     },
     "categories": {
       "Getting Started": "Getting Started",
+      "Architecture": "Architecture",
       "Implementation": "Implementation",
       "Contributing": "Contributing"
     }
