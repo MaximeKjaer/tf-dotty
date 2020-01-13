@@ -5,15 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-const React = require('react');
-
+const React = require("react");
 
 class HomeSplash extends React.Component {
   render() {
-    const {siteConfig, language = ''} = this.props;
-    const {baseUrl, docsUrl} = siteConfig;
-    const docsPart = `${docsUrl ? `${docsUrl}/` : ''}`;
-    const langPart = `${language ? `${language}/` : ''}`;
+    const { siteConfig, language = "" } = this.props;
+    const { baseUrl, docsUrl } = siteConfig;
+    const docsPart = `${docsUrl ? `${docsUrl}/` : ""}`;
+    const langPart = `${language ? `${language}/` : ""}`;
     const docUrl = doc => `${baseUrl}${docsPart}${langPart}${doc}`;
 
     const SplashContainer = props => (
@@ -58,8 +57,7 @@ class HomeSplash extends React.Component {
         <div className="inner">
           <ProjectTitle siteConfig={siteConfig} />
           <PromoSection>
-            <Button href={docUrl('getting-started.html')}>Read docs</Button>
-            <Button href="/blog">News</Button>
+            <Button href={docUrl("getting-started.html")}>Get started</Button>
           </PromoSection>
         </div>
       </SplashContainer>
@@ -69,7 +67,7 @@ class HomeSplash extends React.Component {
 
 class Index extends React.Component {
   render() {
-    const {config: siteConfig, language = ''} = this.props;
+    const { config: siteConfig, language = "" } = this.props;
 
     return (
       <div>
