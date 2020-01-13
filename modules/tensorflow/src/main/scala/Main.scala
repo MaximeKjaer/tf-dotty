@@ -1,5 +1,4 @@
-import ch.epfl.tensorflow.api.core._
-import ch.epfl.tensorflow.api.core.TF.tf
+import ch.epfl.tensorflow.core._
 
 object Main {
   

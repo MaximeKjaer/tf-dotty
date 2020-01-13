@@ -1,7 +1,4 @@
-package ch.epfl.tensorflow.api.core
-
-import ch.epfl.tensorflow.api.core._
-import ch.epfl.tensorflow.api.core.TF.tf
+import ch.epfl.tensorflow.core._
 import me.shadaj.scalapy.py
 import util.Random
 

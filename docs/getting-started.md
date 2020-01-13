@@ -10,8 +10,7 @@ _Note that you must use tf-dotty from a Dotty project, and not a Scala 2 project
 ## Importing
 
 ```scala
-import ch.epfl.tensorflow.api.core._
-import ch.epfl.tensorflow.api.core.TF.tf
+import ch.epfl.tensorflow.core._
 
 val matrix = tf.zeros(2 #: 2 #: SNil)
  // matrix: Tensor[Float, 2 #: 2 #: SNil] = Tensor("zeros:0", shape=(2, 2), dtype=float32)

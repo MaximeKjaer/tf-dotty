@@ -1,7 +1,7 @@
 import org.junit.Test
 import org.junit.Assert._
 
-import ch.epfl.tensorflow.api.core._
+import ch.epfl.tensorflow.core._
 
 class IndicesTest {
     @Test def `indices 1`(): Unit = {

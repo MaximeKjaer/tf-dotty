@@ -1,4 +1,4 @@
-package ch.epfl.tensorflow.api.core
+package ch.epfl.tensorflow.core
 
 import me.shadaj.scalapy.py
 import me.shadaj.scalapy.tensorflow.TF.tf
