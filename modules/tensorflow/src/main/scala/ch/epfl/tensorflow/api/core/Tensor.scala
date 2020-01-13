@@ -27,7 +27,7 @@ class Tensor[T, S <: Shape] private[core] (val tensor: PyTensor) {
     def gt(that: Tensor[T, S]): Tensor[Boolean, S] = new Tensor[Boolean, S](tensor)
 }
 
-given boolTensorOps: [S <: Shape](self: Tensor[Boolean, S]) {
+given boolTensorOps: [S <: Shape](self: Tensor[Boolean, S]) extended with {
     def unary_~ : Tensor[Boolean, S] = new Tensor[Boolean, S](~self.tensor)
     def & (that: Tensor[Boolean, S]): Tensor[Boolean, S] = new Tensor[Boolean, S](self.tensor & that.tensor)
     def | (that: Tensor[Boolean, S]): Tensor[Boolean, S] = new Tensor[Boolean, S](self.tensor | that.tensor)

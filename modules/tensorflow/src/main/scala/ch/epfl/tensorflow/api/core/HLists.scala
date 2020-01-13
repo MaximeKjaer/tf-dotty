@@ -4,7 +4,7 @@ import me.shadaj.scalapy.py
 import scala.compiletime.S
 import scala.compiletime.ops.int
 import scala.compiletime.ops.int.{<, <=, *}
-import scala.compiletime.ops.string.{+, Error}
+import scala.compiletime.ops.string.+
 import scala.compiletime.ops.boolean.&&
 
 sealed trait SNil extends Shape with Indices
@@ -164,9 +164,9 @@ object Shape {
         }
         case SNil => ToRemove match {
             case SNil => SNil
-            case head :: tail => Error[
-                "The following indices are out of bounds: " + Indices.ToString[ToRemove]
-            ]
+        //     case head :: tail => Error[
+        //         "The following indices are out of bounds: " + Indices.ToString[ToRemove]
+        //     ]
         }
     }
 
@@ -181,10 +181,10 @@ object Shape {
       */
     type RemoveIndex[RemoveFrom <: Shape, I <: Index] <: Shape = WithinBounds[I, RemoveFrom] match {
         case true => RemoveIndexLoop[RemoveFrom, I, 0]
-        case false => Error[
-            "Index " + int.ToString[I] +
-            " is out of bounds for shape of rank " + int.ToString[Size[RemoveFrom]]
-        ]
+        // case false => Error[
+        //     "Index " + int.ToString[I] +
+        //     " is out of bounds for shape of rank " + int.ToString[Size[RemoveFrom]]
+        // ]
     } 
     
     /** 

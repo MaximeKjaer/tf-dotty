@@ -96,7 +96,6 @@ object TensorFlow {
     @implicitNotFound("Reshape dimensions mismatch")
     type CanReshape[Old <: Shape, New <: Shape] = (Shape.NumElements[Old] == Shape.NumElements[New]) match {
         case true => ValueOf[true]
-        // TODO better error message through Error
         // case false => Error["Cannot reshape tensor from " + ToString[Shape.NumElements[Old]] +
         //                     " elements to " + Shape.NumElements[Old] + " elements. Number of elements must be the same"]
     }

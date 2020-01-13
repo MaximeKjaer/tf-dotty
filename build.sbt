@@ -1,10 +1,6 @@
 import scala.sys.process._
 
-/** This version is compiled from this fork of dotty:
- *  https://github.com/MaximeKjaer/dotty/tree/singleton-arithmetic
- *  It has been published locally with `sbt dotty-bootstrapped/publishLocal`.
- */
-val dottyVersion = "0.21.0-bin-SNAPSHOT"
+val dottyVersion = "0.22.0-bin-20200110-842e4c4-NIGHTLY"
 
 val scala213Version = "2.13.1"
 
