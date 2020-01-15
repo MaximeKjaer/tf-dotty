@@ -9,7 +9,7 @@ class ShapeTest {
     }
 
     @Test def `numElements empty`(): Unit = {    
-        assertEquals(0, SNil.numElements)
+        assertEquals(1, SNil.numElements)
     }
 
     @Test def `numElements 1`(): Unit = {    

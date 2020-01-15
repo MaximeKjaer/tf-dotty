@@ -51,8 +51,8 @@ sealed trait Shape extends Product with Serializable {
 
     def numElements: NumElements[this.type] = {
         val res: Int = this match {
-            case SNil => 0
-            case head #: tail => head * Math.max(1, tail.numElements)
+            case SNil => 1
+            case head #: tail => head * tail.numElements
         }
         res.asInstanceOf[NumElements[this.type]]
     }
@@ -101,13 +101,8 @@ object Shape {
     }
 
     type NumElements[X <: Shape] <: Int = X match {
-        case SNil => 0
-        case head #: tail => head * NumElementsNonEmpty[tail]
-    }
-
-    protected type NumElementsNonEmpty[X <: Shape] <: Int = X match {
         case SNil => 1
-        case head #: tail => head * NumElementsNonEmpty[tail]
+        case head #: tail => head * NumElements[tail]
     }
 
     type Concat[X <: Shape, Y <: Shape] <: Shape = X match {
