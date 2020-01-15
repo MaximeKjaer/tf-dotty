@@ -25,13 +25,13 @@ class ShapeTest {
     @Test def `NumElements 1`(): Unit = {
         val shape = 1 #: 2 #: 3 #: SNil
         val res = valueOf[Shape.NumElements[shape.type]]
-        assertEquals(6, res)
+        assertEquals(6, res.toLong)
     }
 
     @Test def `NumElements 2`(): Unit = {
         val shape = 3 #: 2 #: 1 #: SNil
         val res = valueOf[Shape.NumElements[shape.type]]
-        assertEquals(6, res)
+        assertEquals(6, res.toLong)
     }
 
     @Test def `Reduce empty`(): Unit = {
@@ -51,12 +51,12 @@ class ShapeTest {
 
     @Test def `Head 1`(): Unit = {
         val res = valueOf[Shape.Head[1 #: 2 #: 3 #: SNil]]
-        assertEquals(1, res)
+        assertEquals(1, res.toLong)
     }
 
     @Test def `Head 2`(): Unit = {
         val res = valueOf[Shape.Head[1 #: SNil]]
-        assertEquals(1, res)
+        assertEquals(1, res.toLong)
     }
 
     @Test def `Tail 1`(): Unit = {
