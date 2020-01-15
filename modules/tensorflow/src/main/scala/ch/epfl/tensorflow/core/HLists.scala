@@ -137,11 +137,11 @@ object Shape {
       * 
       * @tparam S           Shape to reduce
       * @tparam Axes        List of indices to reduce along.
-      *                     `py.None` if reduction should be done along all axes.
+      *                     `one` if reduction should be done along all axes.
       *                     `SNil` if no reduction should be done.
       */
-    type Reduce[S <: Shape, Axes <: Indices | py.None] <: Shape = Axes match {
-        case py.None => SNil
+    type Reduce[S <: Shape, Axes <: None.type | Indices] <: Shape = Axes match {
+        case None.type => SNil
         case Indices => ReduceLoop[S, Axes, 0]
     }
 

@@ -158,16 +158,16 @@ object TensorFlow {
       * Reduces `input_tensor` along the dimensions given in `axis`. Unless `keepdims` is `true`, the rank of the tensor
       * is reduced by 1 for each entry in `axis`. If `keepdims` is `true`, the reduced dimensions are retained with length 1.
       * 
-      * If axis is `py.None`, all dimensions are reduced, and a tensor with a single element is returned.
+      * If axis is `None`, all dimensions are reduced, and a tensor with a single element is returned.
       * 
       * @param input_tensor The tensor to reduce
-      * @param axis         The dimensions to reduce. If `py.None` (the default), reduces all dimensions
+      * @param axis         The dimensions to reduce. If `None` (the default), reduces all dimensions
       * @param keepdims     If `true`, retains reduced dimensions with length 1.
       */
     // TODO keepdims type-level support
-    def reduce_mean[T <: Numeric, S <: Shape, Axis <: py.None | Indices](
+    def reduce_mean[T <: Numeric, S <: Shape, Axis <: None.type | Indices](
         input_tensor: Tensor[T, S],
-        axis: Axis = py.None,
+        axis: Axis = None,
         keepdims: Boolean = false
     ): Tensor[T, Shape.Reduce[S, Axis]] = 
         new Tensor(tf.reduce_mean(input_tensor.tensor, encodeAxis(axis), keepdims))
@@ -423,11 +423,11 @@ object TensorFlow {
       * @tparam InputT      Type of input elements
       * @tparam OutputT     Type of output elements
       * @tparam S           Shape of input tensor
-      * @tparam Axis        Type of axes to reduce over, or py.None to reduce over all
+      * @tparam Axis        Type of axes to reduce over, or None to reduce over all
       */
-    def count_nonzero[InputT <: Numeric | Boolean | String, OutputT, S <: Shape, Axis <: Indices | py.None](
+    def count_nonzero[InputT <: Numeric | Boolean | String, OutputT, S <: Shape, Axis <: None.type | Indices](
         input_tensor: Tensor[InputT, S],
-        axis: Axis = py.None,
+        axis: Axis = None,
         keepdims: Boolean = false,
         dtype: DataType[OutputT] = int64
     ): Tensor[OutputT, Shape.Reduce[S, Axis]] = {
