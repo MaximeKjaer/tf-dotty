@@ -30,9 +30,10 @@ jobs:
         - npm install
       script:
         - npm run build
+        - touch build/.nojekyll
       deploy:
         provider: pages
-        local_dir: website/build
+        local_dir: website/build/tf-dotty
         skip_cleanup: true
         github_token: $GITHUB_TOKEN
         on:
