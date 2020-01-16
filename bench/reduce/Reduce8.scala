@@ -1,4 +1,4 @@
-import ch.epfl.tensorflow.core._
+import io.kjaer.tensorflow.core._
 
 object Reduce8 {
   val tensor1 = tf.zeros(2 #: 1 #: 2 #: 1 #: 40 #: 40 #: 10 #: 20 #: SNil)

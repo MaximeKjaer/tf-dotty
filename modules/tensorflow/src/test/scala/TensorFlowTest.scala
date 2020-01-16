@@ -1,6 +1,6 @@
 import org.junit.Test
 import org.junit.Assert._
-import ch.epfl.tensorflow.core._
+import io.kjaer.tensorflow.core._
 
 class TensorFlowTest {
     def shapeFromType[S <: Shape](t: Tensor[?, S])(given s: ShapeOf[S]): S = s.value

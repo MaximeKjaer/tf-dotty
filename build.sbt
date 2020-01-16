@@ -10,7 +10,7 @@ lazy val tensorflow = project
   .settings(
     name := "tf-dotty",
     version := "0.1.0",
-    organization := "ch.epfl",
+    organization := "io.kjaer",
     scalaVersion := dottyVersion,
 
     // Tests:

@@ -1,4 +1,4 @@
-import ch.epfl.tensorflow.core._
+import io.kjaer.tensorflow.core._
 import me.shadaj.scalapy.py
 import util.Random
 

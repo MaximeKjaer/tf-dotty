@@ -1,4 +1,4 @@
-package ch.epfl.tensorflow.core
+package io.kjaer.tensorflow.core
 
 import me.shadaj.scalapy.tensorflow.{Training => PyTraining}
 

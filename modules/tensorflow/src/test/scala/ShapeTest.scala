@@ -1,6 +1,6 @@
 import org.junit.Test
 import org.junit.Assert._
-import ch.epfl.tensorflow.core._
+import io.kjaer.tensorflow.core._
 
 class ShapeTest {
     def assertShapeEquals[Expected <: Shape, Actual <: Shape]

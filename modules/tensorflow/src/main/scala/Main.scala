@@ -1,4 +1,4 @@
-import ch.epfl.tensorflow.core._
+import io.kjaer.tensorflow.core._
 
 object Main {
   

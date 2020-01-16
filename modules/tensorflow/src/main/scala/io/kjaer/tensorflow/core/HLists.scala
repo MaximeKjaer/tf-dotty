@@ -1,4 +1,4 @@
-package ch.epfl.tensorflow.core
+package io.kjaer.tensorflow.core
 
 import me.shadaj.scalapy.py
 import scala.compiletime.S
@@ -22,7 +22,7 @@ sealed trait Shape extends Product with Serializable {
 
     /** Prepend the head to this */
     def #:[H <: Dimension, This >: this.type <: Shape](head: H): H #: This = 
-        ch.epfl.tensorflow.core.#:(head, this)
+        io.kjaer.tensorflow.core.#:(head, this)
 
     /** Concat with another shape **/
     def ++(that: Shape): this.type Concat that.type = {
@@ -228,7 +228,7 @@ type Index = Int & Singleton
 
 sealed trait Indices {
     def ::[H <: Index, This >: this.type <: Indices](head: H): H :: This = 
-        ch.epfl.tensorflow.core.::(head, this)
+        io.kjaer.tensorflow.core.::(head, this)
 
     def indices: Set[Int] = this match {
         case head :: tail => tail.indices + head
