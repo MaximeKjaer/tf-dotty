@@ -1,6 +1,8 @@
-# Tensorflow Dotty
+# tf-dotty
 
 [![Build Status](https://travis-ci.com/MaximeKjaer/tf-dotty.svg?token=soqG4sgcMQUgpCtPSUUr&branch=master)](https://travis-ci.com/MaximeKjaer/tf-dotty)
+
+tf-dotty is a [Dotty](https://github.com/lampepfl/dotty) library that adds type safety to TensorFlow code by statically checking tensor types and shape.
 
 ## Dependencies
 
