@@ -55,23 +55,15 @@ To support constant time multiplication, the Dotty compiler must be able to eval
 import scala.compiletime.ops.int.*
 
 type NumElements[X <: Shape] <: Int = X match {
-    case SNil => 0
-    case head #: tail => head * NumElementsNonEmpty[tail]
-}
-
-protected type NumElementsNonEmpty[X <: Shape] <: Int = X match {
     case SNil => 1
-    case head #: tail => head * NumElementsNonEmpty[tail]
+    case head #: tail => head * NumElements[tail]
 }
 ```
 
 A reshape operation can then ensure that the new shape has the same number of elements as the old shape, by demanding an implicit parameter proving that the types representing the number of elements are equal:
 
 ```scala
-def reshape[T, OldShape <: Shape, NewShape <: Shape](
-    tensor: Tensor[T, OldShape], shape: NewShape
-)(
-    given Shape.NumElements[Old] =:= Shape.NumElements[New]
-): Tensor[T, NewShape] =
-    new Tensor[T, NewShape](tf.reshape(tensor.tensor, shape.toSeq))
+def reshape[T, Old <: Shape, New <: Shape](tensor: Tensor[T, Old], shape: New)
+  (given NumElements[Old] =:= NumElements[New]): Tensor[T, New] =
+    new Tensor[T, New](tf.reshape(tensor.tensor, shape.toSeq))
 ```
