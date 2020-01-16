@@ -162,9 +162,9 @@ object TensorFlow {
       * 
       * @param input_tensor The tensor to reduce
       * @param axis         The dimensions to reduce. If `None` (the default), reduces all dimensions
-      * @param keepdims     If `true`, retains reduced dimensions with length 1.
+      * @param keepdims     If `true`, retains reduced dimensions with length 1. Note that there is no type-level support for `keepdims=true`.
       */
-    // TODO keepdims type-level support
+    // TODO keepdims type-level support. Requires this issue to be resolved https://github.com/lampepfl/dotty/issues/8010#issuecomment-575061446
     def reduce_mean[T <: Numeric, S <: Shape, Axis <: None.type | Indices](
         input_tensor: Tensor[T, S],
         axis: Axis = None,
