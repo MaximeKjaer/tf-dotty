@@ -30,3 +30,10 @@ jobs:
         - npm install
       script:
         - npm run build
+      deploy:
+        provider: pages
+        local_dir: build/tf-dotty
+        skip_cleanup: true
+        github_token: $GITHUB_TOKEN
+        on:
+          branch: master
