@@ -32,7 +32,7 @@ jobs:
         - npm run build
       deploy:
         provider: pages
-        local_dir: build/tf-dotty
+        local_dir: website/build/tf-dotty
         skip_cleanup: true
         github_token: $GITHUB_TOKEN
         on:
