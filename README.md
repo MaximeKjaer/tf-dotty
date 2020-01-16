@@ -6,7 +6,7 @@ tf-dotty is a [Dotty](https://github.com/lampepfl/dotty) library that adds type 
 
 ## Dependencies
 
-This project communicates with the Python implementation of TensorFlow. Therefore, you will need to have Python 3.7 and pip installed. Therefore, you will need to have Python 3.7 and pip installed. To install the dependencies, run:
+This project communicates with the Python implementation of TensorFlow. Therefore, you will need to have Python 3.7 and pip installed. To install the dependencies, run:
 
 ```console
 $ pip install -r requirements.txt
