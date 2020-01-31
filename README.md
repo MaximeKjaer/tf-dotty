@@ -4,6 +4,8 @@
 
 tf-dotty is a [Dotty](https://github.com/lampepfl/dotty) library that adds type safety to TensorFlow code by statically checking tensor types and shape.
 
+To get started, read [the documentation](https://maximekjaer.github.io/tf-dotty/docs/getting-started.html).
+
 ## Dependencies
 
 This project communicates with the Python implementation of TensorFlow. Therefore, you will need to have Python 3.7 and pip installed. To install the dependencies, run:
