@@ -13,8 +13,8 @@ lazy val tensorflow = project
     scalaVersion := dottyVersion,
 
     // Tests:
-    libraryDependencies += "com.novocode" % "junit-interface" % "0.11" % "test",
-    testOptions += Tests.Argument(TestFrameworks.JUnit, "-s", "-v"),
+    libraryDependencies += "org.scalameta" %% "munit" % "0.5.2",
+    testFrameworks += new TestFramework("munit.Framework"),
 
     // ScalaPy:
     libraryDependencies += "me.shadaj" % "scalapy-core_2.13" % "0.3.0+15-598682f0",

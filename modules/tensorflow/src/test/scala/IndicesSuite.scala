@@ -1,62 +1,59 @@
-import org.junit.Test
-import org.junit.Assert._
-
 import io.kjaer.tensorflow.core._
 
-class IndicesTest {
-    @Test def `indices 1`(): Unit = {
+class IndicesSuite extends munit.FunSuite {
+    test("indices 1") {
         assertEquals((0 :: 2 :: SNil).indices, Set(0, 2))
     }
 
-    @Test def `indices 2`(): Unit = {
+    test("indices 2") {
         assertEquals((0 :: 1 :: 2 :: SNil).indices, Set(0, 1, 2))
     }
 
-    @Test def `indices empty for SNil`(): Unit = {
+    test("indices empty for SNil") {
         assertEquals(SNil.indices, Set.empty)
     }
 
-    @Test def `Contains false for SNil`(): Unit = {
+    test("Contains false for SNil") {
         val res = valueOf[Indices.Contains[SNil, 1]]
-        assertFalse(res)
+        assert(!res)
     }
 
-    @Test def `Contains true 1`(): Unit = {
+    test("Contains true 1") {
         val res = valueOf[Indices.Contains[1 :: SNil, 1]]
-        assertTrue(res)
+        assert(res)
     }
     
-    @Test def `Contains true 2`(): Unit = {
+    test("Contains true 2") {
         val res = valueOf[Indices.Contains[1 :: 2 :: 3 :: SNil, 2]]
-        assertTrue(res)
+        assert(res)
     }
 
-    @Test def `Contains false`(): Unit = {
+    test("Contains false") {
         val res = valueOf[Indices.Contains[1 :: 2 :: 3 :: SNil, 12]]
-        assertFalse(res)
+        assert(!res)
     }
 
-    @Test def `RemoveValue 1`(): Unit = {
+    test("RemoveValue 1") {
         val res = indicesOf[Indices.RemoveValue[1 :: 10 :: SNil, 1]]
         assertEquals(10 :: SNil, res)
     }
 
-    @Test def `RemoveValue 2`(): Unit = {
+    test("RemoveValue 2") {
         val res = indicesOf[Indices.RemoveValue[1 :: 10 :: SNil, 10]]
         assertEquals(1 :: SNil, res)
     }
 
-    @Test def `RemoveValue only value`(): Unit = {
+    test("RemoveValue only value") {
         val res = indicesOf[Indices.RemoveValue[1 :: SNil, 1]]
-        assertEquals(SNil, res)
+        assert(SNil == res)
     }
 
-    @Test def `RemoveValue SNil`(): Unit = {
+    test("RemoveValue SNil") {
         val res = indicesOf[Indices.RemoveValue[SNil, 1]]
-        assertEquals(SNil, res)
+        assert(SNil == res)
     }
 
-    @Test def `RemoveValue not contained`(): Unit = {
+    test("RemoveValue not contained") {
         val res = indicesOf[Indices.RemoveValue[1 :: 10 :: SNil, 20]]
         assertEquals(1 :: 10 :: SNil, res)
     }
