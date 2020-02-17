@@ -1,7 +1,6 @@
 import scala.sys.process._
 
-val dottyVersion = "0.22.0-bin-20200110-842e4c4-NIGHTLY"
-
+val dottyVersion = "0.22.0-RC1"
 val scala213Version = "2.13.1"
 
 lazy val tensorflow = project

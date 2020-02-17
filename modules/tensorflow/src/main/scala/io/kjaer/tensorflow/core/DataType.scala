@@ -23,11 +23,11 @@ opaque type Resource = Long
 opaque type Variant = Long
 
 
-given shortReader: (floatReader: Reader[Float]) => Reader[Short] {
+given shortReader(using floatReader: Reader[Float]) as Reader[Short] {
     def read(v: PyValue): Short = floatReader.read(v).toShort
 }
 
-given shortWriter: (floatWriter: Writer[Float]) => Writer[Short] {
+given shortWriter(using floatWriter: Writer[Float]) as Writer[Short] {
     def write(s: Short): PyValue = floatWriter.write(s.toFloat)
 }
 
