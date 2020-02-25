@@ -17,11 +17,18 @@ inThisBuild(List(
   )
 ))
 
-lazy val tensorflow = project
-  .in(file("modules/tensorflow"))
-  .dependsOn(scalapyTensorflow)
+lazy val root = project
+  .in(file("."))
+  .aggregate(tensorflow)
   .settings(
     name := "tf-dotty",
+    scalaVersion := dottyVersion
+  )
+
+lazy val tensorflow = project
+  .in(file("modules/tensorflow"))
+  .dependsOn(`scalapy-tensorflow`)
+  .settings(
     organization := "io.kjaer",
     scalaVersion := dottyVersion,
 
@@ -37,10 +44,9 @@ lazy val tensorflow = project
     projectDependencies ~=(_.map(_.withDottyCompat(dottyVersion))),
   )
 
-lazy val scalapyTensorflow = project
+lazy val `scalapy-tensorflow` = project
   .in(file("modules/scalapy-tensorflow"))
   .settings(
-    name := "scalapy-tensorflow",
     scalaVersion := scala213Version,
     organization := "me.shadaj",
     skip in publish := true,
