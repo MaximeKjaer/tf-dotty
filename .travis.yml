@@ -33,6 +33,7 @@ jobs:
         - touch build/.nojekyll
       deploy:
         provider: pages
+        skip_cleanup: true
         local_dir: website/build/tf-dotty
         github_token: $GITHUB_TOKEN
         on:
