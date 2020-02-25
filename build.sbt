@@ -3,12 +3,25 @@ import scala.sys.process._
 val dottyVersion = "0.22.0-RC1"
 val scala213Version = "2.13.1"
 
+inThisBuild(List(
+  organization := "io.kjaer",
+  homepage := Some(url("https://github.com/maximekjaer/tf-dotty")),
+  licenses := List("MIT" -> url("https://github.com/MaximeKjaer/tf-dotty/blob/master/LICENSE")),
+  developers := List(
+    Developer(
+      "maximekjaer",
+      "Maxime Kjaer",
+      "maxime.kjaer@gmail.com",
+      url("https://kjaer.io")
+    )
+  )
+))
+
 lazy val tensorflow = project
   .in(file("modules/tensorflow"))
   .dependsOn(scalapyTensorflow)
   .settings(
     name := "tf-dotty",
-    version := "0.1.0",
     organization := "io.kjaer",
     scalaVersion := dottyVersion,
 
