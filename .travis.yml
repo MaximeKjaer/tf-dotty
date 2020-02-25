@@ -37,9 +37,9 @@ jobs:
         github_token: $GITHUB_TOKEN
         on:
           branch: master
-      
-      - stage: release
-        name: "Release library"
-        before_install:
-          - git fetch --tags
-        script: sbt ci-release
+
+    - stage: release
+      name: "Release library"
+      before_install:
+        - git fetch --tags
+      script: sbt ci-release
