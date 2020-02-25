@@ -5,10 +5,14 @@ import scala.compiletime.testing.typeChecks
 class TensorFlowSuite extends munit.FunSuite {
     def shapeFromType[S <: Shape](t: Tensor[?, S])(given s: ShapeOf[S]): S = s.value
 
-    test("tf.math methods are available in top-level tf") {
-        val tensor = tf.zeros(2 #: 2 #: SNil)
+    test("tf.math is mixed-in to top-level tf") {
         assert(typeChecks("tf.math.abs"))
         assert(typeChecks("tf.abs"))
+    }
+
+    test("tf.dtypes is mixed-in to top-level tf") {
+        assert(typeChecks("tf.int32"))
+        assert(typeChecks("tf.dtypes.int32"))
     }
 
     test("reduce_mean without axes") {

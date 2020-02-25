@@ -1,6 +1,7 @@
 package io.kjaer.tensorflow.math 
 
 import io.kjaer.tensorflow.core._
+import io.kjaer.tensorflow.dtypes.DataType
 import Utils.encodeAxis
 import me.shadaj.scalapy.py
 import me.shadaj.scalapy.tensorflow.TF.tf

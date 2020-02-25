@@ -1,4 +1,4 @@
-package io.kjaer.tensorflow.core
+package io.kjaer.tensorflow.dtypes
 
 import me.shadaj.scalapy.py.{Reader, Writer, PyValue}
 import me.shadaj.scalapy.tensorflow
