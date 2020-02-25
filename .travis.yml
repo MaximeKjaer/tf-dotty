@@ -2,7 +2,8 @@ language: scala
 
 jobs:
   include:
-    - name: "Tests"
+    - stage: test
+      name: "Test"
       cache:
         directories:
           - $HOME/.cache/coursier
@@ -19,11 +20,11 @@ jobs:
         - pyenv global 3.7.1
         - pip install -r requirements.txt
         - export LD_LIBRARY_PATH=$(python3-config --prefix)/lib
-
       script:
         - sbt test
 
-    - name: "Website"
+    - stage: deploy
+      name: "Deploy website"
       install:
         - cd website
         - npm install
@@ -33,12 +34,11 @@ jobs:
       deploy:
         provider: pages
         local_dir: website/build/tf-dotty
-        skip_cleanup: true
         github_token: $GITHUB_TOKEN
         on:
           branch: master
 
-    - stage: release
+    - stage: deploy
       name: "Release library"
       before_install:
         - git fetch --tags
