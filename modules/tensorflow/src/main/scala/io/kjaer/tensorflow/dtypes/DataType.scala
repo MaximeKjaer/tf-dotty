@@ -56,7 +56,7 @@ enum DataType[T] {
     case RESOURCE extends DataType[Resource]
     case VARIANT extends DataType[Variant]
 
-    def dtype: tensorflow.DType = this match {
+    def dtype: tensorflow.dtypes.DType = this match {
         case FLOAT16 => tf.float16
         case FLOAT32 => tf.float32
         case FLOAT64 => tf.float64

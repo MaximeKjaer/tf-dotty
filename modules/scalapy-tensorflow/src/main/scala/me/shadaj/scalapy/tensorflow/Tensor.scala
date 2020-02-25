@@ -1,6 +1,7 @@
 package me.shadaj.scalapy.tensorflow
 
 import me.shadaj.scalapy.py
+import me.shadaj.scalapy.tensorflow.dtypes.DType
 
 @py.native trait Tensor extends py.Object {
   def name: String = py.native
