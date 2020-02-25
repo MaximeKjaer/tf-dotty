@@ -1,7 +1,15 @@
 import io.kjaer.tensorflow.core._
 
+import scala.compiletime.testing.typeChecks
+
 class TensorFlowSuite extends munit.FunSuite {
     def shapeFromType[S <: Shape](t: Tensor[?, S])(given s: ShapeOf[S]): S = s.value
+
+    test("tf.math methods are available in top-level tf") {
+        val tensor = tf.zeros(2 #: 2 #: SNil)
+        assert(typeChecks("tf.math.abs"))
+        assert(typeChecks("tf.abs"))
+    }
 
     test("reduce_mean without axes") {
         val tensor = tf.zeros(2 #: 2 #: SNil)

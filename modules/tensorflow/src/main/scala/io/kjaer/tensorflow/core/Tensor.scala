@@ -2,7 +2,7 @@ package io.kjaer.tensorflow.core
 
 import me.shadaj.scalapy.tensorflow.{Tensor => PyTensor}
 
-class Tensor[T, S <: Shape] private[core] (val tensor: PyTensor) {
+class Tensor[T, S <: Shape] private[tensorflow] (val tensor: PyTensor) {
     override def toString: String = tensor.toString
 
     def dtype: DataType[T] = ??? // TODO 
