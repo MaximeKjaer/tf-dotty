@@ -43,6 +43,7 @@ lazy val scalapyTensorflow = project
     name := "scalapy-tensorflow",
     scalaVersion := scala213Version,
     organization := "me.shadaj",
+    skip in publish := true,
 
     // ScalaPy:
     libraryDependencies += "me.shadaj" %% "scalapy-core" % "0.3.0+15-598682f0",
