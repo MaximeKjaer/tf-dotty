@@ -80,7 +80,7 @@ object TensorFlow extends Math with DTypes {
 
     
     def reshape[T, OldShape <: Shape, NewShape <: Shape](tensor: Tensor[T, OldShape], shape: NewShape)(
-        given ev: CanReshape[OldShape, NewShape]
+        given CanReshape[OldShape, NewShape]
     ): Tensor[T, NewShape] = {
         new Tensor[T, NewShape](tf.reshape(tensor.tensor, shape.toSeq))
     }
