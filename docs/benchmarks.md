@@ -21,4 +21,4 @@ As mentioned in the section on [typing reduction operations](reduce.md), the red
 
 Compiling a single reduction along 6 axes compiled in 500-1500ms on average, depending on the order of the indices, while compiling 5 reductions along 6 axes compiled in around 70s on average. This goes against the expectation that, in a program containing only independent function calls to reduction operations, compilation time would grow linearly with the number of reductions.
 
-This is therefore still work in progress.
+This is therefore still work in progress. There is a [Dotty issue](https://github.com/lampepfl/dotty/issues/7512) tracking slowness in certain match types; resolving this *may* solve this problem.
