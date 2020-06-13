@@ -6,7 +6,7 @@ sidebar_label: Reduce
 
 ## Reducing a tensor
 
-Tensorflow has a series of reduction operations, like [`tf.cumprod`](https://www.tensorflow.org/versions/r1.15/api_docs/python/tf/math/cumprod), [`tf.reduce_mean`](https://www.tensorflow.org/versions/r1.15/api_docs/python/tf/math/reduce_mean) or [`tf.reduce_variance`](https://www.tensorflow.org/versions/r1.15/api_docs/python/tf/math/reduce_variance). These operations have the following parameters:
+TensorFlow has a series of reduction operations, like [`tf.cumprod`](https://www.tensorflow.org/versions/r1.15/api_docs/python/tf/math/cumprod), [`tf.reduce_mean`](https://www.tensorflow.org/versions/r1.15/api_docs/python/tf/math/reduce_mean) or [`tf.reduce_variance`](https://www.tensorflow.org/versions/r1.15/api_docs/python/tf/math/reduce_variance). These operations have the following parameters:
 
 - `tensor`: a tensor to reduce over.
 - `axis`: indices of the axes to reduce along, or `py.None` to reduce along all axes.
