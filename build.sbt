@@ -38,7 +38,7 @@ lazy val tensorflow = project
     scalaVersion := dottyVersion,
 
     // Tests:
-    libraryDependencies += "org.scalameta" %% "munit" % munitVersion,
+    libraryDependencies += "org.scalameta" %% "munit" % munitVersion % Test,
     testFrameworks += new TestFramework("munit.Framework"),
 
     // ScalaPy:
@@ -59,7 +59,7 @@ lazy val compiletime = project
     organization := "io.kjaer",
     scalaVersion := dottyVersion,
 
-    libraryDependencies += "org.scalameta" %% "munit" % munitVersion,
+    libraryDependencies += "org.scalameta" %% "munit" % munitVersion % Test,
     testFrameworks += new TestFramework("munit.Framework"),
   )
 
@@ -75,8 +75,8 @@ lazy val `scalapy-tensorflow` = project
     libraryDependencies += "me.shadaj" %% "scalapy-numpy" % scalapyNumpyVersion,
 
     // Tests:
-    libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.14.0" % Test,
-    libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.8" % Test,
+    libraryDependencies += "org.scalameta" %% "munit" % munitVersion % Test,
+    testFrameworks += new TestFramework("munit.Framework"),
 
     projectDependencies ~=(_.map(_.withDottyCompat(dottyVersion))),
   )
