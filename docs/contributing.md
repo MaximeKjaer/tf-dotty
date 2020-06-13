@@ -20,6 +20,7 @@ The documentation website is built by [Docusaurus](https://docusaurus.io/docs/en
 
 ```console
 $ cd website
+$ npm install
 $ npm start
 ```
 
