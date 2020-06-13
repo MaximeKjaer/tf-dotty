@@ -22,19 +22,12 @@ inThisBuild(List(
   )
 ))
 
-lazy val root = project
-  .in(file("."))
-  .aggregate(tensorflow, compiletime)
-  .settings(
-    name := "tf-dotty",
-    scalaVersion := dottyVersion
-  )
-
 lazy val tensorflow = project
   .in(file("modules/tensorflow"))
   .dependsOn(`scalapy-tensorflow`, compiletime)
   .settings(
     organization := "io.kjaer",
+    name := "tf-dotty",
     scalaVersion := dottyVersion,
 
     // Tests:
@@ -57,6 +50,7 @@ lazy val compiletime = project
   .in(file("modules/compiletime"))
   .settings(
     organization := "io.kjaer",
+    name := "tf-dotty-compiletime",
     scalaVersion := dottyVersion,
 
     libraryDependencies += "org.scalameta" %% "munit" % munitVersion % Test,
