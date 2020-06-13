@@ -1,7 +1,7 @@
 import scala.sys.process._
 
-val dottyVersion = "0.22.0-RC1"
-val scala213Version = "2.13.1"
+val dottyVersion = "0.25.0-RC1"
+val scala213Version = "2.13.2"
 
 inThisBuild(List(
   organization := "io.kjaer",
@@ -33,7 +33,7 @@ lazy val tensorflow = project
     scalaVersion := dottyVersion,
 
     // Tests:
-    libraryDependencies += "org.scalameta" %% "munit" % "0.5.2",
+    libraryDependencies += "org.scalameta" %% "munit" % "0.7.9",
     testFrameworks += new TestFramework("munit.Framework"),
 
     // ScalaPy:

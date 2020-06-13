@@ -34,7 +34,7 @@ object TensorFlow extends Math with DTypes {
         value: V,
         dtype: DataType[T],
         shape: S = SNil
-    )(given py.Reader[V], py.Writer[V]): Tensor[T, S] = {
+    )(using py.Reader[V], py.Writer[V]): Tensor[T, S] = {
         new Tensor(tf.constant(value, dtype.dtype, shape.toSeq))
     }
 
@@ -80,7 +80,7 @@ object TensorFlow extends Math with DTypes {
 
     
     def reshape[T, OldShape <: Shape, NewShape <: Shape](tensor: Tensor[T, OldShape], shape: NewShape)(
-        given CanReshape[OldShape, NewShape]
+        using CanReshape[OldShape, NewShape]
     ): Tensor[T, NewShape] = {
         new Tensor[T, NewShape](tf.reshape(tensor.tensor, shape.toSeq))
     }

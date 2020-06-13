@@ -211,13 +211,13 @@ final case class #:[+H <: Dimension, +T <: Shape](head: H, tail: T) extends Shap
 final class ShapeOf[T <: Shape](val value: T)
 
 object ShapeOf {
-    given ShapeOf[SNil.type] = ShapeOf(SNil)
-    given ShapeOf[SNil] = ShapeOf(SNil)
-    given [H <: Dimension, T <: Shape](given head: ValueOf[H], tail: ShapeOf[T]): ShapeOf[H #: T] =
+    given shapeOfSNilType as ShapeOf[SNil.type] = ShapeOf(SNil)
+    given shapeOfSNil as ShapeOf[SNil] = ShapeOf(SNil)
+    given shapeOfCons[H <: Dimension, T <: Shape](using head: ValueOf[H], tail: ShapeOf[T]) as ShapeOf[H #: T] =
         ShapeOf(head.value #: tail.value)
 }
 
-inline def shapeOf[S <: Shape](given s: ShapeOf[S]): S = s.value
+inline def shapeOf[S <: Shape](using s: ShapeOf[S]): S = s.value
 
 
 ////////////
@@ -266,10 +266,10 @@ object Indices {
 final class IndicesOf[T <: Indices](val value: T)
 
 object IndicesOf {
-    given indicesOfSNilType: IndicesOf[SNil.type] = IndicesOf(SNil)
-    given indicesOfSNil: IndicesOf[SNil] = IndicesOf(SNil)
-    given indicesOfCons[H <: Index, T <: Indices](given head: ValueOf[H], tail: IndicesOf[T]): IndicesOf[H :: T] =
+    given indicesOfSNilType as IndicesOf[SNil.type] = IndicesOf(SNil)
+    given indicesOfSNil as IndicesOf[SNil] = IndicesOf(SNil)
+    given indicesOfCons[H <: Index, T <: Indices](using head: ValueOf[H], tail: IndicesOf[T]) as IndicesOf[H :: T] =
         IndicesOf(head.value :: tail.value)
 }
 
-inline def indicesOf[I <: Indices](given i: IndicesOf[I]): I = i.value
+inline def indicesOf[I <: Indices](using i: IndicesOf[I]): I = i.value

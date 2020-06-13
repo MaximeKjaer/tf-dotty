@@ -3,7 +3,7 @@ import io.kjaer.tensorflow.core._
 import scala.compiletime.testing.typeChecks
 
 class TensorFlowSuite extends munit.FunSuite {
-    def shapeFromType[S <: Shape](t: Tensor[?, S])(given s: ShapeOf[S]): S = s.value
+    def shapeFromType[S <: Shape](t: Tensor[?, S])(using s: ShapeOf[S]): S = s.value
 
     test("tf.math is mixed-in to top-level tf") {
         assert(typeChecks("tf.math.abs"))
