@@ -1,4 +1,5 @@
 import io.kjaer.tensorflow.core._
+import io.kjaer.compiletime._
 
 import scala.compiletime.testing.typeChecks
 
@@ -24,35 +25,35 @@ class TensorFlowSuite extends munit.FunSuite {
 
     test("reduce_mean along empty axes") {
         val tensor = tf.zeros(20 #: 22 #: SNil)
-        val res = tf.reduce_mean(tensor, SNil)
+        val res = tf.reduce_mean(tensor, INil)
         assert(20 #: 22 #: SNil == res.shape)
         assert(res.shape == shapeFromType(res))
     }
 
     test("reduce_mean along axis 0") {
         val tensor = tf.zeros(20 #: 22 #: SNil)
-        val res = tf.reduce_mean(tensor, 0 :: SNil)
+        val res = tf.reduce_mean(tensor, 0 :: INil)
         assert(22 #: SNil == res.shape)
         assert(res.shape == shapeFromType(res))
     }
 
     test("reduce_mean along axis 1") {
         val tensor = tf.zeros(20 #: 22 #: SNil)
-        val res = tf.reduce_mean(tensor, 1 :: SNil)
+        val res = tf.reduce_mean(tensor, 1 :: INil)
         assert(20 #: SNil == res.shape)
         assert(res.shape == shapeFromType(res))
     }    
 
     test("reduce_mean along all axes in order") {
         val tensor = tf.zeros(20 #: 22 #: SNil)
-        val res = tf.reduce_mean(tensor, 0 :: 1 :: SNil)
+        val res = tf.reduce_mean(tensor, 0 :: 1 :: INil)
         assert(SNil == res.shape)
         assert(res.shape == shapeFromType(res))
     }
 
     test("reduce_mean along all axes not in order") {
         val tensor = tf.zeros(20 #: 22 #: SNil)
-        val res = tf.reduce_mean(tensor, 1 :: 0 :: SNil)
+        val res = tf.reduce_mean(tensor, 1 :: 0 :: INil)
         assert(SNil == res.shape)
         assert(res.shape == shapeFromType(res))
     }
@@ -60,7 +61,7 @@ class TensorFlowSuite extends munit.FunSuite {
     /*
     test("reduce_mean along wrong axes") {
         val tensor = tf.zeros(20 #: 22 #: SNil)
-        val res = tf.reduce_mean(tensor, 13 :: 30 :: SNil)
+        val res = tf.reduce_mean(tensor, 13 :: 30 :: INil)
         assert(SNil == res.shape)
     }
     */
@@ -128,7 +129,7 @@ class TensorFlowSuite extends munit.FunSuite {
 
     test("count_nonzero along axis 0") {
         val tensor = tf.zeros(2 #: 3 #: 4 #: SNil)
-        val res = tf.count_nonzero(tensor, 0 :: SNil, keepdims=false)
+        val res = tf.count_nonzero(tensor, 0 :: INil, keepdims=false)
         assert(3 #: 4 #: SNil == res.shape)
         assert(res.shape == shapeFromType(res))
     }
@@ -136,7 +137,7 @@ class TensorFlowSuite extends munit.FunSuite {
     /* Should not compile:
     test("count_nonzero along invalid axis") {
         val tensor = tf.zeros(2 #: 3 #: 4 #: SNil)
-        val res = tf.count_nonzero(tensor, 1 :: -1 :: 3203 :: 20 :: 0 :: SNil, keepdims=false)
+        val res = tf.count_nonzero(tensor, 1 :: -1 :: 3203 :: 20 :: 0 :: INil, keepdims=false)
         assert(3 #: 4 #: SNil == res.shape)
         assert(res.shape == shapeFromType(res))
     }

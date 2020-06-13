@@ -1,5 +1,6 @@
 package io.kjaer.tensorflow.math 
 
+import io.kjaer.compiletime._
 import io.kjaer.tensorflow.core._
 import io.kjaer.tensorflow.dtypes.DataType
 import Utils.encodeAxis

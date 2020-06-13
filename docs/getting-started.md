@@ -46,6 +46,7 @@ lazy val myProject = project
 ## Importing
 
 ```scala
+import io.kjaer.compiletime._
 import io.kjaer.tensorflow.core._
 
 val matrix = tf.zeros(2 #: 2 #: SNil)

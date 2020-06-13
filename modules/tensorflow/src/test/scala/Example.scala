@@ -1,4 +1,6 @@
 import io.kjaer.tensorflow.core._
+import io.kjaer.compiletime._
+
 import me.shadaj.scalapy.py
 import util.Random
 

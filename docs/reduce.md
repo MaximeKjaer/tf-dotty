@@ -17,9 +17,9 @@ The example code below illustrates the use of these parameters in tf-dotty.
 ```scala
 val tensor = tf.zeros(10 #: 20 #: 30 #: SNil) //: Tensor[Float, 10 #: 20 #: 30 #: SNil]
 tf.reduce_mean(tensor, axis = py.None) //: Tensor[Float, SNil]
-tf.reduce_mean(tensor, axis = 0 :: SNil) //: Tensor[Float, 20 #: 30 #: SNil]
-tf.reduce_mean(tensor, axis = 1 :: 2 :: SNil) //: Tensor[Float, 10 #: SNil]
-tf.reduce_mean(tensor, axis = 0 :: 2 :: SNil, keepdims = true) //: Tensor[Float, 1 #: 20 #: 1 #: SNil]
+tf.reduce_mean(tensor, axis = 0 :: INil) //: Tensor[Float, 20 #: 30 #: SNil]
+tf.reduce_mean(tensor, axis = 1 :: 2 :: INil) //: Tensor[Float, 10 #: SNil]
+tf.reduce_mean(tensor, axis = 0 :: 2 :: INil, keepdims = true) //: Tensor[Float, 1 #: 20 #: 1 #: SNil]
 ```
 
 The `axis` parameter takes a list of indices of axes, of type `Indices`. This list is built with the `::` Cons type, which is different from the `#:` Cons type used for `Shape`. Both are lists of singleton integer types, but have different semantic meaning.
@@ -35,7 +35,7 @@ To avoid the problem of unordered, repeated indices, we can deviate from the Ten
 ```scala
 tf.reduce_mean(
     input_tensor = tf.zeros(1 #: 2 #: 3 #: SNil),
-    axis         =          ^ :: v :: ^ :: SNil,
+    axis         =          ^ :: v :: ^ :: INil,
     keepdims     = false
 ) //: Tensor[Float, 2 #: SNil]
 ```

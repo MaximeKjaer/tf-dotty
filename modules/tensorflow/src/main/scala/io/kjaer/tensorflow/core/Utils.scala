@@ -1,6 +1,7 @@
 package io.kjaer.tensorflow.core
 
 import me.shadaj.scalapy.py
+import io.kjaer.compiletime._
 
 object Utils {
     /** 

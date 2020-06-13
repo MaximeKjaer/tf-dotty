@@ -7,6 +7,7 @@ import scala.compiletime.ops.any.==
 
 import io.kjaer.tensorflow.math._
 import io.kjaer.tensorflow.dtypes._
+import io.kjaer.compiletime._
 
 object TensorFlow extends Math with DTypes {
     /////////////

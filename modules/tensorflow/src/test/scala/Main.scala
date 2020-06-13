@@ -1,4 +1,5 @@
 import io.kjaer.tensorflow.core._
+import io.kjaer.compiletime._
 
 object Main {
   
@@ -16,7 +17,7 @@ object Main {
 
     val res1T = tf.transpose(res1)
 
-    val x = tf.reduce_mean(matrix1, SNil)
+    val x = tf.reduce_mean(matrix1, INil)
     println(x)
     
     println(res2)
