@@ -39,7 +39,7 @@ class Footer extends React.Component {
             <h5>Docs</h5>
             {
               Object.entries(this.props.config.docSections).map(([section, docs]) => 
-                <a key={section} href={this.docUrl(docs[0], this.props.language)}>
+                <a key={section} href={this.docUrl(docs[0])}>
                   {section}
                 </a>
               )
