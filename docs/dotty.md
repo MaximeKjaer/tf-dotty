@@ -39,7 +39,7 @@ tf-dotty also uses a few language features that are not yet part of the official
 
 Dotty has support for `scala.compiletime.S`, a type which represents the successor of a natural singleton integer type: for instance, the type `S[1]` reduces to the singleton type `2`. Implementing tf-dotty has given a motivation for more general arithmetic operations on singleton types, such as addition and multiplication. For instance, [typing the `reshape` operation](reshape.md) requires computing the product of the tensor's dimensions.
 
-This feature was implemented in a fork of Dotty, and [has since been integrated to the upstream version](https://github.com/lampepfl/dotty/pull/7628=. The implementation defines a series of abstract types in Dotty's standard library, in the `scala.compiletime.ops` package. For example, `scala.compiletime.ops.int.*` provides support for multiplying two singleton `Int` types, and `scala.compiletime.ops.boolean.&&` for the conjunction of two singleton `Boolean` types.
+This feature was implemented in a fork of Dotty, and [has since been integrated to the upstream version](https://github.com/lampepfl/dotty/pull/7628). The implementation defines a series of abstract types in Dotty's standard library, in the `scala.compiletime.ops` package. For example, `scala.compiletime.ops.int.*` provides support for multiplying two singleton `Int` types, and `scala.compiletime.ops.boolean.&&` for the conjunction of two singleton `Boolean` types.
 
 ```scala
 import scala.compiletime.ops.int._
