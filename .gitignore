@@ -5,6 +5,7 @@ target/
 project/target/
 .bloop
 .metals
+.bsp
 .dotty-ide*
 .idea
 

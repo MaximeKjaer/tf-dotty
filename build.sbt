@@ -1,10 +1,10 @@
 import scala.sys.process._
 
 
-val dottyVersion = "0.25.0-RC1"
+val dottyVersion = "3.0.0-M1"
 val scala213Version = "2.13.2"
 
-val munitVersion = "0.7.9"
+val munitVersion = "0.7.16"
 val scalapyVersion = "0.3.0+15-598682f0"
 val scalapyNumpyVersion = "0.1.0+5-ad550211"
 

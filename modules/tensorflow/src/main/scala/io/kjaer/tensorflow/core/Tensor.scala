@@ -29,7 +29,7 @@ class Tensor[T, S <: Shape] private[tensorflow] (val tensor: PyTensor) {
     def gt(that: Tensor[T, S]): Tensor[Boolean, S] = new Tensor[Boolean, S](tensor)
 }
 
-extension boolTensorOps on [S <: Shape](self: Tensor[Boolean, S]) {
+extension [S <: Shape](self: Tensor[Boolean, S]) {
     def unary_~ : Tensor[Boolean, S] = new Tensor[Boolean, S](~self.tensor)
     def & (that: Tensor[Boolean, S]): Tensor[Boolean, S] = new Tensor[Boolean, S](self.tensor & that.tensor)
     def | (that: Tensor[Boolean, S]): Tensor[Boolean, S] = new Tensor[Boolean, S](self.tensor | that.tensor)
