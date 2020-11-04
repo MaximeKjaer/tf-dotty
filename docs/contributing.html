@@ -1,0 +1,94 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Contributing · tf-dotty</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="## Compiling and testing"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Contributing · tf-dotty"/><meta property="og:type" content="website"/><meta property="og:url" content="https://maximekjaer.github.io/tf-dotty/"/><meta property="og:description" content="## Compiling and testing"/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/tf-dotty/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="alternate" type="application/atom+xml" href="https://maximekjaer.github.io/tf-dotty/blog/atom.xml" title="tf-dotty Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://maximekjaer.github.io/tf-dotty/blog/feed.xml" title="tf-dotty Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script src="/tf-dotty/js/scrollSpy.js"></script><link rel="stylesheet" href="/tf-dotty/css/main.css"/><script src="/tf-dotty/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/tf-dotty/"><h2 class="headerTitle">tf-dotty</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/tf-dotty/docs/getting-started" target="_self">Docs</a></li><li class=""><a href="/tf-dotty/blog/" target="_self">Blog</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Contributing</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Getting Started</h3><ul class=""><li class="navListItem"><a class="navItem" href="/tf-dotty/docs/getting-started">Getting Started</a></li><li class="navListItem"><a class="navItem" href="/tf-dotty/docs/benchmarks">Benchmarks</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Architecture</h3><ul class=""><li class="navListItem"><a class="navItem" href="/tf-dotty/docs/architecture">Architecture</a></li><li class="navListItem"><a class="navItem" href="/tf-dotty/docs/dotty">Dotty features</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Implementation</h3><ul class=""><li class="navListItem"><a class="navItem" href="/tf-dotty/docs/tensor">Tensor</a></li><li class="navListItem"><a class="navItem" href="/tf-dotty/docs/reduce">Reduce</a></li><li class="navListItem"><a class="navItem" href="/tf-dotty/docs/reshape">Reshape</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Contributing</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/tf-dotty/docs/contributing">Contributing</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">Contributing</h1></header><article><div><span><h2><a class="anchor" aria-hidden="true" id="compiling-and-testing"></a><a href="#compiling-and-testing" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Compiling and testing</h2>
+<p>See how to install Python dependencies in the <a href="/tf-dotty/docs/getting-started">Getting Started</a> page. Compile and test using sbt:</p>
+<pre><code class="hljs css language-console"><span class="hljs-meta">$</span><span class="bash"> workon tf-dotty  <span class="hljs-comment"># optional: activate tf-dotty Python virtualenv</span></span>
+<span class="hljs-meta">$</span><span class="bash"> sbt</span>
+<span class="hljs-meta">&gt;</span><span class="bash"> compile</span>
+<span class="hljs-meta">&gt;</span><span class="bash"> <span class="hljs-built_in">test</span></span>
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="documentation"></a><a href="#documentation" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Documentation</h2>
+<p>The documentation website is built by <a href="https://docusaurus.io/docs/en/installation">Docusaurus</a>. The code for the website is in the <code>website</code> directory. To change the documentation, edit the files in <code>docs</code>, and serve the site by running:</p>
+<pre><code class="hljs css language-console"><span class="hljs-meta">$</span><span class="bash"> <span class="hljs-built_in">cd</span> website</span>
+<span class="hljs-meta">$</span><span class="bash"> npm install</span>
+<span class="hljs-meta">$</span><span class="bash"> npm start</span>
+</code></pre>
+<p>You can include math in Markdown using <code>\\(</code> and <code>\\)</code> delimiters.</p>
+<p>The docs are not a part of the sbt build for now. The project may use <a href="https://scalameta.org/mdoc">mdoc</a> or <a href="https://dotty.epfl.ch/docs/usage/dottydoc.html">Dottydoc</a> down the road.</p>
+<h2><a class="anchor" aria-hidden="true" id="further-work"></a><a href="#further-work" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Further work</h2>
+<p>tf-dotty is still in experimental stages, and some areas topics could be explored further:</p>
+<ul>
+<li><strong>Keras</strong>: tf-dotty currently only supports TensorFlow Core, but most developers use Keras in their day-to-day; tf-dotty could also provide a shape-safe Keras interface.</li>
+<li><strong>TensorFlow 2.0</strong>: TensorFlow recently released version 2.0, but tf-dotty uses 1.14.</li>
+<li><strong>Negative indices</strong>: Python lists have support for negative indices, which count from the end. Many data scientists are used to these, and supporting them would help port Python code to tf-dotty.</li>
+<li><strong>API support</strong>: TensorFlow's API is quite large, and many areas are still unsupported. Some parts of the API are straightforward forwarding to the Python implementation, but there is opportunity for stricter type checks in others.</li>
+<li><strong>Broadcasting</strong>: tf-dotty does not support broadcasting. Some people consider broadcasting a bug, and others consider it a feature they couldn't live without. Ideally, support for broadcasting would be opt-in, perhaps through implicit conversions.</li>
+<li><strong>Labeled axes</strong>: The standard TensorFlow API does not support labeled axes, but instead takes a list of indices for reduction operations. There have been <a href="http://nlp.seas.harvard.edu/NamedTensor">arguments against this API</a>. Could tf-dotty support labeled axes at the type level, and materialize the correct indices?</li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="guidelines"></a><a href="#guidelines" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Guidelines</h2>
+<ul>
+<li>Do not expose deprecated arguments</li>
+<li>Encode default arguments in Scala, and pass them explicitly to the Python implementation.</li>
+<li>You can remove documentation about the types of the arguments if they are encoded in the type system instead</li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="releasing"></a><a href="#releasing" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Releasing</h2>
+<p>Releases are handled on Travis CI by <a href="https://github.com/olafurpg/sbt-ci-release">sbt-ci-release</a>. To release a new version, run:</p>
+<pre><code class="hljs css language-console"><span class="hljs-meta">$</span><span class="bash"> git tag -a <span class="hljs-variable">$VERSION</span> -m <span class="hljs-string">"<span class="hljs-variable">$VERSION</span>"</span></span>
+<span class="hljs-meta">$</span><span class="bash"> git push origin <span class="hljs-variable">$VERSION</span></span>
+</code></pre>
+<p>Note that <code>$VERSION</code> <strong>must</strong> start with a <code>v</code>, e.g. <code>v0.1.0</code>.</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/tf-dotty/docs/reshape"><span class="arrow-prev">← </span><span>Reshape</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#compiling-and-testing">Compiling and testing</a></li><li><a href="#documentation">Documentation</a></li><li><a href="#further-work">Further work</a></li><li><a href="#guidelines">Guidelines</a></li><li><a href="#releasing">Releasing</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/tf-dotty/" class="nav-home"></a><div><h5>Docs</h5><a href="/tf-dotty/docs/getting-started">Getting Started</a><a href="/tf-dotty/docs/architecture">Architecture</a><a href="/tf-dotty/docs/tensor">Implementation</a><a href="/tf-dotty/docs/contributing">Contributing</a></div><div><h5>More</h5><a href="/tf-dotty/blog">Blog</a><a href="https://github.com/MaximeKjaer/tf-dotty">GitHub</a><a class="github-button" href="https://github.com/MaximeKjaer/tf-dotty" data-icon="octicon-star" data-count-href="/MaximeKjaer/tf-dotty/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section></footer></div></body></html>

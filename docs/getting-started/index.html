@@ -1,0 +1,89 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Getting Started · tf-dotty</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="tf-dotty is a shape-safe facade for TensorFlow in Dotty (a.k.a. Scala 3)."/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Getting Started · tf-dotty"/><meta property="og:type" content="website"/><meta property="og:url" content="https://maximekjaer.github.io/tf-dotty/"/><meta property="og:description" content="tf-dotty is a shape-safe facade for TensorFlow in Dotty (a.k.a. Scala 3)."/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/tf-dotty/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="alternate" type="application/atom+xml" href="https://maximekjaer.github.io/tf-dotty/blog/atom.xml" title="tf-dotty Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://maximekjaer.github.io/tf-dotty/blog/feed.xml" title="tf-dotty Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script src="/tf-dotty/js/scrollSpy.js"></script><link rel="stylesheet" href="/tf-dotty/css/main.css"/><script src="/tf-dotty/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/tf-dotty/"><h2 class="headerTitle">tf-dotty</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive siteNavItemActive"><a href="/tf-dotty/docs/getting-started" target="_self">Docs</a></li><li class=""><a href="/tf-dotty/blog/" target="_self">Blog</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Getting Started</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Getting Started</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/tf-dotty/docs/getting-started">Getting Started</a></li><li class="navListItem"><a class="navItem" href="/tf-dotty/docs/benchmarks">Benchmarks</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Architecture</h3><ul class=""><li class="navListItem"><a class="navItem" href="/tf-dotty/docs/architecture">Architecture</a></li><li class="navListItem"><a class="navItem" href="/tf-dotty/docs/dotty">Dotty features</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Implementation</h3><ul class=""><li class="navListItem"><a class="navItem" href="/tf-dotty/docs/tensor">Tensor</a></li><li class="navListItem"><a class="navItem" href="/tf-dotty/docs/reduce">Reduce</a></li><li class="navListItem"><a class="navItem" href="/tf-dotty/docs/reshape">Reshape</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Contributing</h3><ul class=""><li class="navListItem"><a class="navItem" href="/tf-dotty/docs/contributing">Contributing</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">Getting Started</h1></header><article><div><span><p>tf-dotty is a shape-safe facade for TensorFlow in Dotty (a.k.a. Scala 3).</p>
+<p><em>Note that you must use tf-dotty from a Dotty project, and not a Scala 2 project.</em></p>
+<h2><a class="anchor" aria-hidden="true" id="installing-python-dependencies"></a><a href="#installing-python-dependencies" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Installing Python dependencies</h2>
+<p>This project communicates with the TensorFlow 1.15 Python API, so you will also need to have Python 3.7 and pip installed. On Ubuntu, you can install these dependencies as follows:</p>
+<pre><code class="hljs css language-console"><span class="hljs-meta">$</span><span class="bash"> sudo apt-get install software-properties-common</span>
+<span class="hljs-meta">$</span><span class="bash"> sudo add-apt-repository ppa:deadsnakes/ppa</span>
+<span class="hljs-meta">$</span><span class="bash"> sudo apt-get update</span>
+<span class="hljs-meta">$</span><span class="bash"> sudo apt-get install python3.7 libpython3.7</span>
+</code></pre>
+<p>To install the runtime dependencies, run:</p>
+<pre><code class="hljs css language-console"><span class="hljs-meta">$</span><span class="bash"> pip install -r requirements.txt</span>
+</code></pre>
+<p>You can also choose to do this in a virtualenv with <a href="https://virtualenvwrapper.readthedocs.io/en/latest/install.html">virtualenvwrapper</a>:</p>
+<pre><code class="hljs css language-console"><span class="hljs-meta">$</span><span class="bash"> mkvirtualenv -p python3.7 -r requirements.txt tf-dotty</span>
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="setting-up-sbt"></a><a href="#setting-up-sbt" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Setting up sbt</h2>
+<p>To use tf-dotty, you must use the following sbt settings:</p>
+<pre><code class="hljs css language-scala"><span class="hljs-keyword">lazy</span> <span class="hljs-keyword">val</span> myProject = project
+  .settings(
+    fork := <span class="hljs-literal">true</span>,
+    javaOptions += <span class="hljs-string">s"-Djna.library.path=<span class="hljs-subst">${"python3-config --prefix".!!.trim}</span>/lib"</span>,
+    libraryDependencies += <span class="hljs-string">"io.kjaer"</span> %% <span class="hljs-string">"tf-dotty"</span> % <span class="hljs-string">"insert-version-here"</span>
+  )
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="importing"></a><a href="#importing" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Importing</h2>
+<pre><code class="hljs css language-scala"><span class="hljs-keyword">import</span> io.kjaer.compiletime._
+<span class="hljs-keyword">import</span> io.kjaer.tensorflow.core._
+
+<span class="hljs-keyword">val</span> matrix = tf.zeros(<span class="hljs-number">2</span> #: <span class="hljs-number">2</span> #: <span class="hljs-type">SNil</span>)
+ <span class="hljs-comment">// matrix: Tensor[Float, 2 #: 2 #: SNil] = Tensor("zeros:0", shape=(2, 2), dtype=float32)</span>
+</code></pre>
+<p>Read the documentation on <a href="/tf-dotty/docs/tensor">tensor shapes</a> to learn about <code>#:</code> and <code>SNil</code>.</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-next button" href="/tf-dotty/docs/benchmarks"><span>Benchmarks</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#installing-python-dependencies">Installing Python dependencies</a></li><li><a href="#setting-up-sbt">Setting up sbt</a></li><li><a href="#importing">Importing</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/tf-dotty/" class="nav-home"></a><div><h5>Docs</h5><a href="/tf-dotty/docs/getting-started">Getting Started</a><a href="/tf-dotty/docs/architecture">Architecture</a><a href="/tf-dotty/docs/tensor">Implementation</a><a href="/tf-dotty/docs/contributing">Contributing</a></div><div><h5>More</h5><a href="/tf-dotty/blog">Blog</a><a href="https://github.com/MaximeKjaer/tf-dotty">GitHub</a><a class="github-button" href="https://github.com/MaximeKjaer/tf-dotty" data-icon="octicon-star" data-count-href="/MaximeKjaer/tf-dotty/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section></footer></div></body></html>

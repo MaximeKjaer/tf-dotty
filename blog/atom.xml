@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://maximekjaer.github.io/tf-dotty/blog</id>
+    <title>tf-dotty Blog</title>
+    <updated>2020-01-16T06:00:00.000Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://maximekjaer.github.io/tf-dotty/blog"/>
+    <subtitle>The best place to stay up-to-date with the latest tf-dotty news and events.</subtitle>
+    <logo>https://maximekjaer.github.io/tf-dotty/undefined</logo>
+    <entry>
+        <title type="html"><![CDATA[tf-dotty is open-sourced]]></title>
+        <id>https://maximekjaer.github.io/tf-dotty/blog/2020/01/16/tf-dotty-is-open-sourced.html</id>
+        <link href="https://maximekjaer.github.io/tf-dotty/blog/2020/01/16/tf-dotty-is-open-sourced.html"/>
+        <updated>2020-01-16T06:00:00.000Z</updated>
+        <summary type="html"><![CDATA[<p>Today, tf-dotty is open-sourced 🎉</p> <p>There is some documentation of the code and approach on this site. Many things are still bound to change, but do not hesitate to open an issue on <a href="https://github.com/MaximeKjaer/tf-dotty">the repo</a>.</p> <p>This is still a very early version of tf-dotty; it is not pu...</p>]]></summary>
+        <author>
+            <name>Maxime Kjaer</name>
+            <email/>
+            <uri/>
+        </author>
+    </entry>
+</feed>

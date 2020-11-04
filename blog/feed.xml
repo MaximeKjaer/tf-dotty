@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+    <channel>
+        <title>tf-dotty Blog</title>
+        <link>https://maximekjaer.github.io/tf-dotty/blog</link>
+        <description>The best place to stay up-to-date with the latest tf-dotty news and events.</description>
+        <lastBuildDate>Thu, 16 Jan 2020 06:00:00 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>https://github.com/jpmonette/feed</generator>
+        <image>
+            <title>tf-dotty Blog</title>
+            <url>https://maximekjaer.github.io/tf-dotty/undefined</url>
+            <link>https://maximekjaer.github.io/tf-dotty/blog</link>
+        </image>
+        <item>
+            <title><![CDATA[tf-dotty is open-sourced]]></title>
+            <link>https://maximekjaer.github.io/tf-dotty/blog/2020/01/16/tf-dotty-is-open-sourced.html</link>
+            <guid>https://maximekjaer.github.io/tf-dotty/blog/2020/01/16/tf-dotty-is-open-sourced.html</guid>
+            <pubDate>Thu, 16 Jan 2020 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>Today, tf-dotty is open-sourced 🎉</p> <p>There is some documentation of the code and approach on this site. Many things are still bound to change, but do not hesitate to open an issue on <a href="https://github.com/MaximeKjaer/tf-dotty">the repo</a>.</p> <p>This is still a very early version of tf-dotty; it is not pu...</p>]]></description>
+        </item>
+    </channel>
+</rss>

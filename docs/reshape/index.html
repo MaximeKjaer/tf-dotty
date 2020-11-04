@@ -1,0 +1,103 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Reshaping with singleton ops · tf-dotty</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="## Reshaping tensors"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Reshaping with singleton ops · tf-dotty"/><meta property="og:type" content="website"/><meta property="og:url" content="https://maximekjaer.github.io/tf-dotty/"/><meta property="og:description" content="## Reshaping tensors"/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/tf-dotty/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="alternate" type="application/atom+xml" href="https://maximekjaer.github.io/tf-dotty/blog/atom.xml" title="tf-dotty Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://maximekjaer.github.io/tf-dotty/blog/feed.xml" title="tf-dotty Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script src="/tf-dotty/js/scrollSpy.js"></script><link rel="stylesheet" href="/tf-dotty/css/main.css"/><script src="/tf-dotty/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/tf-dotty/"><h2 class="headerTitle">tf-dotty</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/tf-dotty/docs/getting-started" target="_self">Docs</a></li><li class=""><a href="/tf-dotty/blog/" target="_self">Blog</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Implementation</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Getting Started</h3><ul class=""><li class="navListItem"><a class="navItem" href="/tf-dotty/docs/getting-started">Getting Started</a></li><li class="navListItem"><a class="navItem" href="/tf-dotty/docs/benchmarks">Benchmarks</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Architecture</h3><ul class=""><li class="navListItem"><a class="navItem" href="/tf-dotty/docs/architecture">Architecture</a></li><li class="navListItem"><a class="navItem" href="/tf-dotty/docs/dotty">Dotty features</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Implementation</h3><ul class=""><li class="navListItem"><a class="navItem" href="/tf-dotty/docs/tensor">Tensor</a></li><li class="navListItem"><a class="navItem" href="/tf-dotty/docs/reduce">Reduce</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/tf-dotty/docs/reshape">Reshape</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Contributing</h3><ul class=""><li class="navListItem"><a class="navItem" href="/tf-dotty/docs/contributing">Contributing</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">Reshaping with singleton ops</h1></header><article><div><span><h2><a class="anchor" aria-hidden="true" id="reshaping-tensors"></a><a href="#reshaping-tensors" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Reshaping tensors</h2>
+<p>A common operation in TensorFlow is <a href="https://www.tensorflow.org/versions/r1.15/api_docs/python/tf/reshape"><code>tf.reshape</code></a>, which changes the shape of a tensor, but does not change its. A restriction imposed by the TensorFlow API is that the output shape must have the same number of elements as the input shape. The Python implementation of TensorFlow throws a <code>ValueError</code> when the shapes are incompatible:</p>
+<pre><code class="hljs css language-python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf
+<span class="hljs-meta">&gt;&gt;&gt; </span>tf.reshape(tf.zeros([<span class="hljs-number">10</span>, <span class="hljs-number">10</span>]), [<span class="hljs-number">20</span>, <span class="hljs-number">20</span>])
+<span class="hljs-comment"># ValueError: Cannot reshape a tensor with 100 elements to shape [20,20] (400 elements) for 'Reshape' (op: 'Reshape') with input shapes: [10,10], [2] and with input tensors computed as partial shapes: input[1] = [20,20].</span>
+</code></pre>
+<p>Indeed, a tensor can only be reshaped to another shape containing the same number of elements. The number of elements of a shape is the product of dimension sizes; a tensor of shape <code>10 #: 20 #: 30 #: SNil</code> contains \(10 \times 20 \times 30 = 6000\) elements, and can only be reshaped into another shape containing 6000 elements.</p>
+<h2><a class="anchor" aria-hidden="true" id="statically-checking-reshapes"></a><a href="#statically-checking-reshapes" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Statically checking reshapes</h2>
+<p>How can we check this constraint statically? As Maclaurin et al. ask in &quot;<a href="https://openreview.net/pdf?id=rJxd7vsWPS">Dex: array programming with typed indices</a>&quot;:</p>
+<blockquote>
+<p>What about the dreaded reshape, which would seem to require type-level arithmetic?</p>
+</blockquote>
+<h3><a class="anchor" aria-hidden="true" id="first-attempt-with-match-types-and-s"></a><a href="#first-attempt-with-match-types-and-s" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>First attempt: with match types and <code>S</code></h3>
+<p>With match type and <code>scala.compiletime.S</code>, it is possible to define some arithmetic operations in Dotty's type system:</p>
+<pre><code class="hljs css language-scala"><span class="hljs-keyword">import</span> scala.annotation.infix
+
+<span class="hljs-meta">@infix</span> <span class="hljs-class"><span class="hljs-keyword">type</span> <span class="hljs-title">+</span>[<span class="hljs-type">A</span> &lt;: <span class="hljs-type">Int</span>, <span class="hljs-type">B</span> &lt;: <span class="hljs-type">Int</span>] <span class="hljs-title">&lt;</span></span>: <span class="hljs-type">Int</span> = <span class="hljs-type">A</span> <span class="hljs-keyword">match</span> {
+    <span class="hljs-keyword">case</span> <span class="hljs-number">0</span> =&gt; <span class="hljs-type">B</span>
+    <span class="hljs-keyword">case</span> <span class="hljs-type">S</span>[aMinusOne] =&gt; <span class="hljs-type">S</span>[aMinusOne + <span class="hljs-type">B</span>]
+}
+
+<span class="hljs-meta">@infix</span> <span class="hljs-class"><span class="hljs-keyword">type</span> <span class="hljs-title">*</span>[<span class="hljs-type">A</span> &lt;: <span class="hljs-type">Int</span>, <span class="hljs-type">B</span> &lt;: <span class="hljs-type">Int</span>] <span class="hljs-title">&lt;</span></span>: <span class="hljs-type">Int</span> = <span class="hljs-type">A</span> <span class="hljs-keyword">match</span> {
+    <span class="hljs-keyword">case</span> <span class="hljs-number">0</span> =&gt; <span class="hljs-number">0</span>
+    <span class="hljs-keyword">case</span> _ =&gt; <span class="hljs-type">MultiplyLoop</span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>, <span class="hljs-number">0</span>]
+}
+
+<span class="hljs-keyword">protected</span> <span class="hljs-class"><span class="hljs-keyword">type</span> <span class="hljs-title">MultiplyLoop</span>[<span class="hljs-type">A</span> &lt;: <span class="hljs-type">Int</span>, <span class="hljs-type">B</span> &lt;: <span class="hljs-type">Int</span>, <span class="hljs-type">Acc</span> &lt;: <span class="hljs-type">Int</span>] <span class="hljs-title">&lt;</span></span>: <span class="hljs-type">Int</span> = <span class="hljs-type">A</span> <span class="hljs-keyword">match</span> {
+    <span class="hljs-keyword">case</span> <span class="hljs-number">0</span> =&gt; <span class="hljs-type">Acc</span>
+    <span class="hljs-keyword">case</span> <span class="hljs-type">S</span>[aMinusOne] =&gt; <span class="hljs-type">MultiplyLoop</span>[aMinusOne, <span class="hljs-type">B</span>, <span class="hljs-type">B</span> + <span class="hljs-type">Acc</span>]
+}
+</code></pre>
+<p>These match types are highly recursive; with the default setting of 512 MB of memory for the JVM, computing <code>100 * 100</code> results in a stack overflow on Dotty 0.21.0-RC1, which is too limiting for what typical machine learning workloads need to compute.</p>
+<h3><a class="anchor" aria-hidden="true" id="second-attempt-with-compiler-support"></a><a href="#second-attempt-with-compiler-support" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Second attempt: with compiler support</h3>
+<p>To support constant time multiplication, the Dotty compiler must be able to evaluate a type-level arithmetic operation as its term-level equivalent. This feature is <a href="https://github.com/lampepfl/dotty/pull/7628">now available in Dotty</a>. With these operation types, we can compute the number of elements in a tensor's shape:</p>
+<pre><code class="hljs css language-scala"><span class="hljs-keyword">import</span> scala.compiletime.ops.int.*
+
+<span class="hljs-class"><span class="hljs-keyword">type</span> <span class="hljs-title">NumElements</span>[<span class="hljs-type">X</span> &lt;: <span class="hljs-type">Shape</span>] <span class="hljs-title">&lt;</span></span>: <span class="hljs-type">Int</span> = <span class="hljs-type">X</span> <span class="hljs-keyword">match</span> {
+    <span class="hljs-keyword">case</span> <span class="hljs-type">SNil</span> =&gt; <span class="hljs-number">1</span>
+    <span class="hljs-keyword">case</span> head #: tail =&gt; head * <span class="hljs-type">NumElements</span>[tail]
+}
+</code></pre>
+<p>A reshape operation can then ensure that the new shape has the same number of elements as the old shape, by demanding an implicit parameter proving that the types representing the number of elements are equal:</p>
+<pre><code class="hljs css language-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">reshape</span></span>[<span class="hljs-type">T</span>, <span class="hljs-type">Old</span> &lt;: <span class="hljs-type">Shape</span>, <span class="hljs-type">New</span> &lt;: <span class="hljs-type">Shape</span>](tensor: <span class="hljs-type">Tensor</span>[<span class="hljs-type">T</span>, <span class="hljs-type">Old</span>], shape: <span class="hljs-type">New</span>)
+  (given <span class="hljs-type">NumElements</span>[<span class="hljs-type">Old</span>] =:= <span class="hljs-type">NumElements</span>[<span class="hljs-type">New</span>]): <span class="hljs-type">Tensor</span>[<span class="hljs-type">T</span>, <span class="hljs-type">New</span>] =
+    <span class="hljs-keyword">new</span> <span class="hljs-type">Tensor</span>[<span class="hljs-type">T</span>, <span class="hljs-type">New</span>](tf.reshape(tensor.tensor, shape.toSeq))
+</code></pre>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/tf-dotty/docs/reduce"><span class="arrow-prev">← </span><span>Reduce</span></a><a class="docs-next button" href="/tf-dotty/docs/contributing"><span>Contributing</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#reshaping-tensors">Reshaping tensors</a></li><li><a href="#statically-checking-reshapes">Statically checking reshapes</a><ul class="toc-headings"><li><a href="#first-attempt-with-match-types-and-s">First attempt: with match types and <code>S</code></a></li><li><a href="#second-attempt-with-compiler-support">Second attempt: with compiler support</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/tf-dotty/" class="nav-home"></a><div><h5>Docs</h5><a href="/tf-dotty/docs/getting-started">Getting Started</a><a href="/tf-dotty/docs/architecture">Architecture</a><a href="/tf-dotty/docs/tensor">Implementation</a><a href="/tf-dotty/docs/contributing">Contributing</a></div><div><h5>More</h5><a href="/tf-dotty/blog">Blog</a><a href="https://github.com/MaximeKjaer/tf-dotty">GitHub</a><a class="github-button" href="https://github.com/MaximeKjaer/tf-dotty" data-icon="octicon-star" data-count-href="/MaximeKjaer/tf-dotty/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section></footer></div></body></html>

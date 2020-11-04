@@ -1,0 +1,95 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Reducing with match types · tf-dotty</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="## Reducing a tensor"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Reducing with match types · tf-dotty"/><meta property="og:type" content="website"/><meta property="og:url" content="https://maximekjaer.github.io/tf-dotty/"/><meta property="og:description" content="## Reducing a tensor"/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/tf-dotty/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="alternate" type="application/atom+xml" href="https://maximekjaer.github.io/tf-dotty/blog/atom.xml" title="tf-dotty Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://maximekjaer.github.io/tf-dotty/blog/feed.xml" title="tf-dotty Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script src="/tf-dotty/js/scrollSpy.js"></script><link rel="stylesheet" href="/tf-dotty/css/main.css"/><script src="/tf-dotty/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/tf-dotty/"><h2 class="headerTitle">tf-dotty</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/tf-dotty/docs/getting-started" target="_self">Docs</a></li><li class=""><a href="/tf-dotty/blog/" target="_self">Blog</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Implementation</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Getting Started</h3><ul class=""><li class="navListItem"><a class="navItem" href="/tf-dotty/docs/getting-started">Getting Started</a></li><li class="navListItem"><a class="navItem" href="/tf-dotty/docs/benchmarks">Benchmarks</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Architecture</h3><ul class=""><li class="navListItem"><a class="navItem" href="/tf-dotty/docs/architecture">Architecture</a></li><li class="navListItem"><a class="navItem" href="/tf-dotty/docs/dotty">Dotty features</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Implementation</h3><ul class=""><li class="navListItem"><a class="navItem" href="/tf-dotty/docs/tensor">Tensor</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/tf-dotty/docs/reduce">Reduce</a></li><li class="navListItem"><a class="navItem" href="/tf-dotty/docs/reshape">Reshape</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Contributing</h3><ul class=""><li class="navListItem"><a class="navItem" href="/tf-dotty/docs/contributing">Contributing</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">Reducing with match types</h1></header><article><div><span><h2><a class="anchor" aria-hidden="true" id="reducing-a-tensor"></a><a href="#reducing-a-tensor" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Reducing a tensor</h2>
+<p>TensorFlow has a series of reduction operations, like <a href="https://www.tensorflow.org/versions/r1.15/api_docs/python/tf/math/cumprod"><code>tf.cumprod</code></a>, <a href="https://www.tensorflow.org/versions/r1.15/api_docs/python/tf/math/reduce_mean"><code>tf.reduce_mean</code></a> or <a href="https://www.tensorflow.org/versions/r1.15/api_docs/python/tf/math/reduce_variance"><code>tf.reduce_variance</code></a>. These operations have the following parameters:</p>
+<ul>
+<li><code>tensor</code>: a tensor to reduce over.</li>
+<li><code>axis</code>: indices of the axes to reduce along, or <code>py.None</code> to reduce along all axes.</li>
+<li><code>keepdims</code>: if <code>true</code>, reduced dimensions are retained with size <code>1</code>; if <code>false</code>, they are removed.</li>
+</ul>
+<p>The example code below illustrates the use of these parameters in tf-dotty.</p>
+<pre><code class="hljs css language-scala"><span class="hljs-keyword">val</span> tensor = tf.zeros(<span class="hljs-number">10</span> #: <span class="hljs-number">20</span> #: <span class="hljs-number">30</span> #: <span class="hljs-type">SNil</span>) <span class="hljs-comment">//: Tensor[Float, 10 #: 20 #: 30 #: SNil]</span>
+tf.reduce_mean(tensor, axis = py.<span class="hljs-type">None</span>) <span class="hljs-comment">//: Tensor[Float, SNil]</span>
+tf.reduce_mean(tensor, axis = <span class="hljs-number">0</span> :: <span class="hljs-type">INil</span>) <span class="hljs-comment">//: Tensor[Float, 20 #: 30 #: SNil]</span>
+tf.reduce_mean(tensor, axis = <span class="hljs-number">1</span> :: <span class="hljs-number">2</span> :: <span class="hljs-type">INil</span>) <span class="hljs-comment">//: Tensor[Float, 10 #: SNil]</span>
+tf.reduce_mean(tensor, axis = <span class="hljs-number">0</span> :: <span class="hljs-number">2</span> :: <span class="hljs-type">INil</span>, keepdims = <span class="hljs-literal">true</span>) <span class="hljs-comment">//: Tensor[Float, 1 #: 20 #: 1 #: SNil]</span>
+</code></pre>
+<p>The <code>axis</code> parameter takes a list of indices of axes, of type <code>Indices</code>. This list is built with the <code>::</code> Cons type, which is different from the <code>#:</code> Cons type used for <code>Shape</code>. Both are lists of singleton integer types, but have different semantic meaning.</p>
+<p>In the above examples, the indices are ordered, unique and within bounds. However, the Python TensorFlow API supports unordered and repeated indices, and it raises a runtime error for indices out of bounds.</p>
+<h2><a class="anchor" aria-hidden="true" id="statically-checking-reductions"></a><a href="#statically-checking-reductions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Statically checking reductions</h2>
+<h3><a class="anchor" aria-hidden="true" id="first-attempt-selection"></a><a href="#first-attempt-selection" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>First attempt: <code>Selection</code></h3>
+<p>To avoid the problem of unordered, repeated indices, we can deviate from the TensorFlow Python API, and create a new type to represent index sets. This type is <code>Selection</code>, and is an HList that can only contain one of two singleton object types, <code>^</code> and <code>v</code>: the former includes an index in the reduction, and the latter excludes it. For instance, the code below reduces over dimensions 0 and 2:</p>
+<pre><code class="hljs css language-scala">tf.reduce_mean(
+    input_tensor = tf.zeros(<span class="hljs-number">1</span> #: <span class="hljs-number">2</span> #: <span class="hljs-number">3</span> #: <span class="hljs-type">SNil</span>),
+    axis         =          ^ :: v :: ^ :: <span class="hljs-type">INil</span>,
+    keepdims     = <span class="hljs-literal">false</span>
+) <span class="hljs-comment">//: Tensor[Float, 2 #: SNil]</span>
+</code></pre>
+<p>The advantage of this <code>Selection</code> type is that it is always ordered, and cannot contain duplicates, by construction. If the <code>Selection</code> is longer than the <code>Shape</code>, the remaining selection indicators can be ignored, or an error could be raised. However, there are also disadvantages to this type:</p>
+<ul>
+<li>It is very verbose for high-dimensional tensors</li>
+<li>It strays from the TensorFlow Python API, which makes portability of Python programs to tf-dotty more difficult</li>
+<li>In code using TensorFlow, the call to the reduction is not always implemented adjacent to the definition of the shape, which makes the selection harder to read</li>
+</ul>
+<h3><a class="anchor" aria-hidden="true" id="second-attempt-nested-type-loop"></a><a href="#second-attempt-nested-type-loop" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Second attempt: Nested type loop</h3>
+<p>It is possible to compute reduction along a list of given indices by implementing logic similar to two nested loops:</p>
+<ul>
+<li>The outer loop iterates over the shape and counts the current index;</li>
+<li>The inner loop iterates over the indices to remove, removes all occurrences of the index and returns whether the index was in the list.</li>
+</ul>
+<p>This implementation is \( \mathcal{O}(m \cdot n) \), where \( m \) is the size of the index list, and \( n \) is the rank of the tensor. When the outer loop reaches the end of the <code>Shape</code>, any indices remaining in the index list are out of bounds, and can be reported as such through a compile-time error.</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/tf-dotty/docs/tensor"><span class="arrow-prev">← </span><span>Tensor</span></a><a class="docs-next button" href="/tf-dotty/docs/reshape"><span>Reshape</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#reducing-a-tensor">Reducing a tensor</a></li><li><a href="#statically-checking-reductions">Statically checking reductions</a><ul class="toc-headings"><li><a href="#first-attempt-selection">First attempt: <code>Selection</code></a></li><li><a href="#second-attempt-nested-type-loop">Second attempt: Nested type loop</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/tf-dotty/" class="nav-home"></a><div><h5>Docs</h5><a href="/tf-dotty/docs/getting-started">Getting Started</a><a href="/tf-dotty/docs/architecture">Architecture</a><a href="/tf-dotty/docs/tensor">Implementation</a><a href="/tf-dotty/docs/contributing">Contributing</a></div><div><h5>More</h5><a href="/tf-dotty/blog">Blog</a><a href="https://github.com/MaximeKjaer/tf-dotty">GitHub</a><a class="github-button" href="https://github.com/MaximeKjaer/tf-dotty" data-icon="octicon-star" data-count-href="/MaximeKjaer/tf-dotty/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section></footer></div></body></html>
