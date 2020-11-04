@@ -39,37 +39,15 @@ sealed trait SNil extends Shape
 case object SNil extends SNil
 
 object Shape {
+  def scalar: SNil = SNil
+  def vector(length: Dimension): length.type #: SNil = length #: SNil
+  def matrix(rows: Dimension, columns: Dimension): rows.type #: columns.type #: SNil = rows #: columns #: SNil
+
   def fromSeq(seq: Seq[Int]): Shape = seq match {
     case Nil => SNil
     case head +: tail => head #: Shape.fromSeq(tail)
   }
 
-  /**
-   * Apply a function to elements of a Shape.
-   * Type-level representation of  `def map(f: (A) => A): List[A]`
-   *
-   * @tparam X Shape to map over
-   * @tparam F Function taking an value of the Shape, returning another value
-   */
-  type Map[X <: Shape, F[_ <: Dimension] <: Dimension] <: Shape = X match {
-    case SNil => SNil
-    case head #: tail => F[head] #: Map[tail, F]
-  }
-
-  /**
-   * Apply a folding function to the elements of a Shape
-   * Type-level representation of `def foldLeft[B](z: B)(op: (B, A) => B): B`
-   *
-   * @tparam B Return type of the operation
-   * @tparam X Shape to fold over
-   * @tparam Z Zero element
-   * @tparam F Function taking an accumulator of type B, and an element of type Int, returning B
-   */
-  type FoldLeft[B, X <: Shape, Z <: B, F[_ <: B, _ <: Int] <: B] <: B = X match {
-    case SNil => Z
-    case head #: tail => FoldLeft[B, tail, F[Z, head], F]
-  }
-  
   type Concat[X <: Shape, Y <: Shape] <: Shape = X match {
     case SNil => Y
     case head #: tail => head #: Concat[tail, Y]
@@ -191,18 +169,29 @@ object Shape {
     }
   }
 
-  def scalar: SNil = SNil
-  def vector(length: Dimension): length.type #: SNil = length #: SNil
-  def matrix(rows: Dimension, columns: Dimension): rows.type #: columns.type #: SNil = rows #: columns #: SNil
+  /**
+   * Apply a function to elements of a Shape.
+   * Type-level representation of  `def map(f: (A) => A): List[A]`
+   *
+   * @tparam X Shape to map over
+   * @tparam F Function taking an value of the Shape, returning another value
+   */
+  type Map[X <: Shape, F[_ <: Dimension] <: Dimension] <: Shape = X match {
+    case SNil => SNil
+    case head #: tail => F[head] #: Map[tail, F]
+  }
+
+  /**
+   * Apply a folding function to the elements of a Shape
+   * Type-level representation of `def foldLeft[B](z: B)(op: (B, A) => B): B`
+   *
+   * @tparam B Return type of the operation
+   * @tparam X Shape to fold over
+   * @tparam Z Zero element
+   * @tparam F Function taking an accumulator of type B, and an element of type Int, returning B
+   */
+  type FoldLeft[B, X <: Shape, Z <: B, F[_ <: B, _ <: Int] <: B] <: B = X match {
+    case SNil => Z
+    case head #: tail => FoldLeft[B, tail, F[Z, head], F]
+  }
 }
-
-final class ShapeOf[T <: Shape](val value: T)
-
-object ShapeOf {
-  given shapeOfSNilType as ShapeOf[SNil.type] = ShapeOf(SNil)
-  given shapeOfSNil as ShapeOf[SNil] = ShapeOf(SNil)
-  given shapeOfCons[H <: Dimension, T <: Shape](using head: ValueOf[H], tail: ShapeOf[T]) as ShapeOf[H #: T] =
-    ShapeOf(head.value #: tail.value)
-}
-
-inline def shapeOf[S <: Shape](using s: ShapeOf[S]): S = s.value
