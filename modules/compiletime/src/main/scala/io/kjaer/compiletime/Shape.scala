@@ -1,7 +1,7 @@
 package io.kjaer.compiletime
 
 import scala.compiletime.S
-import scala.compiletime.ops.int.{<, <=, *}
+import scala.compiletime.ops.int.{+, <, <=, *}
 import scala.compiletime.ops.boolean.&&
 
 type Dimension = Int & Singleton
@@ -14,37 +14,13 @@ sealed trait Shape extends Product with Serializable {
     io.kjaer.compiletime.#:(head, this)
 
   /** Concat with another shape **/
-  def ++(that: Shape): this.type Concat that.type = {
-    val res: Shape = this match {
-      case SNil => that
-      case x #: xs => x #: (xs ++ that)
-    }
-    res.asInstanceOf[this.type Concat that.type]
-  }
-
-  def reverse: Reverse[this.type] = {
-    val res: Shape = this match {
-      case SNil => SNil
-      case x #: xs => xs.reverse ++ (x #: SNil)
-    }
-    res.asInstanceOf[Reverse[this.type]]
-  }
-
-  def rank: Size[this.type] = {
-    val res: Int = this match {
-      case SNil => 0
-      case head #: tail => 1 + tail.rank
-    }
-    res.asInstanceOf[Size[this.type]]
-  }
-
-  def numElements: NumElements[this.type] = {
-    val res: Int = this match {
-      case SNil => 1
-      case head #: tail => head * tail.numElements
-    }
-    res.asInstanceOf[NumElements[this.type]]
-  }
+  def ++(that: Shape): this.type Concat that.type = Shape.concat(this, that)
+  /** Reverse the dimension list */
+  def reverse: Reverse[this.type] = Shape.reverse(this)
+  /** Number of elements in the shape */
+  def numElements: NumElements[this.type] = Shape.numElements(this)
+  /** Number of dimensions represented by this shape */
+  def rank: Rank[this.type] = Shape.rank(this)
 
   def toSeq: Seq[Int] = this match {
     case SNil => Nil
@@ -93,10 +69,25 @@ object Shape {
     case SNil => Z
     case head #: tail => FoldLeft[B, tail, F[Z, head], F]
   }
+  
+  type Concat[X <: Shape, Y <: Shape] <: Shape = X match {
+    case SNil => Y
+    case head #: tail => head #: Concat[tail, Y]
+  }
 
-  type Size[X <: Shape] <: Int = X match {
-    case SNil => 0
-    case head #: tail => S[Size[tail]]
+  def concat[X <: Shape, Y <: Shape](x: X, y: Y): Concat[X, Y] = x match {
+    case _: SNil => y
+    case cons: #:[x, y] => cons.head #: concat(cons.tail, y)
+  }
+
+  type Reverse[X <: Shape] <: Shape = X match {
+    case SNil => SNil
+    case head #: tail => Concat[Reverse[tail], head #: SNil]
+  }
+
+  def reverse[X <: Shape](x: X): Reverse[X] = x match {
+    case _: SNil => SNil
+    case cons: #:[head, tail] => concat(reverse(cons.tail), cons.head #: SNil)
   }
 
   type NumElements[X <: Shape] <: Int = X match {
@@ -104,14 +95,19 @@ object Shape {
     case head #: tail => head * NumElements[tail]
   }
 
-  type Concat[X <: Shape, Y <: Shape] <: Shape = X match {
-    case SNil => Y
-    case head #: tail => head #: Concat[tail, Y]
+  def numElements[X <: Shape](x: X): NumElements[X] = x match {
+    case _: SNil => 1
+    case cons: #:[head, tail] => cons.head mul numElements(cons.tail)
   }
 
-  type Reverse[X <: Shape] <: Shape = X match {
-    case SNil => SNil
-    case head #: tail => Concat[Reverse[tail], head #: SNil]
+  type Rank[X <: Shape] <: Int = X match {
+    case SNil => 0
+    case head #: tail => Rank[tail] + 1
+  }
+
+  def rank[X <: Shape](x: X): Rank[X] = x match {
+    case _: SNil => 0
+    case cons: #:[head, tail] => rank(cons.tail) add 1
   }
 
   type IsEmpty[X <: Shape] <: Boolean = X match {
@@ -165,7 +161,7 @@ object Shape {
   }
 
   /** Returns whether index `I` is within bounds of `S` */
-  type WithinBounds[I <: Index, S <: Shape] = (0 <= I && I < Size[S])
+  type WithinBounds[I <: Index, S <: Shape] = (0 <= I && I < Rank[S])
 
   /**
    * Remove the element at index `I` in `RemoveFrom`.
@@ -177,7 +173,7 @@ object Shape {
     case true => RemoveIndexLoop[RemoveFrom, I, 0]
     // case false => Error[
     //     "Index " + int.ToString[I] +
-    //     " is out of bounds for shape of rank " + int.ToString[Size[RemoveFrom]]
+    //     " is out of bounds for shape of rank " + int.ToString[Rank[RemoveFrom]]
     // ]
   }
 
